@@ -1,6 +1,6 @@
-# YahUwU
+# hELP - home of Economics, Law and Politics
 
-YahUwU is collaborative web platform where users ask and answer questions about law, politics and economics. 
+hELP is collaborative web platform where users ask and answer each other questions about law, politics and economics. 
 
 
 ## Team
