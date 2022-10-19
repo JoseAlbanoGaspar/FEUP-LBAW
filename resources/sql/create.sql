@@ -576,61 +576,201 @@ INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (12, 'Bronze', 'Jud
 
 
 --notifs
-DROP TABLE IF EXISTS "notification" CASCADE;
-DROP TABLE IF EXISTS systemNotif CASCADE;
-DROP TABLE IF EXISTS followTagNotif CASCADE;
-DROP TABLE IF EXISTS markedAsSolutionNotif CASCADE;
-DROP TABLE IF EXISTS newBadgeNotif CASCADE;
-DROP TABLE IF EXISTS newAnswerNotif CASCADE;
-DROP TABLE IF EXISTS followedQuestionNotif CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS system_Notif CASCADE;
+DROP TABLE IF EXISTS follow_tag_notif CASCADE;
+DROP TABLE IF EXISTS marked_as_solution_notif CASCADE;
+DROP TABLE IF EXISTS new_badge_notif CASCADE;
+DROP TABLE IF EXISTS new_answer_notif CASCADE;
+DROP TABLE IF EXISTS followed_question_notif CASCADE;
 
-CREATE TABLE "notification" (
+CREATE TABLE notifications (
 	id_notif SERIAL PRIMARY KEY,
 	notif_text TEXT NOT NULL,
 	dismissed BOOL NOT NULL,
 	id_user INT,
+    date DATE,
 	FOREIGN KEY (id_user) REFERENCES "user"(id_user)
 );
 
-CREATE TABLE systemNotif (
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (1, 'neque sapien placerat ante nulla justo aliquam quis turpis eget elit sodales scelerisque mauris sit amet eros suspendisse accumsan tortor quis turpis sed ante vivamus tortor duis mattis egestas', true, 73, '2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (2, 'cras mi pede malesuada in imperdiet et commodo vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula', true, 49,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (3, 'sit amet consectetuer adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut', false, 71,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (4, 'eleifend pede libero quis orci nullam molestie nibh in lectus pellentesque at nulla suspendisse', false, 49,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (5, 'aenean fermentum donec ut mauris eget massa tempor convallis nulla neque libero convallis eget eleifend luctus ultricies eu nibh quisque id justo sit amet', false, 74,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (6, 'id nisl venenatis lacinia aenean sit amet justo morbi ut odio cras mi pede malesuada in imperdiet', true, 38,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (7, 'odio condimentum id luctus nec molestie sed justo pellentesque viverra pede ac diam cras pellentesque volutpat dui maecenas tristique est et tempus semper est', true, 28,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (8, 'consequat lectus in est risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis enim blandit mi', true, 92,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (9, 'vitae mattis nibh ligula nec sem duis aliquam convallis nunc proin at turpis a pede posuere nonummy integer non velit', true, 4,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (10, 'pulvinar sed nisl nunc rhoncus dui vel sem sed sagittis nam congue risus semper porta volutpat quam pede lobortis ligula sit amet eleifend pede', true, 69,'2022-10-02 12:32:23');
+
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (11, 'vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare imperdiet sapien urna pretium nisl ut', true, 26,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (12, 'sit amet turpis elementum ligula vehicula consequat morbi a ipsum integer a nibh in quis justo', false, 97,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (13, 'ipsum dolor sit amet consectetuer adipiscing elit proin risus praesent lectus vestibulum quam sapien varius ut blandit non interdum in ante vestibulum ante ipsum', true, 95,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (14, 'mattis nibh ligula nec sem duis aliquam convallis nunc proin at turpis a pede posuere nonummy integer non velit donec diam', false, 71,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (15, 'sapien dignissim vestibulum vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae nulla dapibus dolor vel est donec odio justo sollicitudin ut suscipit a', true, 88,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (16, 'pede justo lacinia eget tincidunt eget tempus vel pede morbi porttitor lorem id ligula suspendisse ornare', true, 80,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (17, 'viverra dapibus nulla suscipit ligula in lacus curabitur at ipsum ac tellus', true, 33,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (18, 'lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque quam turpis', true, 63,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (19, 'ut rhoncus aliquet pulvinar sed nisl nunc rhoncus dui vel sem sed sagittis nam', false, 20,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (20, 'mauris enim leo rhoncus sed vestibulum sit amet cursus id turpis integer aliquet', false, 66,'2022-10-02 12:32:23');
+
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (21, 'eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus', true, 94,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (22, 'leo rhoncus sed vestibulum sit amet cursus id turpis integer aliquet massa id lobortis convallis tortor risus dapibus augue vel accumsan tellus nisi eu orci mauris lacinia sapien', true, 60,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (23, 'tortor duis mattis egestas metus aenean fermentum donec ut mauris eget massa tempor convallis nulla neque libero', true, 9,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (24, 'at lorem integer tincidunt ante vel ipsum praesent blandit lacinia erat vestibulum sed magna at nunc commodo placerat praesent blandit nam nulla integer pede justo lacinia eget tincidunt', false, 74,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (25, 'felis ut at dolor quis odio consequat varius integer ac leo pellentesque ultrices mattis odio donec vitae nisi nam ultrices libero non mattis pulvinar', false, 39,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (26, 'blandit non interdum in ante vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae', true, 19,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (27, 'vestibulum velit id pretium iaculis diam erat fermentum justo nec condimentum neque sapien placerat ante nulla justo aliquam quis turpis eget elit sodales', false, 29,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (28, 'orci mauris lacinia sapien quis libero nullam sit amet turpis elementum ligula vehicula consequat morbi a ipsum', true, 78,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (29, 'in lectus pellentesque at nulla suspendisse potenti cras in purus eu magna vulputate luctus cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus', true, 22,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (30, 'nunc proin at turpis a pede posuere nonummy integer non velit donec diam neque vestibulum eget vulputate', false, 37,'2022-10-02 12:32:23');
+
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (31, 'dictumst etiam faucibus cursus urna ut tellus nulla ut erat id mauris vulputate elementum nullam', false, 81,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (32, 'nisl duis bibendum felis sed interdum venenatis turpis enim blandit mi in porttitor pede justo eu', false, 66,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (33, 'vestibulum eget vulputate ut ultrices vel augue vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae donec pharetra magna vestibulum aliquet ultrices erat', true, 2,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (34, 'turpis eget elit sodales scelerisque mauris sit amet eros suspendisse accumsan tortor quis turpis sed ante vivamus tortor duis mattis egestas metus aenean fermentum donec ut mauris eget massa tempor', true, 16,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (35, 'mauris lacinia sapien quis libero nullam sit amet turpis elementum ligula vehicula consequat morbi a ipsum integer a nibh in quis justo maecenas rhoncus aliquam lacus morbi quis tortor id', false, 62,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (36, 'morbi ut odio cras mi pede malesuada in imperdiet et commodo vulputate justo', false, 27,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (37, 'sit amet turpis elementum ligula vehicula consequat morbi a ipsum integer a nibh in quis', false, 87,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (38, 'duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis dui vel nisl duis ac nibh fusce lacus purus aliquet at feugiat non pretium quis lectus', false, 23,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (39, 'consequat ut nulla sed accumsan felis ut at dolor quis odio consequat', true, 22,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (40, 'aenean auctor gravida sem praesent id massa id nisl venenatis', false, 51,'2022-10-02 12:32:23');
+
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (41, 'ornare consequat lectus in est risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc', true, 76,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (42, 'enim blandit mi in porttitor pede justo eu massa donec dapibus duis at velit eu est congue elementum in hac habitasse', true, 96,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (43, 'cubilia curae donec pharetra magna vestibulum aliquet ultrices erat tortor sollicitudin mi sit amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi non quam nec dui luctus', true, 47,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (44, 'consequat morbi a ipsum integer a nibh in quis justo maecenas rhoncus aliquam lacus morbi quis tortor id nulla ultrices aliquet maecenas', false, 55,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (45, 'duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla', false, 17,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (46, 'porttitor lacus at turpis donec posuere metus vitae ipsum aliquam non mauris morbi non lectus aliquam sit amet diam in magna bibendum imperdiet', false, 61,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (47, 'pellentesque at nulla suspendisse potenti cras in purus eu magna vulputate luctus cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus', false, 31,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (48, 'amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in', true, 2,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (49, 'consequat in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque ultrices mattis odio', false, 90,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user, date) values (50, 'neque duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis dui vel nisl duis', false, 74,'2022-10-02 12:32:23');
+
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (51, 'lectus pellentesque at nulla suspendisse potenti cras in purus eu magna vulputate luctus cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus', true, 26,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (52, 'erat volutpat in congue etiam justo etiam pretium iaculis justo in hac habitasse platea dictumst etiam faucibus', false, 80,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (53, 'congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis', true, 6,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (54, 'vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo', true, 81,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (55, 'quam fringilla rhoncus mauris enim leo rhoncus sed vestibulum sit amet cursus id turpis integer', false, 61,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (56, 'elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim', true, 1,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (57, 'in faucibus orci luctus et ultrices posuere cubilia curae mauris viverra diam vitae quam suspendisse potenti nullam porttitor', false, 60,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (58, 'eu orci mauris lacinia sapien quis libero nullam sit amet turpis elementum ligula vehicula consequat morbi a ipsum integer a nibh in quis justo maecenas rhoncus', true, 40,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (59, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit', false, 44,'2022-10-02 12:32:23');
+insert into notifications (id_notif, notif_text, dismissed, id_user,date) values (60, 'interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor', false, 32,'2022-10-02 12:32:23');
+
+
+CREATE TABLE system_notif (
 	id_notif INT PRIMARY KEY,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif)
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif)
 );
 
-CREATE TABLE followTagNotif (
+insert into system_notif (id_notif) values (1);
+insert into system_notif (id_notif) values (2);
+insert into system_notif (id_notif) values (3);
+insert into system_notif (id_notif) values (4);
+insert into system_notif (id_notif) values (5);
+insert into system_notif (id_notif) values (6);
+insert into system_notif (id_notif) values (7);
+insert into system_notif (id_notif) values (8);
+insert into system_notif (id_notif) values (9);
+insert into system_notif (id_notif) values (10);
+
+
+CREATE TABLE follow_tag_notif (
 	id_notif INT PRIMARY KEY,
 	id_tag INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif),
 	CONSTRAINT FK_TAG FOREIGN KEY (id_tag) REFERENCES tag(id_tag)
 );
 
-CREATE TABLE markedAsSolutionNotif (
+insert into follow_tag_notif (id_notif, id_tag) values (11, 5);
+insert into follow_tag_notif (id_notif, id_tag) values (12, 20);
+insert into follow_tag_notif (id_notif, id_tag) values (13, 1);
+insert into follow_tag_notif (id_notif, id_tag) values (14, 13);
+insert into follow_tag_notif (id_notif, id_tag) values (15, 15);
+insert into follow_tag_notif (id_notif, id_tag) values (16, 10);
+insert into follow_tag_notif (id_notif, id_tag) values (17, 9);
+insert into follow_tag_notif (id_notif, id_tag) values (18, 6);
+insert into follow_tag_notif (id_notif, id_tag) values (19, 20);
+insert into follow_tag_notif (id_notif, id_tag) values (20, 7);
+
+
+CREATE TABLE marked_as_solution_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif),
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
-CREATE TABLE newBadgeNotif (
+
+insert into marked_as_solution_notif (id_notif, id_answer) values (21,52);
+insert into marked_as_solution_notif (id_notif, id_answer) values (22,105);
+insert into marked_as_solution_notif (id_notif, id_answer) values (23,66);
+insert into marked_as_solution_notif (id_notif, id_answer) values (24,69);
+insert into marked_as_solution_notif (id_notif, id_answer) values (25,72);
+insert into marked_as_solution_notif (id_notif, id_answer) values (26,84);
+insert into marked_as_solution_notif (id_notif, id_answer) values (27,98);
+insert into marked_as_solution_notif (id_notif, id_answer) values (28,100);
+insert into marked_as_solution_notif (id_notif, id_answer) values (29,99);
+insert into marked_as_solution_notif (id_notif, id_answer) values (30,101);
+
+
+CREATE TABLE new_badge_notif (
 	id_notif INT PRIMARY KEY,
 	id_badge INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif),
 	CONSTRAINT FK_BADGE FOREIGN KEY (id_badge) REFERENCES badge(id_badge)
 );
 
-CREATE TABLE newAnswerNotif (
+insert into new_badge_notif (id_notif,id_badge) values (31,1);
+insert into new_badge_notif (id_notif,id_badge) values (32,2);
+insert into new_badge_notif (id_notif,id_badge) values (33,3);
+insert into new_badge_notif (id_notif,id_badge) values (34,4);
+insert into new_badge_notif (id_notif,id_badge) values (35,5);
+insert into new_badge_notif (id_notif,id_badge) values (36,6);
+insert into new_badge_notif (id_notif,id_badge) values (37,7);
+insert into new_badge_notif (id_notif,id_badge) values (38,8);
+insert into new_badge_notif (id_notif,id_badge) values (39,9);
+insert into new_badge_notif (id_notif,id_badge) values (40,10);
+
+CREATE TABLE new_answer_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif),
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
-CREATE TABLE followedQuestionNotif (
+insert into new_answer_notif (id_notif,id_answer) values (41,53);
+insert into new_answer_notif (id_notif,id_answer) values (42,64);
+insert into new_answer_notif (id_notif,id_answer) values (43,75);
+insert into new_answer_notif (id_notif,id_answer) values (44,86);
+insert into new_answer_notif (id_notif,id_answer) values (45,97);
+insert into new_answer_notif (id_notif,id_answer) values (46,108);
+insert into new_answer_notif (id_notif,id_answer) values (47,109);
+insert into new_answer_notif (id_notif,id_answer) values (48,55);
+insert into new_answer_notif (id_notif,id_answer) values (49,67);
+insert into new_answer_notif (id_notif,id_answer) values (50,56);
+
+CREATE TABLE followed_question_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notifications (id_notif),
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
+
+
+insert into followed_question_notif (id_notif,id_answer) values (51,60);
+insert into followed_question_notif (id_notif,id_answer) values (52,61);
+insert into followed_question_notif (id_notif,id_answer) values (53,62);
+insert into followed_question_notif (id_notif,id_answer) values (54,63);
+insert into followed_question_notif (id_notif,id_answer) values (55,64);
+insert into followed_question_notif (id_notif,id_answer) values (56,65);
+insert into followed_question_notif (id_notif,id_answer) values (57,66);
+insert into followed_question_notif (id_notif,id_answer) values (58,67);
+insert into followed_question_notif (id_notif,id_answer) values (59,68);
+insert into followed_question_notif (id_notif,id_answer) values (60,69);
+
 
 
 
