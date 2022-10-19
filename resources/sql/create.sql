@@ -7,6 +7,25 @@ DROP TABLE IF EXISTS tag CASCADE; --25
 DROP TABLE IF EXISTS question_tag CASCADE;
 DROP TABLE IF EXISTS "user" CASCADE;
 
+--notifs
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS system_Notif CASCADE;
+DROP TABLE IF EXISTS follow_tag_notif CASCADE;
+DROP TABLE IF EXISTS marked_as_solution_notif CASCADE;
+DROP TABLE IF EXISTS new_badge_notif CASCADE;
+DROP TABLE IF EXISTS new_answer_notif CASCADE;
+DROP TABLE IF EXISTS followed_question_notif CASCADE;
+
+--badges
+DROP TABLE IF EXISTS badge CASCADE;
+DROP TABLE IF EXISTS badge_given CASCADE; --30
+DROP TABLE IF EXISTS follows_tag CASCADE; --100
+DROP TABLE IF EXISTS follows_question CASCADE; --15
+DROP TABLE IF EXISTS question_vote CASCADE; --200
+DROP TABLE IF EXISTS answer_vote CASCADE; --300
+
+DROP TYPE IF EXISTS rank;
+
 
 create table "user"
 (
@@ -544,12 +563,6 @@ VALUES
     (13,15),
     (17,37);
 
-
-
---badges
-DROP TABLE IF EXISTS badge CASCADE;
-DROP TYPE IF EXISTS rank;
-
 CREATE TYPE rank AS ENUM ('Gold', 'Silver', 'Bronze');
 
 CREATE TABLE badge (
@@ -573,16 +586,50 @@ INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (10, 'Gold', 'Judge
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (11, 'Silver', 'Judge Pro', 'Vote more than 100 times');
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (12, 'Bronze', 'Judge Beginner', 'Vote more than 100 times');
 
+CREATE TABLE badge_given (
+	id_badge INT NOT NULL,
+    id_user INT NOT NULL,
+    PRIMARY KEY (id_user, id_badge),
+	    CONSTRAINT FK_BADGE
+			FOREIGN KEY(id_badge)
+				REFERENCES badge(id_badge),
+		CONSTRAINT FK_USER
+			FOREIGN KEY(id_user)
+				REFERENCES "user"(id_user)
+);
 
-
---notifs
-DROP TABLE IF EXISTS notifications CASCADE;
-DROP TABLE IF EXISTS system_Notif CASCADE;
-DROP TABLE IF EXISTS follow_tag_notif CASCADE;
-DROP TABLE IF EXISTS marked_as_solution_notif CASCADE;
-DROP TABLE IF EXISTS new_badge_notif CASCADE;
-DROP TABLE IF EXISTS new_answer_notif CASCADE;
-DROP TABLE IF EXISTS followed_question_notif CASCADE;
+INSERT INTO badge_given (id_user,id_badge)
+VALUES
+  (94,9),
+  (54,3),
+  (50,8),
+  (77,1),
+  (41,10),
+  (30,2),
+  (71,1),
+  (48,3),
+  (67,6),
+  (59,5),
+  (1,3),
+  (72,6),
+  (88,1),
+  (76,7),
+  (43,1),
+  (13,9),
+  (10,2),
+  (39,9),
+  (7,4),
+  (83,12),
+  (58,3),
+  (22,1),
+  (92,8),
+  (31,3),
+  (26,11),
+  (7,6),
+  (52,6),
+  (42,11),
+  (10,3),
+  (60,7);
 
 CREATE TABLE notifications (
 	id_notif SERIAL PRIMARY KEY,
@@ -773,5 +820,738 @@ insert into followed_question_notif (id_notif,id_answer) values (60,69);
 
 
 
+CREATE TABLE follows_tag (
+	id_user INT NOT NULL,
+    id_tag INT NOT NULL,
+    PRIMARY KEY (id_user, id_tag),
+	    CONSTRAINT FK_TAG
+			FOREIGN KEY(id_tag)
+				REFERENCES tag(id_tag),
+		CONSTRAINT FK_USER
+			FOREIGN KEY(id_user)
+				REFERENCES "user"(id_user)
+);
 
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+  (51,9),
+  (58,3),
+  (12,18),
+  (45,13),
+  (35,17),
+  (28,7),
+  (68,10),
+  (38,24),
+  (98,13),
+  (55,14),
+  (96,15),
+  (42,25),
+  (43,22),
+  (95,13),
+  (41,9),
+  (20,10),
+  (17,8),
+  (41,6),
+  (48,2),
+  (11,6),
+  (88,24),
+  (35,6),
+  (22,3),
+  (33,7),
+  (52,17),
+  (45,10),
+  (36,22),
+  (4,5),
+  (99,4),
+  (60,17);
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+  (99,21),
+  (57,19),
+  (29,17),
+  (70,2),
+  (48,9),
+  (62,9),
+  (17,7),
+  (22,20),
+  (62,11),
+  (83,17),
+  (49,18),
+  (39,3),
+  (44,18),
+  (94,11),
+  (93,8),
+  (48,24),
+  (3,18),
+  (44,22),
+  (60,20),
+  (19,9);
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+  (66,12),
+  (29,14),
+  (78,23),
+  (88,17),
+  (61,6),
+  (96,18),
+  (87,7),
+  (54,16),
+  (5,24),
+  (62,22),
+  (56,4),
+  (84,10),
+  (64,8),
+  (10,17),
+  (70,6),
+  (23,4),
+  (57,11),
+  (12,8),
+  (61,3),
+  (64,24),
+  (5,8),
+  (33,25),
+  (17,3),
+  (95,2),
+  (66,16),
+  (94,6),
+  (54,1),
+  (4,16),
+  (83,22),
+  (10,6);
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+  (4,18),
+  (61,7),
+  (86,4),
+  (37,25),
+  (15,18),
+  (6,16),
+  (76,6),
+  (33,23),
+  (6,19),
+  (90,12),
+  (21,20),
+  (37,5),
+  (43,2),
+  (32,22),
+  (64,18),
+  (30,6),
+  (12,23),
+  (86,11),
+  (83,12),
+  (62,4);
+  
+CREATE TABLE follows_question (
+	id_user INT NOT NULL,
+	id_question INT NOT NULL,
+	PRIMARY KEY (id_user, id_question),
+		CONSTRAINT FK_QUESTION
+			FOREIGN KEY(id_question)
+				REFERENCES question(id_question),
+		CONSTRAINT FK_USER
+			FOREIGN KEY(id_user)
+				REFERENCES "user"(id_user)
+);
+
+INSERT INTO follows_question (id_user,id_question)
+VALUES
+  (58,7),
+  (94,6),
+  (49,46),
+  (45,30),
+  (12,23),
+  (72,10),
+  (96,30),
+  (1,22),
+  (63,45),
+  (100,33),
+  (85,39),
+  (50,2),
+  (73,24),
+  (14,25),
+  (64,31),
+  (79,12),
+  (67,23),
+  (15,10),
+  (30,24),
+  (40,26),
+  (76,5),
+  (65,40),
+  (52,11),
+  (97,37),
+  (48,42);
+  
+CREATE TABLE question_vote (
+	id_user INT NOT NULL,
+	id_question INT NOT NULL,
+	score INT NOT NULL,
+		CONSTRAINT SCORE_VALUES
+			CHECK (score BETWEEN -1 AND 1),
+	PRIMARY KEY (id_user, id_question),
+		CONSTRAINT FK_QUESTION
+			FOREIGN KEY(id_question)
+				REFERENCES question(id_question),
+		CONSTRAINT FK_USER
+			FOREIGN KEY(id_user)
+				REFERENCES "user"(id_user)
+);
+
+
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (26,47,1),
+  (81,8,-1),
+  (61,26,1),
+  (65,32,1),
+  (7,5,-1),
+  (8,19,1),
+  (9,1,0),
+  (80,26,1),
+  (74,6,1),
+  (31,5,-1),
+  (80,37,-1),
+  (96,43,-1),
+  (95,11,1),
+  (56,43,1),
+  (71,7,1),
+  (38,2,-1),
+  (66,21,-1),
+  (65,8,-1),
+  (84,4,-1),
+  (55,2,1),
+  (82,9,-1),
+  (25,37,-1),
+  (6,39,-1),
+  (58,26,1),
+  (54,28,1),
+  (99,45,1),
+  (48,23,1),
+  (75,25,1),
+  (15,42,-1),
+  (67,44,-1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (89,25,-1),
+  (47,40,-1),
+  (22,33,-1),
+  (57,19,1),
+  (14,24,1),
+  (4,15,1),
+  (7,7,-1),
+  (93,46,1),
+  (90,39,1),
+  (20,32,1),
+  (98,44,-1),
+  (91,42,1),
+  (85,7,0),
+  (2,8,-1),
+  (18,27,-1),
+  (4,43,-1),
+  (89,38,1),
+  (67,13,-1),
+  (20,19,1),
+  (12,10,1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (6,49,-1),
+  (90,48,1),
+  (55,41,0),
+  (42,16,1),
+  (59,15,1),
+  (12,5,0),
+  (20,4,-1),
+  (1,2,1),
+  (87,42,-1),
+  (82,16,-1),
+  (10,38,1),
+  (64,46,-1),
+  (37,36,-1),
+  (19,35,1),
+  (86,16,-1),
+  (16,49,-1),
+  (22,27,1),
+  (73,24,1),
+  (86,7,-1),
+  (84,23,1),
+  (61,18,1),
+  (47,41,1),
+  (30,27,-1),
+  (97,31,1),
+  (46,17,-1),
+  (6,34,1),
+  (41,15,1),
+  (2,9,-1),
+  (7,20,1),
+  (70,4,1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (32,38,1),
+  (84,3,-1),
+  (43,31,-1),
+  (34,37,-1),
+  (60,31,1),
+  (37,3,1),
+  (75,45,-1),
+  (59,48,-1),
+  (80,7,1),
+  (87,48,1),
+  (46,36,-1),
+  (36,28,1),
+  (85,27,1),
+  (94,33,-1),
+  (97,15,1),
+  (64,10,1),
+  (82,15,-1),
+  (16,42,1),
+  (96,47,1),
+  (63,3,1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (13,12,-1),
+  (51,13,1),
+  (76,12,0),
+  (89,50,-1),
+  (6,27,1),
+  (19,40,1),
+  (84,10,-1),
+  (39,2,0),
+  (92,13,1),
+  (73,41,-1),
+  (80,31,1),
+  (21,15,0),
+  (81,49,1),
+  (66,45,-1),
+  (69,37,-1),
+  (65,40,-1),
+  (29,8,-1),
+  (80,49,1),
+  (73,23,1),
+  (94,48,1),
+  (59,11,-1),
+  (74,38,1),
+  (79,11,-1),
+  (96,30,-1),
+  (6,31,-1),
+  (57,31,-1),
+  (3,2,1),
+  (88,12,1),
+  (77,19,1),
+  (54,46,-1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (95,14,-1),
+  (51,40,1),
+  (2,5,1),
+  (70,28,1),
+  (56,12,1),
+  (87,47,-1),
+  (53,15,-1),
+  (38,28,-1),
+  (7,47,1),
+  (26,25,1),
+  (76,39,1),
+  (48,7,-1),
+  (96,38,1),
+  (64,40,-1),
+  (96,3,1),
+  (58,33,1),
+  (93,20,1),
+  (41,45,-1),
+  (79,36,1),
+  (70,30,1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (44,6,-1),
+  (86,27,1),
+  (68,32,-1),
+  (44,8,1),
+  (47,6,-1),
+  (20,29,-1),
+  (93,17,-1),
+  (98,19,-1),
+  (35,19,1),
+  (55,30,-1),
+  (40,28,-1),
+  (75,15,1),
+  (64,6,-1),
+  (43,8,-1),
+  (75,11,-1),
+  (72,41,1),
+  (85,38,-1),
+  (72,35,1),
+  (60,33,1),
+  (96,8,-1),
+  (62,21,-1),
+  (85,33,1),
+  (28,6,1),
+  (71,46,1),
+  (64,31,-1),
+  (64,42,-1),
+  (65,49,1),
+  (10,27,-1),
+  (42,23,1),
+  (99,2,-1);
+INSERT INTO question_vote (id_user,id_question,score)
+VALUES
+  (91,38,1),
+  (1,35,1),
+  (17,48,1),
+  (42,21,-1),
+  (8,34,-1),
+  (68,6,-1),
+  (31,14,1),
+  (77,32,-1),
+  (16,18,-1),
+  (34,22,-1),
+  (82,8,-1),
+  (84,12,1),
+  (79,6,1),
+  (97,28,1),
+  (62,40,-1),
+  (16,3,1),
+  (47,21,-1),
+  (11,48,-1),
+  (17,49,1),
+  (24,42,-1);
+  
+  
+CREATE TABLE answer_vote (
+	id_user INT NOT NULL,
+	id_answer INT NOT NULL,
+	score INT NOT NULL,
+		CONSTRAINT SCORE_VALUES
+			CHECK (score BETWEEN -1 AND 1),
+	PRIMARY KEY (id_user, id_answer),
+		CONSTRAINT FK_ANSWER
+			FOREIGN KEY(id_answer)
+				REFERENCES answer(id_answer),
+		CONSTRAINT FK_USER
+			FOREIGN KEY(id_user)
+				REFERENCES "user"(id_user)
+);
+
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (81,87,-1),
+  (87,59,1),
+  (84,81,-1),
+  (46,108,1),
+  (35,98,-1),
+  (35,60,1),
+  (7,84,1),
+  (28,102,1),
+  (31,66,1),
+  (65,99,1),
+  (10,55,-1),
+  (22,67,1),
+  (41,67,-1),
+  (84,94,-1),
+  (63,58,-1),
+  (52,88,-1),
+  (96,61,1),
+  (50,87,1),
+  (7,110,1),
+  (46,90,1),
+  (85,63,-1),
+  (42,103,-1),
+  (78,67,1),
+  (35,69,1),
+  (84,53,-1),
+  (18,89,1),
+  (93,88,1),
+  (28,100,1),
+  (77,109,1),
+  (46,52,-1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (98,73,-1),
+  (77,98,-1),
+  (91,84,1),
+  (77,95,1),
+  (53,86,1),
+  (73,61,1),
+  (33,56,1),
+  (81,108,1),
+  (11,104,1),
+  (94,74,-1),
+  (44,68,-1),
+  (59,89,-1),
+  (8,91,1),
+  (17,73,1),
+  (38,99,-1),
+  (57,99,-1),
+  (52,53,1),
+  (91,77,1),
+  (57,66,1),
+  (68,66,-1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (33,77,1),
+  (40,95,-1),
+  (66,103,-1),
+  (17,84,1),
+  (92,87,-1),
+  (19,75,-1),
+  (41,96,1),
+  (68,103,1),
+  (53,65,1),
+  (4,82,-1),
+  (21,80,1),
+  (81,79,-1),
+  (33,52,1),
+  (63,94,-1),
+  (34,97,1),
+  (6,52,1),
+  (60,72,-1),
+  (61,67,-1),
+  (40,53,1),
+  (87,58,1),
+  (13,53,1),
+  (47,54,1),
+  (66,58,-1),
+  (44,101,1),
+  (2,67,1),
+  (58,52,1),
+  (14,101,-1),
+  (47,55,1),
+  (85,70,-1),
+  (82,61,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (13,58,1),
+  (94,82,1),
+  (39,57,1),
+  (88,97,1),
+  (67,62,-1),
+  (22,59,-1),
+  (93,92,-1),
+  (100,95,-1),
+  (89,73,-1),
+  (41,53,1),
+  (55,55,-1),
+  (62,82,-1),
+  (30,66,1),
+  (73,78,1),
+  (28,65,-1),
+  (97,58,-1),
+  (60,97,0),
+  (84,89,-1),
+  (79,108,1),
+  (38,52,-1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (57,59,1),
+  (12,68,1),
+  (9,100,-1),
+  (11,77,1),
+  (52,99,-1),
+  (94,63,-1),
+  (99,83,-1),
+  (56,85,-1),
+  (98,96,1),
+  (61,97,-1),
+  (34,80,1),
+  (59,83,-1),
+  (100,98,-1),
+  (77,91,1),
+  (3,92,0),
+  (100,97,1),
+  (88,81,-1),
+  (31,84,0),
+  (69,85,1),
+  (42,86,-1),
+  (61,58,1),
+  (87,73,1),
+  (62,90,-1),
+  (38,91,-1),
+  (20,101,1),
+  (72,102,-1),
+  (30,95,-1),
+  (35,66,-1),
+  (69,81,-1),
+  (50,84,-1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (83,108,1),
+  (61,101,1),
+  (11,102,-1),
+  (12,104,1),
+  (38,107,1),
+  (81,77,1),
+  (1,66,1),
+  (68,84,-1),
+  (25,108,-1),
+  (56,93,1),
+  (3,58,1),
+  (53,67,-1),
+  (26,76,-1),
+  (47,56,-1),
+  (62,72,1),
+  (94,79,1),
+  (9,69,1),
+  (53,98,0),
+  (27,97,-1),
+  (28,73,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (71,92,1),
+  (23,96,-1),
+  (6,73,-1),
+  (69,99,-1),
+  (25,79,1),
+  (78,51,1),
+  (92,53,1),
+  (82,63,1),
+  (64,73,1),
+  (19,96,-1),
+  (63,103,-1),
+  (23,83,-1),
+  (58,109,1),
+  (90,108,1),
+  (81,95,1),
+  (65,57,1),
+  (57,103,1),
+  (41,93,1),
+  (96,71,1),
+  (6,53,1),
+  (55,98,-1),
+  (53,52,-1),
+  (86,109,1),
+  (23,109,1),
+  (31,69,1),
+  (58,108,1),
+  (12,64,-1),
+  (72,93,1),
+  (38,81,1),
+  (69,82,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (100,80,-1),
+  (97,92,1),
+  (48,52,1),
+  (23,57,-1),
+  (22,107,1),
+  (81,93,1),
+  (45,98,1),
+  (52,56,1),
+  (86,95,1),
+  (91,96,-1),
+  (26,69,-1),
+  (75,87,1),
+  (99,62,1),
+  (38,95,1),
+  (1,87,-1),
+  (93,72,-1),
+  (93,78,-1),
+  (95,85,-1),
+  (84,99,-1),
+  (1,93,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (99,85,1),
+  (74,94,-1),
+  (57,79,-1),
+  (32,107,1),
+  (96,91,1),
+  (46,66,1),
+  (75,92,1),
+  (56,107,1),
+  (67,104,-1),
+  (39,91,-1),
+  (50,52,-1),
+  (82,59,1),
+  (63,79,1),
+  (26,100,1),
+  (25,56,1),
+  (79,80,1),
+  (70,81,-1),
+  (23,71,1),
+  (96,55,1),
+  (26,55,1),
+  (29,88,1),
+  (97,56,1),
+  (18,90,1),
+  (43,53,1),
+  (33,102,-1),
+  (20,108,-1),
+  (9,95,-1),
+  (23,66,-1),
+  (54,84,-1),
+  (11,98,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (51,74,-1),
+  (95,75,-1),
+  (39,54,1),
+  (14,90,1),
+  (90,62,1),
+  (58,51,1),
+  (69,66,1),
+  (60,101,1),
+  (37,100,1),
+  (17,89,1),
+  (93,56,-1),
+  (5,96,-1),
+  (84,103,-1),
+  (26,89,-1),
+  (20,98,1),
+  (91,103,1),
+  (42,87,-1),
+  (59,73,-1),
+  (93,91,-1),
+  (70,108,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (12,75,1),
+  (9,108,-1),
+  (62,96,-1),
+  (73,73,-1),
+  (39,76,1),
+  (17,59,1),
+  (36,54,1),
+  (89,101,1),
+  (55,79,1),
+  (60,82,-1),
+  (60,108,-1),
+  (20,103,-1),
+  (67,76,1),
+  (97,53,-1),
+  (20,96,-1),
+  (68,77,-1),
+  (58,69,1),
+  (50,58,1),
+  (20,67,1),
+  (87,91,1),
+  (32,101,-1),
+  (9,84,1),
+  (29,77,-1),
+  (29,60,1),
+  (97,57,-1),
+  (43,67,-1),
+  (94,76,1),
+  (33,70,1),
+  (95,106,1),
+  (92,103,1);
+INSERT INTO answer_vote (id_user,id_answer,score)
+VALUES
+  (97,90,1),
+  (68,80,-1),
+  (5,61,-1),
+  (47,70,1),
+  (42,97,1),
+  (87,108,1),
+  (51,70,1),
+  (27,79,1),
+  (88,55,-1),
+  (8,84,-1),
+  (27,70,-1),
+  (34,60,1),
+  (86,86,1),
+  (59,92,1),
+  (55,67,1),
+  (89,92,-1),
+  (92,83,-1),
+  (59,106,-1),
+  (41,62,1),
+  (45,102,1);
 
