@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS followed_question_notif CASCADE;
 
 --badges
 DROP TABLE IF EXISTS badge CASCADE;
+DROP TABLE IF EXISTS badges_given CASCADE;
 DROP TABLE IF EXISTS badge_given CASCADE; --30
 DROP TABLE IF EXISTS follows_tag CASCADE; --100
 DROP TABLE IF EXISTS follows_question CASCADE; --15
@@ -1683,3 +1684,22 @@ VALUES
   (41,62,1),
   (45,102,1);
 
+--badges_given
+create table badges_given (
+    id_user INT,
+    id_badge INT,
+    PRIMARY KEY (id_user, id_badge),
+    CONSTRAINT FK_USER
+        FOREIGN KEY(id_user)
+            REFERENCES "user"(id_user),
+    CONSTRAINT FK_BADGE
+        FOREIGN KEY(id_badge)
+            REFERENCES badge(id_badge)
+);
+insert into badges_given (id_user, id_badge) values (8, 12);
+insert into badges_given (id_user, id_badge) values (79, 2);
+insert into badges_given (id_user, id_badge) values (67, 2);
+insert into badges_given (id_user, id_badge) values (36, 11);
+insert into badges_given (id_user, id_badge) values (52, 8);
+insert into badges_given (id_user, id_badge) values (51, 10);
+insert into badges_given (id_user, id_badge) values (98, 1);
