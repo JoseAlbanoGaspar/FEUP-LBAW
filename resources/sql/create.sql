@@ -6,6 +6,9 @@ DROP TABLE IF EXISTS draft CASCADE; --5
 DROP TABLE IF EXISTS tag CASCADE; --25
 DROP TABLE IF EXISTS question_tag CASCADE;
 DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS administrator CASCADE;
+DROP TABLE IF EXISTS moderator CASCADE;
+
 
 --notifs
 DROP TABLE IF EXISTS notifications CASCADE;
@@ -23,6 +26,8 @@ DROP TABLE IF EXISTS follows_tag CASCADE; --100
 DROP TABLE IF EXISTS follows_question CASCADE; --15
 DROP TABLE IF EXISTS question_vote CASCADE; --200
 DROP TABLE IF EXISTS answer_vote CASCADE; --300
+DROP TABLE IF EXISTS report CASCADE; --2
+DROP TABLE IF EXISTS edit CASCADE; --3
 
 DROP TYPE IF EXISTS rank;
 
@@ -1681,3 +1686,45 @@ VALUES
   (41,62,1),
   (45,102,1);
 
+CREATE TABLE report (
+    id_report SERIAL PRIMARY KEY,
+	id_user INT NOT NULL,
+	id_post INT NOT NULL,
+    reason TEXT NOT NULL,
+	date DATE NOT NULL,
+    CONSTRAINT UNIQUE_USER_POST
+	    UNIQUE (id_user, id_post),
+    CONSTRAINT FK_POST
+        FOREIGN KEY(id_post)
+            REFERENCES post(id_post),
+    CONSTRAINT FK_USER
+        FOREIGN KEY(id_user)
+            REFERENCES "user"(id_user)
+);
+
+INSERT INTO report (id_report,id_user,id_post,reason,date)
+VALUES
+  (1,36,112,'neque. Nullam ut nisi a odio semper cursus. Integer mollis. Integer tincidunt aliquam arcu.','2022-10-21 10:46:30'),
+  (2,51,63,'In lorem. Donec elementum, lorem ut aliquam iaculis, lacus pede sagittis augue, eu tempor erat','2022-10-21 14:34:46');
+
+CREATE TABLE edit (
+    id_edit SERIAL PRIMARY KEY,
+	id_user INT NOT NULL,
+	id_post INT NOT NULL,
+    old_text TEXT NOT NULL,
+	date DATE NOT NULL,
+    CONSTRAINT UNIQUE_USER_POST_DATE
+	    UNIQUE (id_user, id_post, date),
+    CONSTRAINT FK_ANSWER
+        FOREIGN KEY(id_post)
+            REFERENCES post(id_post),
+    CONSTRAINT FK_USER
+        FOREIGN KEY(id_user)
+            REFERENCES "user"(id_user)
+);
+
+INSERT INTO edit (id_edit,id_user,id_post,old_text,date)
+VALUES
+  (1,42,1,'vel lectus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.','2022-10-20 15:34:06'),
+  (2,32,29,'Vivamus molestie dapibus ligula. Aliquam erat volutpat. Nulla dignissim. Maecenas ornare egestas ligula. Nullam','2022-10-21 13:07:31'),
+  (3,89,46,'ipsum leo elementum sem, vitae aliquam eros turpis non enim. Mauris quis turpis vitae purus gravida','2022-10-20 09:12:05');
