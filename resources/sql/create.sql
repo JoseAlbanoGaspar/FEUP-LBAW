@@ -545,3 +545,93 @@ VALUES
     (17,37);
 
 
+
+--badges
+DROP TABLE IF EXISTS badge CASCADE;
+DROP TYPE IF EXISTS rank;
+
+CREATE TYPE rank AS ENUM ('Gold', 'Silver', 'Bronze');
+
+CREATE TABLE badge (
+    id_badge serial PRIMARY KEY,
+    b_rank rank NOT NULL,
+    name VARCHAR (50) NOT NULL,
+    condition TEXT NOT NULL
+);
+
+
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (1, 'Gold', 'Inquisitive Master', 'Ask more than 100 questions');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (2, 'Silver', 'Inquisitive Pro', 'Ask more than 50 questions');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (3, 'Bronze', 'Inquisitive Beginner', 'Ask more than 10 questions');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (4, 'Gold', 'Answer Master', 'Answer more than 100 answers');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (5, 'Silver', 'Answer Pro', 'Answer more than 50 answers');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (6, 'Bronze', 'Answer Beginner', 'Answer more than 10 answers');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (7, 'Gold', 'Commentator Master', 'Comment more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (8, 'Silver', 'Commentator Pro', 'Comment more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (9, 'Bronze', 'Commentator Beginner', 'Comment more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (10, 'Gold', 'Judge Master', 'Vote more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (11, 'Silver', 'Judge Pro', 'Vote more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (12, 'Bronze', 'Judge Beginner', 'Vote more than 100 times');
+
+
+
+--notifs
+DROP TABLE IF EXISTS "notification" CASCADE;
+DROP TABLE IF EXISTS systemNotif CASCADE;
+DROP TABLE IF EXISTS followTagNotif CASCADE;
+DROP TABLE IF EXISTS markedAsSolutionNotif CASCADE;
+DROP TABLE IF EXISTS newBadgeNotif CASCADE;
+DROP TABLE IF EXISTS newAnswerNotif CASCADE;
+DROP TABLE IF EXISTS followedQuestionNotif CASCADE;
+
+CREATE TABLE "notification" (
+	id_notif SERIAL PRIMARY KEY,
+	notif_text TEXT NOT NULL,
+	dismissed BOOL NOT NULL,
+	id_user INT,
+	FOREIGN KEY (id_user) REFERENCES "user"(id_user)
+);
+
+CREATE TABLE systemNotif (
+	id_notif INT PRIMARY KEY,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif)
+);
+
+CREATE TABLE followTagNotif (
+	id_notif INT PRIMARY KEY,
+	id_tag INT,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_TAG FOREIGN KEY (id_tag) REFERENCES tag(id_tag)
+);
+
+CREATE TABLE markedAsSolutionNotif (
+	id_notif INT PRIMARY KEY,
+	id_answer INT,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+);
+
+CREATE TABLE newBadgeNotif (
+	id_notif INT PRIMARY KEY,
+	id_badge INT,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_BADGE FOREIGN KEY (id_badge) REFERENCES badge(id_badge)
+);
+
+CREATE TABLE newAnswerNotif (
+	id_notif INT PRIMARY KEY,
+	id_answer INT,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+);
+
+CREATE TABLE followedQuestionNotif (
+	id_notif INT PRIMARY KEY,
+	id_answer INT,
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES "notification"(id_notif),
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+);
+
+
+
+
