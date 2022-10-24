@@ -1,3 +1,50 @@
+DROP TRIGGER IF EXISTS give_question_badge ON question;
+DROP FUNCTION IF EXISTS give_question_badge();
+
+DROP TRIGGER IF EXISTS give_answer_badge ON answer;
+DROP FUNCTION IF EXISTS give_answer_badge();
+
+DROP TRIGGER IF EXISTS give_comment_badge ON comment;
+DROP FUNCTION IF EXISTS give_comment_badge();
+
+DROP TRIGGER IF EXISTS give_question_vote_badge ON question_vote;
+DROP TRIGGER IF EXISTS give_answer_vote_badge ON answer_vote;
+DROP FUNCTION IF EXISTS give_vote_badge();
+
+
+DROP TRIGGER IF EXISTS edit_post ON edit;
+DROP FUNCTION IF EXISTS can_edit();
+
+DROP TRIGGER IF EXISTS only_one_solution ON answer;
+DROP FUNCTION IF EXISTS only_one_solution();
+
+DROP TRIGGER IF EXISTS repeated_followed_tag_notif ON follow_tag_notif;
+DROP FUNCTION IF EXISTS repeated_followed_tag_notif();
+
+DROP TRIGGER IF EXISTS only_one_report ON report;
+DROP FUNCTION IF EXISTS only_one_report();
+
+DROP TRIGGER IF EXISTS author_answer ON answer;
+DROP FUNCTION IF EXISTS author_answer();
+
+--author of answer cannot answer his question
+CREATE FUNCTION author_answer() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+        IF EXISTS (SELECT id_author FROM post WHERE id_post = NEW.id_answer  INTERSECT SELECT id_author FROM post WHERE id_post = NEW.id_question) THEN
+		   DELETE FROM Post WHERE id_post = NEW.id_answer;
+           RAISE EXCEPTION 'An author of a question cannot answer his question';
+        END IF;
+        RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER author_answer
+        BEFORE INSERT OR UPDATE ON answer
+        FOR EACH ROW
+        EXECUTE PROCEDURE author_answer();
+
 --give question badges
 CREATE FUNCTION give_question_badge() RETURNS TRIGGER AS
 $BODY$
@@ -160,7 +207,7 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER edit_question
+CREATE TRIGGER edit_post
  BEFORE INSERT ON edit
  FOR EACH ROW
  EXECUTE PROCEDURE can_edit();
