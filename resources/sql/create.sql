@@ -31,9 +31,9 @@ DROP TYPE IF EXISTS rank;
 
 CREATE TABLE "user" (
 	id_user SERIAL PRIMARY KEY,
-	username VARCHAR(50),
-	email VARCHAR(50),
-	password TEXT,
+	username VARCHAR(25) NOT NULL,
+	email TEXT NOT NULL,
+	password TEXT NOT NULL,
 	profilePicture TEXT,
 	personalText TEXT
 );
