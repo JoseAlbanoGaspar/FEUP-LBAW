@@ -1773,15 +1773,14 @@ ALTER TABLE post
 CREATE FUNCTION post_search_update() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        NEW.tsvectors = (
-                setweight(to_tsvector('english', NEW.text_body), 'B') ||
-            );
+        NEW.tsvectors =
+                setweight(to_tsvector('english', NEW.text_body), 'B');
+
     END IF;
     IF TG_OP = 'UPDATE' THEN
         IF (NEW.text_body <> OLD.text_body) THEN
-            NEW.tsvectors = (
-                    setweight(to_tsvector('english', NEW.text_body), 'B') ||
-                );
+            NEW.tsvectors =
+                    setweight(to_tsvector('english', NEW.text_body), 'B');
         END IF;
     END IF;
     RETURN NEW;
