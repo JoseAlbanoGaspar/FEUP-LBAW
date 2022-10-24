@@ -27,6 +27,9 @@ DROP FUNCTION IF EXISTS only_one_report();
 DROP TRIGGER IF EXISTS author_answer ON answer;
 DROP FUNCTION IF EXISTS author_answer();
 
+DROP TRIGGER IF EXISTS delete_user ON "user";
+DROP FUNCTION IF EXISTS delete_user();
+
 --author of answer cannot answer his question
 CREATE FUNCTION author_answer() RETURNS TRIGGER AS
 $BODY$
@@ -269,3 +272,28 @@ CREATE TRIGGER only_one_report
  BEFORE INSERT ON report
  FOR EACH ROW
  EXECUTE PROCEDURE only_one_report();
+
+ ------------------------TRANSACTION DELETE USER
+
+ -- delete useless information about deleted user
+ CREATE FUNCTION delete_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+   -- delete notifications
+   DELETE FROM notification WHERE id_user = OLD.id_user;
+   -- delete drafts
+   DELETE FROM draft WHERE id_user = OLD.id_user;
+   -- delete follows_tag
+   DELETE FROM follows_tag WHERE id_user = OLD.id_user;
+   -- delete follows_question
+   DELETE FROM follows_question WHERE id_user = OLD.id_user;
+
+END
+$BODY$
+
+LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_user
+BEFORE UPDATE ON "user"
+FOR EACH ROW
+EXECUTE PROCEDURE delete_user();
