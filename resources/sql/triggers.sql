@@ -45,19 +45,19 @@ BEGIN
    numanswer = (SELECT COUNT(*) FROM (post JOIN answer ON id_post = id_answer)
                         WHERE id_author = idauthor);
    IF numanswer >= 10 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 3)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 6)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 3);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 6);
    END IF;
    IF numanswer >= 50 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 2)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 5)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 2);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 5);
    END IF;
    IF numanswer >= 100 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 1)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 4)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 1);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 4);
    END IF;
    RETURN NEW;
 END
@@ -81,19 +81,19 @@ BEGIN
    numcomment = (SELECT COUNT(*) FROM (post JOIN comment ON id_post = id_comment)
                         WHERE id_author = idauthor);
    IF numcomment >= 10 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 3)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 9)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 3);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 9);
    END IF;
    IF numcomment >= 50 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 2)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 8)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 2);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 8);
    END IF;
    IF numcomment >= 100 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 1)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 7)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 1);
+      INSERT INTO badges_given (id_user, id_badge) values (idauthor, 7);
    END IF;
    RETURN NEW;
 END
@@ -116,19 +116,19 @@ BEGIN
              (SELECT COUNT(*) FROM answer_vote WHERE id_user = NEW.id_user);
 
    IF numvote >= 10 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 3)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 12)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 3);
+      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 12);
    END IF;
    IF numvote >= 50 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 2)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 11)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 2);
+      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 11);
    END IF;
    IF numvote >= 100 AND
-      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 1)
+      NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 10)
    THEN
-      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 1);
+      INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 10);
    END IF;
    RETURN NEW;
 END

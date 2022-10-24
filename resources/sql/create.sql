@@ -721,11 +721,11 @@ INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (4, 'Gold', 'Answer
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (5, 'Silver', 'Answer Pro', 'Answer more than 50 answers');
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (6, 'Bronze', 'Answer Beginner', 'Answer more than 10 answers');
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (7, 'Gold', 'Commentator Master', 'Comment more than 100 times');
-INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (8, 'Silver', 'Commentator Pro', 'Comment more than 100 times');
-INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (9, 'Bronze', 'Commentator Beginner', 'Comment more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (8, 'Silver', 'Commentator Pro', 'Comment more than 50 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (9, 'Bronze', 'Commentator Beginner', 'Comment more than 10 times');
 INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (10, 'Gold', 'Judge Master', 'Vote more than 100 times');
-INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (11, 'Silver', 'Judge Pro', 'Vote more than 100 times');
-INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (12, 'Bronze', 'Judge Beginner', 'Vote more than 100 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (11, 'Silver', 'Judge Pro', 'Vote more than 50 times');
+INSERT INTO badge (id_badge, b_rank, name, condition) VALUES (12, 'Bronze', 'Judge Beginner', 'Vote more than 10 times');
 
 CREATE TABLE badge_given (
 	id_badge INT NOT NULL,
