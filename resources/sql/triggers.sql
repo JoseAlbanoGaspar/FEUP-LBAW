@@ -30,6 +30,9 @@ DROP FUNCTION IF EXISTS author_answer();
 DROP TRIGGER IF EXISTS delete_user ON "user";
 DROP FUNCTION IF EXISTS delete_user();
 
+DROP TRIGGER IF EXISTS user_check ON "user";
+DROP FUNCTION IF EXISTS user_check();
+
 --author of answer cannot answer his question
 CREATE FUNCTION author_answer() RETURNS TRIGGER AS
 $BODY$
@@ -273,10 +276,9 @@ CREATE TRIGGER only_one_report
  FOR EACH ROW
  EXECUTE PROCEDURE only_one_report();
 
- ------------------------TRANSACTION DELETE USER
 
- -- delete useless information about deleted user
- CREATE FUNCTION delete_user() RETURNS TRIGGER AS
+-- delete useless information about deleted user
+CREATE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
    -- delete notifications
@@ -297,3 +299,41 @@ CREATE TRIGGER delete_user
 BEFORE UPDATE ON "user"
 FOR EACH ROW
 EXECUTE PROCEDURE delete_user();
+
+-- integrity of user data
+CREATE FUNCTION user_check() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+   IF (NEW.username LIKE "deleted_user" OR NEW.email LIKE "deleted_email")
+      THEN RAISE EXCEPTION 'Cannot use deleted_user as a part of your username, same for deleted_email in email';
+   END IF;
+   RETURN NEW;
+
+END
+$BODY$
+
+LANGUAGE plpgsql;
+
+CREATE TRIGGER user_check
+BEFORE INSERT ON "user"
+FOR EACH ROW
+EXECUTE PROCEDURE user_check();
+
+-- deleted users shouldn't receive notifications
+CREATE FUNCTION delete_user_notif() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+   IF EXISTS (SELECT * FROM notification NATURAL JOIN "user" WHERE NEW.id_user = id_user AND username LIKE "deleted_user")
+      THEN RAISE EXCEPTION 'Notification not sent - user does not exist anymore';
+   END IF;
+   RETURN NEW;
+
+END
+$BODY$
+
+LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_user_notif
+BEFORE INSERT ON notification
+FOR EACH ROW
+EXECUTE PROCEDURE delete_user_notif();
