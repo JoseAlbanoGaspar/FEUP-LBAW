@@ -54,7 +54,7 @@ CREATE TRIGGER author_answer
 --give question badges
 CREATE FUNCTION give_question_badge() RETURNS TRIGGER AS
 $BODY$
-DECLARE 
+DECLARE
 	idauthor integer;
 	numquestion integer;
 BEGIN
@@ -90,7 +90,7 @@ CREATE TRIGGER give_question_badge
 --give answer badges
 CREATE FUNCTION give_answer_badge() RETURNS TRIGGER AS
 $BODY$
-DECLARE 
+DECLARE
 	idauthor integer;
 	numanswer integer;
 BEGIN
@@ -126,7 +126,7 @@ CREATE TRIGGER give_answer_badge
 --give comment badges
 CREATE FUNCTION give_comment_badge() RETURNS TRIGGER AS
 $BODY$
-DECLARE 
+DECLARE
 	idauthor integer;
 	numcomment integer;
 BEGIN
@@ -162,7 +162,7 @@ CREATE TRIGGER give_comment_badge
 --give vote badges
 CREATE FUNCTION give_vote_badge() RETURNS TRIGGER AS
 $BODY$
-DECLARE 
+DECLARE
 	numvote integer;
 BEGIN
    numvote = (SELECT COUNT(*) FROM question_vote WHERE id_user = NEW.id_user) +
@@ -223,7 +223,7 @@ CREATE TRIGGER edit_post
 CREATE FUNCTION only_one_solution() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-   IF NEW.is_solution = '1' AND 
+   IF NEW.is_solution = '1' AND
       EXISTS (SELECT * FROM answer WHERE id_question = NEW.id_question AND is_solution = '1')
    THEN RAISE EXCEPTION 'There already is another solution to this question!';
    END IF;
@@ -242,7 +242,7 @@ CREATE TRIGGER only_one_solution
 CREATE FUNCTION repeated_followed_tag_notif() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-   IF EXISTS (SELECT * FROM follow_tag_notif JOIN notification 
+   IF EXISTS (SELECT * FROM follow_tag_notif JOIN notification
                ON follow_tag_notif.id_notif = notification.id_notif
                WHERE id_user = (SELECT id_user FROM notification WHERE id_notif = NEW.id_notif)
                AND id_tag = NEW.id_tag)
@@ -281,6 +281,8 @@ CREATE TRIGGER only_one_report
 CREATE FUNCTION delete_user() RETURNS TRIGGER AS
 $BODY$
 BEGIN
+    IF NEW.username LIKE 'deleted_user' THEN
+
    -- delete notifications
    DELETE FROM notification WHERE id_user = OLD.id_user;
    -- delete drafts
@@ -289,6 +291,9 @@ BEGIN
    DELETE FROM follows_tag WHERE id_user = OLD.id_user;
    -- delete follows_question
    DELETE FROM follows_question WHERE id_user = OLD.id_user;
+   END IF;
+    RETURN NEW;
+
 
 END
 $BODY$
@@ -337,3 +342,27 @@ CREATE TRIGGER delete_user_notif
 BEFORE INSERT ON notification
 FOR EACH ROW
 EXECUTE PROCEDURE delete_user_notif();
+
+CREATE FUNCTION send_follow_tag_notifs() RETURNS TRIGGER AS --after insert on post
+$BODY$
+DECLARE t RECORD;
+BEGIN
+    FOR t IN SELECT * FROM follows_tag WHERE follows_tag.id_tag IN (SELECT id_tag FROM question_tag WHERE id_question = NEW.id_question)
+    LOOP
+            INSERT INTO notification(dismissed, id_user, date)
+            VALUES(false, t.id_user, Now());
+
+            insert into follow_tag_notif (id_notif, id_tag)
+                (select currval('notification_id_notif_seq'), t.id_tag);
+
+
+                END LOOP;
+
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_follow_tag_notifs
+    AFTER INSERT ON question
+    FOR EACH ROW
+    EXECUTE PROCEDURE send_follow_tag_notifs()
