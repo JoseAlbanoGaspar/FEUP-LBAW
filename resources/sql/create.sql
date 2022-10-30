@@ -31,16 +31,16 @@ DROP TYPE IF EXISTS rank;
 
 CREATE TABLE "user" (
 	id_user SERIAL PRIMARY KEY,
-	username VARCHAR(25) NOT NULL,
-	email TEXT NOT NULL,
+	username VARCHAR(25) UNIQUE NOT NULL,
+	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
-	profilePicture TEXT,
-	personalText TEXT
+	profile_picture TEXT,
+	personal_text TEXT
 );
 
 create table administrator (
     id_admin INT PRIMARY KEY,
-          CONSTRAINT userExists
+          CONSTRAINT FK_USER
             FOREIGN KEY(id_admin)
               REFERENCES "user"(id_user) ON DELETE CASCADE
 );
@@ -48,7 +48,7 @@ create table administrator (
 
 create table moderator (
     id_moderator INT PRIMARY KEY,
-          CONSTRAINT userExists
+          CONSTRAINT FK_USER
             FOREIGN KEY(id_moderator)
               REFERENCES "user"(id_user) ON DELETE CASCADE
 );
@@ -77,8 +77,8 @@ create table question (
 
 CREATE TABLE answer (
                         id_answer SERIAL PRIMARY KEY,
-                        id_question INT NULL,
-                        is_solution BOOLEAN default '0',
+                        id_question INT NOT NULL,
+                        is_solution BOOLEAN NOT NULL DEFAULT '0',
                             CONSTRAINT FK_POST
                                 FOREIGN KEY(id_answer)
                                     REFERENCES post(id_post) ON DELETE CASCADE,
@@ -107,7 +107,7 @@ CREATE TABLE comment (
 
 CREATE TABLE draft (
                          id_draft SERIAL PRIMARY KEY ,
-                         date DATE,
+                         date DATE NOT NULL,
                          id_author integer NOT NULL,
                          title TEXT default NULL,
                          text_body TEXT default NULL,
@@ -168,7 +168,7 @@ CREATE TABLE badge_given (
 CREATE TABLE notification (
 	id_notif SERIAL PRIMARY KEY,
 	dismissed BOOL NOT NULL,
-	id_user INT,
+	id_user INT NOT NULL,
     date DATE NOT NULL,
 	FOREIGN KEY (id_user) REFERENCES "user"(id_user) ON DELETE CASCADE
 );
@@ -252,9 +252,10 @@ CREATE TABLE question_vote (
 	id_user INT NOT NULL,
 	id_question INT NOT NULL,
 	score INT NOT NULL,
+    PRIMARY KEY (id_user, id_question),
 		CONSTRAINT SCORE_VALUES
 			CHECK (score BETWEEN -1 AND 1),
-	PRIMARY KEY (id_user, id_question),
+
 		CONSTRAINT FK_QUESTION
 			FOREIGN KEY(id_question)
 				REFERENCES question(id_question) ON DELETE CASCADE,
@@ -354,11 +355,11 @@ DROP FUNCTION IF EXISTS question_search_update();
 CREATE FUNCTION question_search_update() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        UPDATE post SET tsvectors = setweight('english', NEW.title, 'A') WHERE id_post = NEW.id_question;
+        UPDATE post SET tsvectors = setweight(to_tsvector('english', NEW.title), 'A') WHERE id_post = NEW.id_question;
     END IF;
     IF TG_OP = 'UPDATE' THEN
         IF (NEW.title <> OLD.title) THEN
-            UPDATE post SET tsvectors = setweight('english', NEW.title, 'A') WHERE id_post = NEW.id_question;
+            UPDATE post SET tsvectors = setweight(to_tsvector('english', NEW.title), 'A') WHERE id_post = NEW.id_question;
         END IF;
     END IF;
     RETURN NEW;
@@ -442,19 +443,19 @@ BEGIN
     numquestion = (SELECT COUNT(*) FROM (post JOIN question ON id_post = id_question)
                    WHERE id_author = idauthor);
     IF numquestion >= 10 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 3)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 3)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 3);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 3);
     END IF;
     IF numquestion >= 50 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 2)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 2)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 2);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 2);
     END IF;
     IF numquestion >= 100 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 1)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 1)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 1);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 1);
     END IF;
     RETURN NEW;
 END
@@ -478,19 +479,19 @@ BEGIN
     numanswer = (SELECT COUNT(*) FROM (post JOIN answer ON id_post = id_answer)
                  WHERE id_author = idauthor);
     IF numanswer >= 10 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 6)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 6)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 6);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 6);
     END IF;
     IF numanswer >= 50 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 5)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 5)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 5);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 5);
     END IF;
     IF numanswer >= 100 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 4)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 4)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 4);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 4);
     END IF;
     RETURN NEW;
 END
@@ -514,19 +515,19 @@ BEGIN
     numcomment = (SELECT COUNT(*) FROM (post JOIN comment ON id_post = id_comment)
                   WHERE id_author = idauthor);
     IF numcomment >= 10 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 9)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 9)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 9);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 9);
     END IF;
     IF numcomment >= 50 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 8)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 8)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 8);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 8);
     END IF;
     IF numcomment >= 100 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = idauthor AND id_badge = 7)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = idauthor AND id_badge = 7)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (idauthor, 7);
+        INSERT INTO badge_given (id_user, id_badge) values (idauthor, 7);
     END IF;
     RETURN NEW;
 END
@@ -549,19 +550,19 @@ BEGIN
               (SELECT COUNT(*) FROM answer_vote WHERE id_user = NEW.id_user);
 
     IF numvote >= 10 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 12)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = NEW.id_user AND id_badge = 12)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 12);
+        INSERT INTO badge_given (id_user, id_badge) values (NEW.id_user, 12);
     END IF;
     IF numvote >= 50 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 11)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = NEW.id_user AND id_badge = 11)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 11);
+        INSERT INTO badge_given (id_user, id_badge) values (NEW.id_user, 11);
     END IF;
     IF numvote >= 100 AND
-       NOT EXISTS(SELECT * FROM badges_given WHERE id_user = NEW.id_user AND id_badge = 10)
+       NOT EXISTS(SELECT * FROM badge_given WHERE id_user = NEW.id_user AND id_badge = 10)
     THEN
-        INSERT INTO badges_given (id_user, id_badge) values (NEW.id_user, 10);
+        INSERT INTO badge_given (id_user, id_badge) values (NEW.id_user, 10);
     END IF;
     RETURN NEW;
 END
@@ -605,7 +606,8 @@ $BODY$
 BEGIN
     IF NEW.is_solution = '1' AND
        EXISTS (SELECT * FROM answer WHERE id_question = NEW.id_question AND is_solution = '1')
-    THEN RAISE EXCEPTION 'There already is another solution to this question!';
+    THEN
+        UPDATE answer SET is_solution = '0' WHERE is_solution = '1';
     END IF;
     RETURN NEW;
 END
@@ -658,14 +660,15 @@ EXECUTE PROCEDURE only_one_report();
 
 ------------------------TRANSACTION DELETE USER
 
+/*
 -- delete useless information about deleted user
-CREATE FUNCTION delete_user() RETURNS TRIGGER AS
+CREATE FUNCTION delete_user_misc() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     -- delete notifications
     DELETE FROM notification WHERE id_user = OLD.id_user;
     -- delete drafts
-    DELETE FROM draft WHERE id_user = OLD.id_user;
+    DELETE FROM draft WHERE id_author = OLD.id_user;
     -- delete follows_tag
     DELETE FROM follows_tag WHERE id_user = OLD.id_user;
     -- delete follows_question
@@ -673,13 +676,48 @@ BEGIN
 
 END
 $BODY$
+    LANGUAGE plpgsql;
 
+*/
+
+--isto também não dá pq fazer DELETE USER falha logo por causa de primary keys
+CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+UPDATE "user"
+SET username = CONCAT ('deleted_user_',id_user::TEXT),
+    email = CONCAT ('deleted_email_',id_user::TEXT),
+    password = CONCAT (MD5(RANDOM()::TEXT),id_user::TEXT),
+    profile_picture = NULL,
+    personal_text = NULL
+WHERE id_user = OLD.id_user;
+
+-- delete notifications
+DELETE FROM notification WHERE id_user = OLD.id_user;
+-- delete drafts
+DELETE FROM draft WHERE id_author = OLD.id_user;
+-- delete follows_tag
+DELETE FROM follows_tag WHERE id_user = OLD.id_user;
+-- delete follows_question
+DELETE FROM follows_question WHERE id_user = OLD.id_user;
+
+
+RAISE 'Users can not be deleted';
+
+END
+$BODY$
     LANGUAGE plpgsql;
 
 CREATE TRIGGER delete_user
-    BEFORE UPDATE ON "user"
+    BEFORE DELETE ON "user"
     FOR EACH ROW
 EXECUTE PROCEDURE delete_user();
+
+
+
+
+
+
 
 -----------------------------------------
 -- Transactions
@@ -692,8 +730,8 @@ BEGIN TRANSACTION;
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
 -- Insert user
-INSERT INTO "user" (username, email, password, profilePicture, personalText)
- VALUES ($username, $email, $password, $profilePicture, $personalText);
+INSERT INTO "user" (username, email, password, profile_picture, personal_text)
+ VALUES ($username, $email, $password, $profile_picture, $personal_text);
 
 -- Insert administrator
 INSERT INTO administrator(id_admin)
@@ -708,8 +746,8 @@ BEGIN TRANSACTION;
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
 -- Insert user
-INSERT INTO "user" (id_user, username, email, password, profilePicture, personalText)
- VALUES ($id_user, $username, $email, $password, $profilePicture, $personalText);
+INSERT INTO "user" (id_user, username, email, password, profile_picture, personal_text)
+ VALUES ($id_user, $username, $email, $password, $profile_picture, $personal_text);
 
 -- Insert moderator
 INSERT INTO moderator(id_moderator)
