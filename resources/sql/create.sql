@@ -70,6 +70,7 @@ create table post (
 create table question (
                           id_question SERIAL PRIMARY KEY,
                           title TEXT NOT NULL,
+                          score INT DEFAULT 0,
                           CONSTRAINT FK_POST
                               FOREIGN KEY(id_question)
                                   REFERENCES post(id_post)
@@ -79,7 +80,8 @@ CREATE TABLE answer (
                         id_answer SERIAL PRIMARY KEY,
                         id_question INT NOT NULL,
                         is_solution BOOLEAN NOT NULL DEFAULT '0',
-                            CONSTRAINT FK_POST
+                        score INT DEFAULT 0,
+                        CONSTRAINT FK_POST
                                 FOREIGN KEY(id_answer)
                                     REFERENCES post(id_post),
                             CONSTRAINT FK_QUESTION
@@ -326,7 +328,7 @@ DROP INDEX IF EXISTS question_votes;
 
 CREATE INDEX publication_date ON post USING btree (date);
 CREATE INDEX notification_date ON notification USING btree (date);
-CREATE INDEX question_votes ON question_vote USING hash (id_question);
+CREATE INDEX question_answers ON answer USING hash (id_question);
 
 --Full Text Search
 
@@ -413,6 +415,29 @@ DROP FUNCTION IF EXISTS author_answer();
 
 DROP TRIGGER IF EXISTS delete_user ON "user";
 DROP FUNCTION IF EXISTS delete_user();
+
+DROP TRIGGER IF EXISTS answer_score ON answer_vote;
+DROP FUNCTION IF EXISTS answer_score_update();
+
+DROP TRIGGER IF EXISTS question_score ON question_vote;
+DROP FUNCTION IF EXISTS question_score_update();
+
+DROP TRIGGER IF EXISTS send_follow_tag_notifs ON question;
+DROP FUNCTION IF EXISTS send_follow_tag_notifs();
+
+DROP TRIGGER IF EXISTS send_follow_question_notifs ON answer;
+DROP FUNCTION IF EXISTS send_follow_question_notifs();
+
+DROP TRIGGER IF EXISTS send_new_answer_notif ON answer;
+DROP FUNCTION IF EXISTS send_new_answer_notif();
+
+DROP TRIGGER IF EXISTS send_marked_as_solution_notif ON answer;
+DROP FUNCTION IF EXISTS send_marked_as_solution_notif();
+
+DROP TRIGGER IF EXISTS send_new_badge_notif ON badge_given;
+DROP FUNCTION IF EXISTS send_new_badge_notif();
+
+
 
 --author of answer cannot answer his question
 CREATE FUNCTION author_answer() RETURNS TRIGGER AS
@@ -715,7 +740,158 @@ EXECUTE PROCEDURE delete_user();
 
 
 
+--send notifications to everyone that follows a tag when a new post uses it
+CREATE FUNCTION send_follow_tag_notifs() RETURNS TRIGGER AS --after insert on post
+$BODY$
+DECLARE t RECORD;
+BEGIN
+    FOR t IN SELECT * FROM follows_tag WHERE follows_tag.id_tag IN (SELECT id_tag FROM question_tag WHERE id_question = NEW.id_question)
+        LOOP
+            INSERT INTO notification(dismissed, id_user, date)
+            VALUES(false, t.id_user, Now());
 
+            insert into follow_tag_notif (id_notif, id_tag)
+                (select currval('notification_id_notif_seq'), t.id_tag);
+
+
+        END LOOP;
+
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_follow_tag_notifs
+    AFTER INSERT ON question
+    FOR EACH ROW
+EXECUTE PROCEDURE send_follow_tag_notifs();
+
+--send notifications to everyone that follows a tag when a new post uses it
+CREATE FUNCTION send_marked_as_solution_notif() RETURNS TRIGGER AS --after insert on post
+$BODY$
+DECLARE t record;
+BEGIN
+    IF NEW.is_solution = true AND OLD.is_solution = false THEN SELECT INTO t * FROM post WHERE id_post = NEW.id_answer;
+    INSERT INTO notification(dismissed, id_user, date)
+    VALUES(false, t.id_author, Now());
+
+    insert into marked_as_solution_notif (id_notif)
+        (select currval('notification_id_notif_seq'), NEW.id_answer);
+    END IF;
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_marked_as_solution_notif
+    AFTER UPDATE ON answer
+    FOR EACH ROW
+EXECUTE PROCEDURE send_marked_as_solution_notif();
+
+
+--send notifications to a user when they receive a new badge
+CREATE FUNCTION send_new_badge_notif() RETURNS TRIGGER AS --after insert on post
+$BODY$
+BEGIN
+    INSERT INTO notification(dismissed, id_user, date)
+    VALUES(false, NEW.id_user, Now());
+
+    insert into new_badge_notif (id_notif)
+        (select currval('notification_id_notif_seq'), NEW.id_badge);
+
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_new_badge_notif
+    AFTER INSERT ON badge_given
+    FOR EACH ROW
+EXECUTE PROCEDURE send_new_badge_notif();
+
+--send notifications to a user when they receive new answers on a question
+CREATE FUNCTION send_new_answer_notif() RETURNS TRIGGER AS --after insert on post
+$BODY$
+DECLARE t RECORD;
+BEGIN
+    SELECT INTO t * FROM post WHERE id_post = NEW.id_question;
+    INSERT INTO notification(dismissed, id_user, date)
+    VALUES(false, t.id_author, Now());
+
+    insert into new_answer_notif (id_notif)
+        (select currval('notification_id_notif_seq'), NEW.id_answer);
+
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_new_answer_notif
+    AFTER INSERT ON answer
+    FOR EACH ROW
+EXECUTE PROCEDURE send_new_answer_notif();
+
+
+
+--send notifications to everyone that follows a question when it receives a new answer
+CREATE FUNCTION send_follow_question_notifs() RETURNS TRIGGER AS
+$BODY$
+DECLARE t RECORD;
+BEGIN
+    FOR t IN SELECT * FROM follows_question WHERE follows_question.id_question = NEW.id_question
+        LOOP
+            INSERT INTO notification(dismissed, id_user, date)
+            VALUES(false, t.id_user, Now());
+
+            insert into followed_question_notif (id_notif, id_answer)
+                (select currval('notification_id_notif_seq'), NEW.id_answer);
+
+
+        END LOOP;
+
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER send_follow_question_notifs
+    AFTER INSERT ON answer
+    FOR EACH ROW
+EXECUTE PROCEDURE send_follow_question_notifs();
+
+
+
+--update the score of a question
+CREATE FUNCTION question_score_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        UPDATE question SET score = score + NEW.score WHERE question.id_question = NEW.id_question;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        UPDATE question SET score = score + NEW.score - OLD.score WHERE question.id_question = NEW.id_question;;
+    END IF;
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER question_score
+    BEFORE INSERT OR UPDATE ON question_vote
+    FOR EACH ROW
+EXECUTE PROCEDURE question_score_update();
+
+CREATE FUNCTION answer_score_update() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        UPDATE answer SET score = score + NEW.score WHERE answer.id_answer = NEW.id_answer;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        UPDATE answer SET score = score + NEW.score - OLD.score WHERE answer.id_answer = NEW.id_answer;;
+    END IF;
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER answer_score
+    BEFORE INSERT OR UPDATE ON answer_vote
+    FOR EACH ROW
+EXECUTE PROCEDURE answer_score_update();
 
 
 
