@@ -1,3 +1,4 @@
+SET search_path TO lbaw2214;
 
 insert into "user" (username, email, password, profile_picture, personal_text) values ('anuschke0', 'pdaouse0@nature.com', 'Eb3BBl', 'https://robohash.org/etcorporispossimus.png?size=50x50&set=set1', '');
 insert into "user" (username, email, password, profile_picture, personal_text) values ('bekell1', 'rpennicard1@hao123.com', '9FEnHZkC', 'https://robohash.org/officiaipsamofficiis.png?size=50x50&set=set1', 'maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede ac diam cras pellentesque volutpat dui maecenas tristique est et tempus semper est quam pharetra magna ac consequat metus sapien ut nunc vestibulum ante ipsum primis in');

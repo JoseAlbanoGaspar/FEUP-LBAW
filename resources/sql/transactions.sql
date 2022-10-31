@@ -175,3 +175,31 @@ INSERT INTO followed_question_notif(id_notif, id_answer)
  VALUES(currval('notification_id_notif_seq'), $id_answer);
 
 END TRANSACTION;
+
+
+----------------------------TRANSACTION DELETE USER
+
+BEGIN TRANSACTION ;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED ;
+
+UPDATE "user"
+SET username = CONCAT ('deleted_user_',$id_user::TEXT),
+    email = CONCAT ('deleted_email_',$id_user::TEXT),
+    password = CONCAT (MD5(RANDOM()::TEXT),$id_user::TEXT),
+    profile_picture = NULL,
+    personal_text = NULL
+WHERE id_user = $id_user;
+
+-- delete notifications
+DELETE FROM notification WHERE id_user = $id_user;
+-- delete drafts
+DELETE FROM draft WHERE id_author = $id_user;
+-- delete follows_tag
+DELETE FROM follows_tag WHERE id_user = $id_user;
+-- delete follows_question
+DELETE FROM follows_question WHERE id_user = $id_user;
+-- delete badges
+DELETE FROM badge_given WHERE id_user = $id_user;
+
+END TRANSACTION;
+

@@ -1,3 +1,5 @@
+SET search_path TO lbaw2214;
+
 DROP TABLE IF EXISTS post CASCADE; --140
 DROP TABLE IF EXISTS question CASCADE; --50
 DROP TABLE IF EXISTS answer CASCADE; --60
@@ -57,7 +59,7 @@ create table moderator (
 create table post (
                       id_post SERIAL PRIMARY KEY,
                       id_author INT NOT NULL,
-                      date DATE NOT NULL,
+                      date TIMESTAMP NOT NULL,
                       text_body TEXT NOT NULL,
                       CONSTRAINT FK_AUTHOR
                           FOREIGN KEY(id_author)
@@ -109,7 +111,7 @@ CREATE TABLE comment (
 
 CREATE TABLE draft (
                          id_draft SERIAL PRIMARY KEY ,
-                         date DATE NOT NULL,
+                         date TIMESTAMP NOT NULL,
                          id_author integer NOT NULL,
                          title TEXT default NULL,
                          text_body TEXT default NULL,
@@ -171,7 +173,7 @@ CREATE TABLE notification (
 	id_notif SERIAL PRIMARY KEY,
 	dismissed BOOL NOT NULL,
 	id_user INT NOT NULL,
-    date DATE NOT NULL,
+    date TIMESTAMP NOT NULL,
 	FOREIGN KEY (id_user) REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
@@ -212,7 +214,7 @@ CREATE TABLE new_badge_notif (
 CREATE TABLE new_answer_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE, 
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
@@ -263,7 +265,7 @@ CREATE TABLE question_vote (
 				REFERENCES question(id_question) ON DELETE CASCADE,
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
-				REFERENCES "user"(id_user) 
+				REFERENCES "user"(id_user)
 );
 
 
@@ -289,7 +291,7 @@ CREATE TABLE report (
 	id_user INT NOT NULL,
 	id_post INT NOT NULL,
     reason TEXT NOT NULL,
-	date DATE NOT NULL,
+	date TIMESTAMP NOT NULL,
     CONSTRAINT UNIQUE_USER_POST
 	    UNIQUE (id_user, id_post),
     CONSTRAINT FK_POST
@@ -307,7 +309,7 @@ CREATE TABLE edit (
 	id_user INT NOT NULL,
 	id_post INT NOT NULL,
     old_text TEXT NOT NULL,
-	date DATE NOT NULL,
+	date TIMESTAMP NOT NULL,
     CONSTRAINT UNIQUE_USER_POST_DATE
 	    UNIQUE (id_user, id_post, date),
     CONSTRAINT FK_ANSWER
@@ -683,63 +685,6 @@ CREATE TRIGGER only_one_report
     FOR EACH ROW
 EXECUTE PROCEDURE only_one_report();
 
-------------------------TRANSACTION DELETE USER
-
-/*
--- delete useless information about deleted user
-CREATE FUNCTION delete_user_misc() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-    -- delete notifications
-    DELETE FROM notification WHERE id_user = OLD.id_user;
-    -- delete drafts
-    DELETE FROM draft WHERE id_author = OLD.id_user;
-    -- delete follows_tag
-    DELETE FROM follows_tag WHERE id_user = OLD.id_user;
-    -- delete follows_question
-    DELETE FROM follows_question WHERE id_user = OLD.id_user;
-
-END
-$BODY$
-    LANGUAGE plpgsql;
-
-*/
-
---isto também não dá pq fazer DELETE USER falha logo por causa de primary keys
-CREATE OR REPLACE FUNCTION delete_user() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-UPDATE "user"
-SET username = CONCAT ('deleted_user_',id_user::TEXT),
-    email = CONCAT ('deleted_email_',id_user::TEXT),
-    password = CONCAT (MD5(RANDOM()::TEXT),id_user::TEXT),
-    profile_picture = NULL,
-    personal_text = NULL
-WHERE id_user = OLD.id_user;
-
--- delete notifications
-DELETE FROM notification WHERE id_user = OLD.id_user;
--- delete drafts
-DELETE FROM draft WHERE id_author = OLD.id_user;
--- delete follows_tag
-DELETE FROM follows_tag WHERE id_user = OLD.id_user;
--- delete follows_question
-DELETE FROM follows_question WHERE id_user = OLD.id_user;
-
-
-RAISE 'Users can not be deleted';
-
-END
-$BODY$
-    LANGUAGE plpgsql;
-
-CREATE TRIGGER delete_user
-    BEFORE DELETE ON "user"
-    FOR EACH ROW
-EXECUTE PROCEDURE delete_user();
-
-
-
 --send notifications to everyone that follows a tag when a new post uses it
 CREATE FUNCTION send_follow_tag_notifs() RETURNS TRIGGER AS --after insert on post
 $BODY$
@@ -1082,6 +1027,35 @@ INSERT INTO notification(dismissed, id_user, date)
 -- Insert specific notification
 INSERT INTO followed_question_notif(id_notif, id_answer)
  VALUES(currval('notification_id_notif_seq'), $id_answer);
+
+END TRANSACTION;
+
+
+
+
+ ----------------------------TRANSACTION DELETE USER
+
+BEGIN TRANSACTION ;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED ;
+
+UPDATE "user"
+SET username = CONCAT ('deleted_user_',$id_user::TEXT),
+    email = CONCAT ('deleted_email_',$id_user::TEXT),
+    password = CONCAT (MD5(RANDOM()::TEXT),$id_user::TEXT),
+    profile_picture = NULL,
+    personal_text = NULL
+WHERE id_user = $id_user;
+
+-- delete notifications
+DELETE FROM notification WHERE id_user = $id_user;
+-- delete drafts
+DELETE FROM draft WHERE id_author = $id_user;
+-- delete follows_tag
+DELETE FROM follows_tag WHERE id_user = $id_user;
+-- delete follows_question
+DELETE FROM follows_question WHERE id_user = $id_user;
+-- delete badges
+DELETE FROM badge_given WHERE id_user = $id_user;
 
 END TRANSACTION;
 
