@@ -716,16 +716,98 @@ insert into new_badge_notif (id_notif,id_badge) values (38,8);
 insert into new_badge_notif (id_notif,id_badge) values (39,9);
 insert into new_badge_notif (id_notif,id_badge) values (40,10);
 
-insert into new_answer_notif (id_notif,id_answer) values (41,53);
-insert into new_answer_notif (id_notif,id_answer) values (42,64);
-insert into new_answer_notif (id_notif,id_answer) values (43,75);
-insert into new_answer_notif (id_notif,id_answer) values (44,86);
-insert into new_answer_notif (id_notif,id_answer) values (45,97);
-insert into new_answer_notif (id_notif,id_answer) values (46,108);
-insert into new_answer_notif (id_notif,id_answer) values (47,109);
-insert into new_answer_notif (id_notif,id_answer) values (48,55);
-insert into new_answer_notif (id_notif,id_answer) values (49,67);
-insert into new_answer_notif (id_notif,id_answer) values (50,56);
+-- insert into new_answer_notif (id_notif,id_answer) values (41,53);
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+    (66,12),
+    (29,14),
+    (78,23),
+    (88,17),
+    (61,6),
+    (96,18),
+    (87,7),
+    (54,16),
+    (5,24),
+    (62,22),
+    (56,4),
+    (84,10),
+    (64,8),
+    (10,17),
+    (70,6),
+    (23,4),
+    (57,11),
+    (12,8),
+    (61,3),
+    (64,24),
+    (5,8),
+    (33,25),
+    (17,3),
+    (95,2),
+    (66,16),
+    (94,6),
+    (54,1),
+    (4,16),
+    (83,22),
+    (10,6);
+INSERT INTO follows_tag (id_user, id_tag)
+VALUES
+    (4,18),
+    (61,7),
+    (86,4),
+    (37,25),
+    (15,18),
+    (6,16),
+    (76,6),
+    (33,23),
+    (6,19),
+    (90,12),
+    (21,20),
+    (37,5),
+    (43,2),
+    (32,22),
+    (64,18),
+    (30,6),
+    (12,23),
+    (86,11),
+    (83,12),
+    (62,4);
+INSERT INTO follows_question (id_user,id_question)
+VALUES
+    (58,7),
+    (94,6),
+    (49,46),
+    (45,30),
+    (12,23),
+    (72,10),
+    (96,30),
+    (1,22),
+    (63,45),
+    (100,33),
+    (85,39),
+    (50,2),
+    (73,24),
+    (14,25),
+    (64,31),
+    (79,12),
+    (67,23),
+    (15,10),
+    (30,24),
+    (40,26),
+    (76,5),
+    (65,40),
+    (52,11),
+    (97,37),
+    (48,42);
+
+-- insert into new_answer_notif (id_notif,id_answer) values (42,64);
+-- insert into new_answer_notif (id_notif,id_answer) values (43,75);
+-- insert into new_answer_notif (id_notif,id_answer) values (45,97);
+-- insert into new_answer_notif (id_notif,id_answer) values (44,86);
+-- insert into new_answer_notif (id_notif,id_answer) values (46,108);
+-- insert into new_answer_notif (id_notif,id_answer) values (47,109);
+-- insert into new_answer_notif (id_notif,id_answer) values (48,55);
+-- insert into new_answer_notif (id_notif,id_answer) values (49,67);
+-- insert into new_answer_notif (id_notif,id_answer) values (50,56);
 
 insert into followed_question_notif (id_notif,id_answer) values (51,60);
 insert into followed_question_notif (id_notif,id_answer) values (52,61);
@@ -792,88 +874,6 @@ VALUES
     (44,22),
     (60,20),
     (19,9);
-INSERT INTO follows_tag (id_user, id_tag)
-VALUES
-    (66,12),
-    (29,14),
-    (78,23),
-    (88,17),
-    (61,6),
-    (96,18),
-    (87,7),
-    (54,16),
-    (5,24),
-    (62,22),
-    (56,4),
-    (84,10),
-    (64,8),
-    (10,17),
-    (70,6),
-    (23,4),
-    (57,11),
-    (12,8),
-    (61,3),
-    (64,24),
-    (5,8),
-    (33,25),
-    (17,3),
-    (95,2),
-    (66,16),
-    (94,6),
-    (54,1),
-    (4,16),
-    (83,22),
-    (10,6);
-INSERT INTO follows_tag (id_user, id_tag)
-VALUES
-    (4,18),
-    (61,7),
-    (86,4),
-    (37,25),
-    (15,18),
-    (6,16),
-    (76,6),
-    (33,23),
-    (6,19),
-    (90,12),
-    (21,20),
-    (37,5),
-    (43,2),
-    (32,22),
-    (64,18),
-    (30,6),
-    (12,23),
-    (86,11),
-    (83,12),
-    (62,4);
-
-INSERT INTO follows_question (id_user,id_question)
-VALUES
-    (58,7),
-    (94,6),
-    (49,46),
-    (45,30),
-    (12,23),
-    (72,10),
-    (96,30),
-    (1,22),
-    (63,45),
-    (100,33),
-    (85,39),
-    (50,2),
-    (73,24),
-    (14,25),
-    (64,31),
-    (79,12),
-    (67,23),
-    (15,10),
-    (30,24),
-    (40,26),
-    (76,5),
-    (65,40),
-    (52,11),
-    (97,37),
-    (48,42);
 
 
 INSERT INTO question_vote (id_user,id_question,score)

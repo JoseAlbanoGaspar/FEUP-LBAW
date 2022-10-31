@@ -755,6 +755,7 @@ BEGIN
 
 
         END LOOP;
+    RETURN NEW;
 
 END
 $BODY$
@@ -777,6 +778,8 @@ BEGIN
     insert into marked_as_solution_notif (id_notif)
         (select currval('notification_id_notif_seq'), NEW.id_answer);
     END IF;
+    RETURN NEW;
+
 END
 $BODY$
     LANGUAGE plpgsql;
@@ -794,9 +797,9 @@ BEGIN
     INSERT INTO notification(dismissed, id_user, date)
     VALUES(false, NEW.id_user, Now());
 
-    insert into new_badge_notif (id_notif)
+    insert into new_badge_notif (id_notif, id_badge)
         (select currval('notification_id_notif_seq'), NEW.id_badge);
-
+    RETURN NEW;
 END
 $BODY$
     LANGUAGE plpgsql;
@@ -815,9 +818,9 @@ BEGIN
     INSERT INTO notification(dismissed, id_user, date)
     VALUES(false, t.id_author, Now());
 
-    insert into new_answer_notif (id_notif)
+    insert into new_answer_notif (id_notif, id_answer)
         (select currval('notification_id_notif_seq'), NEW.id_answer);
-
+    RETURN NEW;
 END
 $BODY$
     LANGUAGE plpgsql;
@@ -844,6 +847,7 @@ BEGIN
 
 
         END LOOP;
+    RETURN NULL;
 
 END
 $BODY$
@@ -864,8 +868,10 @@ BEGIN
         UPDATE question SET score = score + NEW.score WHERE question.id_question = NEW.id_question;
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        UPDATE question SET score = score + NEW.score - OLD.score WHERE question.id_question = NEW.id_question;;
+        UPDATE question SET score = score + NEW.score - OLD.score WHERE question.id_question = NEW.id_question;
     END IF;
+    RETURN NEW;
+
 END
 $BODY$
     LANGUAGE plpgsql;
@@ -882,8 +888,10 @@ BEGIN
         UPDATE answer SET score = score + NEW.score WHERE answer.id_answer = NEW.id_answer;
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        UPDATE answer SET score = score + NEW.score - OLD.score WHERE answer.id_answer = NEW.id_answer;;
+        UPDATE answer SET score = score + NEW.score - OLD.score WHERE answer.id_answer = NEW.id_answer;
     END IF;
+    RETURN NEW;
+
 END
 $BODY$
     LANGUAGE plpgsql;
