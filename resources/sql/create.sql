@@ -59,7 +59,7 @@ create table moderator (
 create table post (
                       id_post SERIAL PRIMARY KEY,
                       id_author INT NOT NULL,
-                      date TIMESTAMP NOT NULL,
+                      date TIMESTAMP NOT NULL DEFAULT Now(),
                       text_body TEXT NOT NULL,
                       CONSTRAINT FK_AUTHOR
                           FOREIGN KEY(id_author)
@@ -111,7 +111,7 @@ CREATE TABLE comment (
 
 CREATE TABLE draft (
                          id_draft SERIAL PRIMARY KEY ,
-                         date TIMESTAMP NOT NULL,
+                         date TIMESTAMP NOT NULL DEFAULT Now(),
                          id_author integer NOT NULL,
                          title TEXT default NULL,
                          text_body TEXT default NULL,
@@ -173,7 +173,7 @@ CREATE TABLE notification (
 	id_notif SERIAL PRIMARY KEY,
 	dismissed BOOL NOT NULL,
 	id_user INT NOT NULL,
-    date TIMESTAMP NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT Now(),
 	FOREIGN KEY (id_user) REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
@@ -291,7 +291,7 @@ CREATE TABLE report (
 	id_user INT NOT NULL,
 	id_post INT NOT NULL,
     reason TEXT NOT NULL,
-	date TIMESTAMP NOT NULL,
+	date TIMESTAMP NOT NULL DEFAULT Now(),
     CONSTRAINT UNIQUE_USER_POST
 	    UNIQUE (id_user, id_post),
     CONSTRAINT FK_POST
@@ -309,7 +309,7 @@ CREATE TABLE edit (
 	id_user INT NOT NULL,
 	id_post INT NOT NULL,
     old_text TEXT NOT NULL,
-	date TIMESTAMP NOT NULL,
+	date TIMESTAMP NOT NULL DEFAULT Now(),
     CONSTRAINT UNIQUE_USER_POST_DATE
 	    UNIQUE (id_user, id_post, date),
     CONSTRAINT FK_ANSWER
