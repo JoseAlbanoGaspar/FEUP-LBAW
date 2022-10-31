@@ -42,7 +42,7 @@ create table administrator (
     id_admin INT PRIMARY KEY,
           CONSTRAINT FK_USER
             FOREIGN KEY(id_admin)
-              REFERENCES "user"(id_user)
+              REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
 
@@ -50,7 +50,7 @@ create table moderator (
     id_moderator INT PRIMARY KEY,
           CONSTRAINT FK_USER
             FOREIGN KEY(id_moderator)
-              REFERENCES "user"(id_user)
+              REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
 
@@ -73,7 +73,7 @@ create table question (
                           score INT DEFAULT 0,
                           CONSTRAINT FK_POST
                               FOREIGN KEY(id_question)
-                                  REFERENCES post(id_post)
+                                  REFERENCES post(id_post) ON DELETE CASCADE
 );
 
 CREATE TABLE answer (
@@ -83,7 +83,7 @@ CREATE TABLE answer (
                         score INT DEFAULT 0,
                         CONSTRAINT FK_POST
                                 FOREIGN KEY(id_answer)
-                                    REFERENCES post(id_post),
+                                    REFERENCES post(id_post) ON DELETE CASCADE,
                             CONSTRAINT FK_QUESTION
                                 FOREIGN KEY(id_question)
                                     REFERENCES question(id_question)
@@ -96,7 +96,7 @@ CREATE TABLE comment (
     id_answer INT,
         CONSTRAINT FK_POST
             FOREIGN KEY(id_comment)
-                REFERENCES post(id_post),
+                REFERENCES post(id_post) ON DELETE CASCADE,
         FOREIGN KEY(id_question)
             REFERENCES question(id_question),
         FOREIGN KEY(id_answer)
@@ -137,7 +137,7 @@ CREATE TABLE question_tag (
                                             REFERENCES tag(id_tag),
                                     CONSTRAINT FK_QUESTION
                                         FOREIGN KEY(id_question)
-                                            REFERENCES question(id_question)
+                                            REFERENCES question(id_question) ON DELETE CASCADE
 );
 
 
@@ -171,7 +171,7 @@ CREATE TABLE notification (
 	id_notif SERIAL PRIMARY KEY,
 	dismissed BOOL NOT NULL,
 	id_user INT NOT NULL,
-    date DATE,
+    date DATE NOT NULL,
 	FOREIGN KEY (id_user) REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
@@ -179,14 +179,14 @@ CREATE TABLE notification (
 CREATE TABLE system_notif (
 	id_notif INT PRIMARY KEY,
 	notif_text TEXT NOT NULL,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif)
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE
 );
 
 
 CREATE TABLE follow_tag_notif (
 	id_notif INT PRIMARY KEY,
 	id_tag INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
 	CONSTRAINT FK_TAG FOREIGN KEY (id_tag) REFERENCES tag(id_tag)
 );
 
@@ -195,7 +195,7 @@ CREATE TABLE follow_tag_notif (
 CREATE TABLE marked_as_solution_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
@@ -205,14 +205,14 @@ CREATE TABLE marked_as_solution_notif (
 CREATE TABLE new_badge_notif (
 	id_notif INT PRIMARY KEY,
 	id_badge INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
 	CONSTRAINT FK_BADGE FOREIGN KEY (id_badge) REFERENCES badge(id_badge)
 );
 
 CREATE TABLE new_answer_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE, 
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
@@ -220,7 +220,7 @@ CREATE TABLE new_answer_notif (
 CREATE TABLE followed_question_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
-	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif),
+	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
 	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
 );
 
@@ -233,7 +233,7 @@ CREATE TABLE follows_tag (
 				REFERENCES tag(id_tag),
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
-				REFERENCES "user"(id_user)
+				REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE follows_question (
@@ -242,10 +242,10 @@ CREATE TABLE follows_question (
 	PRIMARY KEY (id_user, id_question),
 		CONSTRAINT FK_QUESTION
 			FOREIGN KEY(id_question)
-				REFERENCES question(id_question),
+				REFERENCES question(id_question) ON DELETE CASCADE,
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
-				REFERENCES "user"(id_user)
+				REFERENCES "user"(id_user) ON DELETE CASCADE
 );
 
 
@@ -260,10 +260,10 @@ CREATE TABLE question_vote (
 
 		CONSTRAINT FK_QUESTION
 			FOREIGN KEY(id_question)
-				REFERENCES question(id_question),
+				REFERENCES question(id_question) ON DELETE CASCADE,
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
-				REFERENCES "user"(id_user)
+				REFERENCES "user"(id_user) 
 );
 
 
@@ -277,7 +277,7 @@ CREATE TABLE answer_vote (
 	PRIMARY KEY (id_user, id_answer),
 		CONSTRAINT FK_ANSWER
 			FOREIGN KEY(id_answer)
-				REFERENCES answer(id_answer),
+				REFERENCES answer(id_answer) ON DELETE CASCADE,
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
 				REFERENCES "user"(id_user)
