@@ -38,7 +38,9 @@ CREATE TABLE "user" (
 	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
 	profile_picture TEXT,
-	personal_text TEXT
+	personal_text TEXT,
+	blocked BOOLEAN DEFAULT '0',
+	remember_token VARCHAR
 );
 
 create table administrator (
