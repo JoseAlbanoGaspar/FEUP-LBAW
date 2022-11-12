@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  *
  * @property Collection|Question[] $questions
- * @property Collection|FollowTagNotif[] $follow_tag_notifs
+ * @property Collection|FollowTagNotification[] $follow_tag_notifs
  * @property Collection|FollowsTag[] $follows_tags
  *
  * @package App\Models
@@ -36,9 +36,9 @@ class Tag extends Model
 		return $this->belongsToMany(Question::class, 'question_tag', 'id_tag', 'id_question');
 	}
 
-	public function follow_tag_notifs()
+	public function follow_tag_notificationss()
 	{
-		return $this->hasMany(FollowTagNotif::class, 'id_tag');
+		return $this->hasMany(FollowTagNotification::class, 'id_tag');
 	}
 
 	public function follows_tags()

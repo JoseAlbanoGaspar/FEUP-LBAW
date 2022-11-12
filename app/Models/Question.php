@@ -29,6 +29,7 @@ class Question extends Model
 {
 	protected $table = 'question';
     protected $primaryKey = 'id_question';
+    public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
@@ -43,7 +44,7 @@ class Question extends Model
 	public function post()
 	{
 		return $this->belongsTo(Post::class, 'id_question')
-					->where('post.id_post', '=', 'question.id_question')
+//					->where('post.id_post', '=', 'question.id_question')
 					->where('post.id_post', '=', 'question.id_question');
 	}
 

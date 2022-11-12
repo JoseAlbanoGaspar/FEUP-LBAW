@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class BadgeGiven
- * 
+ *
  * @property int $id_badge
  * @property int $id_user
- * 
+ *
  * @property Badge $badge
  * @property User $user
  *
@@ -33,14 +33,14 @@ class BadgeGiven extends Model
 	public function badge()
 	{
 		return $this->belongsTo(Badge::class, 'id_badge')
-					->where('badge.id_badge', '=', 'badge_given.id_badge')
+//					->where('badge.id_badge', '=', 'badge_given.id_badge')
 					->where('badge.id_badge', '=', 'badge_given.id_badge');
 	}
 
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_user')
-					->where('user.id_user', '=', 'badge_given.id_user')
+//					->where('user.id_user', '=', 'badge_given.id_user')
 					->where('user.id_user', '=', 'badge_given.id_user');
 	}
 }

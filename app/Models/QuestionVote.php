@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class QuestionVote
- * 
+ *
  * @property int $id_user
  * @property int $id_question
  * @property int $score
- * 
+ *
  * @property User $user
  * @property Question $question
  *
@@ -39,14 +39,14 @@ class QuestionVote extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_user')
-					->where('user.id_user', '=', 'question_vote.id_user')
+//					->where('user.id_user', '=', 'question_vote.id_user')
 					->where('user.id_user', '=', 'question_vote.id_user');
 	}
 
 	public function question()
 	{
 		return $this->belongsTo(Question::class, 'id_question')
-					->where('question.id_question', '=', 'question_vote.id_question')
+//					->where('question.id_question', '=', 'question_vote.id_question')
 					->where('question.id_question', '=', 'question_vote.id_question');
 	}
 }

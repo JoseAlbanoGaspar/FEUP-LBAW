@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class QuestionTag
- * 
+ *
  * @property int $id_tag
  * @property int $id_question
- * 
+ *
  * @property Tag $tag
  * @property Question $question
  *
@@ -33,14 +33,14 @@ class QuestionTag extends Model
 	public function tag()
 	{
 		return $this->belongsTo(Tag::class, 'id_tag')
-					->where('tag.id_tag', '=', 'question_tag.id_tag')
+//					->where('tag.id_tag', '=', 'question_tag.id_tag')
 					->where('tag.id_tag', '=', 'question_tag.id_tag');
 	}
 
 	public function question()
 	{
 		return $this->belongsTo(Question::class, 'id_question')
-					->where('question.id_question', '=', 'question_tag.id_question')
+//					->where('question.id_question', '=', 'question_tag.id_question')
 					->where('question.id_question', '=', 'question_tag.id_question');
 	}
 }

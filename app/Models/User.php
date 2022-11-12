@@ -54,14 +54,14 @@ class User extends Authenticatable
 		'personal_text'
 	];
 
-	public function administrators()
+	public function administrator()
 	{
-		return $this->hasMany(Administrator::class, 'id_admin');
+		return $this->hasOne(Administrator::class, 'id_admin');
 	}
 
-	public function moderators()
+	public function moderator()
 	{
-		return $this->hasMany(Moderator::class, 'id_moderator');
+		return $this->hasOne(Moderator::class, 'id_moderator');
 	}
 
 	public function posts()

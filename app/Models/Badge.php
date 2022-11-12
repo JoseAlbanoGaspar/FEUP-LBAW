@@ -46,7 +46,7 @@ class Badge extends Model
 		'condition'
 	];
 
-	public function badge_givens()
+	public function badges_given()
 	{
 		return $this->hasMany(BadgeGiven::class, 'id_badge');
 	}

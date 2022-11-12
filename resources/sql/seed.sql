@@ -73,7 +73,7 @@ create table post (
 
 
 create table question (
-                          id_question SERIAL PRIMARY KEY,
+                          id_question INT PRIMARY KEY,
                           title TEXT NOT NULL,
                           score INT DEFAULT 0,
                           CONSTRAINT FK_POST
@@ -82,7 +82,7 @@ create table question (
 );
 
 CREATE TABLE answer (
-                        id_answer SERIAL PRIMARY KEY,
+                        id_answer INT PRIMARY KEY,
                         id_question INT NOT NULL,
                         is_solution BOOLEAN NOT NULL DEFAULT '0',
                         score INT DEFAULT 0,
@@ -96,7 +96,7 @@ CREATE TABLE answer (
 
 
 CREATE TABLE comment (
-    id_comment SERIAL PRIMARY KEY,
+    id_comment INT PRIMARY KEY,
     id_question INT,
     id_answer INT,
         CONSTRAINT FK_POST

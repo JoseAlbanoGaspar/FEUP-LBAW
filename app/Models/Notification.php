@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property User $user
  * @property SystemNotification $system_notification
- * @property FollowTagNotif $follow_tag_notif
+ * @property FollowTagNotification $follow_tag_notif
  * @property MarkedAsSolutionNotification $marked_as_solution_notification
  * @property NewBadgeNotification $new_badge_notification
  * @property NewAnswerNotification $new_answer_notification
@@ -51,7 +51,7 @@ class Notification extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_user')
-					->where('user.id_user', '=', 'notification.id_user')
+//					->where('user.id_user', '=', 'notification.id_user')
 					->where('user.id_user', '=', 'notification.id_user');
 	}
 
@@ -60,9 +60,9 @@ class Notification extends Model
 		return $this->hasOne(SystemNotification::class, 'id_notif');
 	}
 
-	public function follow_tag_notif()
+	public function follow_tag_notification()
 	{
-		return $this->hasOne(FollowTagNotif::class, 'id_notif');
+		return $this->hasOne(FollowTagNotification::class, 'id_notif');
 	}
 
 	public function marked_as_solution_notification()
@@ -80,7 +80,7 @@ class Notification extends Model
 		return $this->hasOne(NewAnswerNotification::class, 'id_notif');
 	}
 
-	public function followed_question_notif()
+	public function followed_question_notification()
 	{
 		return $this->hasOne(FollowedQuestionNotification::class, 'id_notif');
 	}

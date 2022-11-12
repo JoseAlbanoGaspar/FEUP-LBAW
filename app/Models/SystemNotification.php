@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class SystemNotification
- * 
+ *
  * @property int $id_notif
  * @property string $notif_text
- * 
+ *
  * @property Notification $notification
  *
  * @package App\Models
@@ -35,7 +35,7 @@ class SystemNotification extends Model
 	public function notification()
 	{
 		return $this->belongsTo(Notification::class, 'id_notif')
-					->where('notification.id_notif', '=', 'system_notif.id_notif')
+//					->where('notification.id_notif', '=', 'system_notif.id_notif')
 					->where('notification.id_notif', '=', 'system_notif.id_notif');
 	}
 }
