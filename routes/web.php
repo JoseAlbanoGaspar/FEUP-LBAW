@@ -34,3 +34,5 @@ Route::post('register', 'Auth\RegisterController@register');
 // User Profile
 
 Route::get('users/{id_user}','UserController@show');
+Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
+Route::get('users/{id_user}/myAnswers','PostController@show')->name('myAnswers');

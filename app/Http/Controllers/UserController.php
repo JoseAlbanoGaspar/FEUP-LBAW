@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
+use App\Models\Administrator;
+use App\Models\Moderator;
 
 class UserController extends Controller
 {
     /**
-     * Shows the card for a given id.
+     * Shows the user for a given id.
      *
      * @param  int  $id
      * @return Response
@@ -19,47 +21,10 @@ class UserController extends Controller
     public function show($id)
     {
       $user = User::find($id);
-      return view('profile/profile', ['user' => $user]);
-    }
+      $role = 'Standard User';
+      if(Moderator::find($id)) $role = 'Moderator';
+      if(Administrator::find($id)) $role = 'Administrator';
 
-    /**
-     * Shows all cards.
-     *
-     * @return Response
-     */
-    public function list()
-    {
-      if (!Auth::check()) return redirect('/login');
-      $this->authorize('list', Card::class);
-      $cards = Auth::user()->cards()->orderBy('id')->get();
-      return view('pages.cards', ['cards' => $cards]);
-    }
-
-    /**
-     * Creates a new card.
-     *
-     * @return Card The card created.
-     */
-    public function create(Request $request)
-    {
-      $card = new Card();
-
-      $this->authorize('create', $card);
-
-      $card->name = $request->input('name');
-      $card->user_id = Auth::user()->id;
-      $card->save();
-
-      return $card;
-    }
-
-    public function delete(Request $request, $id)
-    {
-      $card = Card::find($id);
-
-      $this->authorize('delete', $card);
-      $card->delete();
-
-      return $card;
+      return view('profile.profile', ['user' => $user, 'role'=> $role]);
     }
 }
