@@ -30,3 +30,14 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
+
+// Posts Search
+Route::get('search', 'PostController@search');
+
+//User Search
+Route::get('search_users', 'UserController@search')->name('search_users');
+
+Route::get('questions/{id}', 'PostController@search')->name('questions'); //mudar controller ou substituir por completo
+Route::get('users/{id}', 'UserController@search')->name('users'); //mudar controller ou substituir por completo
+
+

@@ -6,7 +6,7 @@ info:
   description: 'Web Resources Specification (A7) for LBAW2214'
 
 servers:
-- url: http://localhost:8000
+- url: http://localhost:8000 #TODO voltar a pôr lbaw2214
   description: Local dev server
 
 externalDocs:
@@ -151,7 +151,7 @@ paths:
     get:
       operationId: R106
       summary: 'R106: View user profile'
-      description: 'Show the individual user profile. Access: PUB' 
+      description: 'Show the individual user profile. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
 
@@ -313,7 +313,7 @@ paths:
       responses:
         '200':
           description: 'Ok. Show questions.'
- 
+
   /questions/{id}:
     get:
       operationId: R202
@@ -333,7 +333,7 @@ paths:
           description: 'Ok. Show question page.'
 
   /questions/{id}/answer:
-   
+
     post:
       operationId: R204
       summary: 'R204: Post an answer to a question'
@@ -355,7 +355,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  text:           
+                  text:
                     type: string
                 required:
                       - text
@@ -401,9 +401,9 @@ paths:
             schema:
               type: object
               properties:
-                title:          
+                title:
                   type: string
-                text_body:         
+                text_body:
                   type: string
               required:
                     - title
@@ -419,16 +419,16 @@ paths:
               examples:
                 302Success:
                   description: 'Successfully posted a question. Redirect to page of the created question.'
-                  value: '/questions/{question_id}'                 
+                  value: '/questions/{question_id}'
                 302Failure:
                   description: 'Failed posting. Redirect to ask question page.'
                   value: '/questions/ask'
 
-  /questions/search/{query}:
+  /search/?query={query}&filters={filters}:
     get:
       operationId: R207
-      summary: 'R207: Get search for a question'
-      description: 'Render the page with the results for a question search. Access: PUB'
+      summary: 'R207: Get search for posts'
+      description: 'Render the page with the results for posts search. Access: PUB'
       tags:
         - 'M02: Questions'
       parameters:
@@ -438,10 +438,16 @@ paths:
         schema:
           type: string
         required: true
+      - in: path
+        name: filters
+        description: filters to apply to the search
+        schema:
+          type: string
+        required: false
       responses:
         '200':
-          description: 'Ok. Show search questions page.'
-        
+          description: 'Ok. Show search posts page.'
+
 
   /post/{id}/edit:
     get:
@@ -460,7 +466,7 @@ paths:
         responses:
           '200':
             description: 'Ok. Show edit post page.'
-    
+
   /posts/edit:
     patch:
       operationId: R209
@@ -485,18 +491,18 @@ paths:
               required:
                 - post_id
                 - text_body
- 
+
       responses:
         '200':
           description: 'Ok.'
-    
+
     delete:
       operationId: R210
       summary: 'R210: Delete post'
       description: 'Delete post. Access: OWN, MOD, ADM'
       tags:
         - 'M02: Questions'
- 
+
       requestBody:
         required: true
         content:
@@ -508,7 +514,7 @@ paths:
                   type: integer
               required:
                 - post_id
- 
+
       responses:
         '200':
           description: 'Ok.'
@@ -545,10 +551,10 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Top Questions'
-      
 
-  /personal_feed: 
-    get: 
+
+  /personal_feed:
+    get:
       operationId: R303
       summary: 'R303: Shows the personal feed.'
       description: 'Displays with a list of questions based on the preferences of the logged-in user. Access: USR'
@@ -577,8 +583,8 @@ paths:
       responses:
           '200':
             description: 'Ok. Show user search page.'
-        
-    
+
+
     post:
       operationId: R305
       summary: 'R305 Search users by username'
@@ -595,12 +601,12 @@ paths:
 
       requestBody:
         required: true
-        content: 
+        content:
           text/plain:
             schema:
               type: string  #syntax correta? não tem de levar nome?
-             
-              
+
+
       responses:
         '302':
           description: 'Redirect after processing the search.'
@@ -660,9 +666,9 @@ paths:
 
       responses:
         '200':
-          description: 'Ok.'  
+          description: 'Ok.'
 
-  /admin/reported: 
+  /admin/reported:
     get:
       operationId: R403
       summary: 'R403: Get all reported posts'
@@ -675,4 +681,3 @@ paths:
           description: 'Ok.'
 
 
-      

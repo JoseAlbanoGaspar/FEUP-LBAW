@@ -40,22 +40,16 @@ class Comment extends Model
 
 	public function post()
 	{
-		return $this->belongsTo(Post::class, 'id_comment')
-//					->where('post.id_post', '=', 'comment.id_comment')
-					->where('post.id_post', '=', 'comment.id_comment');
+		return $this->belongsTo(Post::class, 'id_comment');
 	}
 
 	public function question()
 	{
-		return $this->belongsTo(Question::class, 'id_question')
-//					->where('question.id_question', '=', 'comment.id_question')
-					->where('question.id_question', '=', 'comment.id_question');
+		return $this->belongsTo(Question::class, 'id_question');
 	}
 
 	public function answer()
 	{
-		return $this->belongsTo(Answer::class, 'id_answer')
-//					->where('answer.id_answer', '=', 'comment.id_answer')
-					->where('answer.id_answer', '=', 'comment.id_answer');
+		return $this->belongsTo(Answer::class, 'id_answer');
 	}
 }
