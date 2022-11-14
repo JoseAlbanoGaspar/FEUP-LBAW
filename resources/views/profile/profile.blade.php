@@ -19,4 +19,8 @@
     <h3>About:</h3>
     <p>{{ $user->personal_text }}</p>
     </div>
+    <form method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
+        <button type="submit">Edit Profile</button>
+    </form>
 </article>
+@endsection

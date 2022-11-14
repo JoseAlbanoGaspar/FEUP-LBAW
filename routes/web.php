@@ -35,4 +35,5 @@ Route::post('register', 'Auth\RegisterController@register');
 
 Route::get('users/{id_user}','UserController@show');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
-Route::get('users/{id_user}/myAnswers','PostController@show')->name('myAnswers');
+Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
+Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');

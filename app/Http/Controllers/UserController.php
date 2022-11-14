@@ -27,4 +27,9 @@ class UserController extends Controller
 
       return view('profile.profile', ['user' => $user, 'role'=> $role]);
     }
+
+    public function getEditProfile($id){
+      $user = User::find($id);
+      return view('profile.edit', ['user' => $user]);
+    }
 }

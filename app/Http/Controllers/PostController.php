@@ -23,6 +23,11 @@ class PostController extends Controller
       return view('posts.post', ['post' => $post]);
     }
 
+    /**
+     * Shows all questions asked for the user with a given id.
+     * @param int $id_user
+     * @return Response
+     */
     public function showQuestions($id_user){
         $questions = DB::table('post')
                     ->join('question','post.id_post','=','question.id_question')
@@ -31,5 +36,20 @@ class PostController extends Controller
         
         return view('posts.question',['questions' => $questions]);
     }
+
+    /**
+     * Shows all answers (and the questions in context) for the user with a given id.
+     * @param int $id_user
+     * @return Response
+     */
+    public function showAnswers($id_user){
+      $answers = DB::table('post')
+                  ->join('answer','post.id_post','=','answer.id_answer')
+                  ->join('question','answer.id_question', '=','question.id_question')
+                  ->select('post.text_body','post.date','question.title')
+                  ->where('post.id_author',$id_user)->get();
+      
+      return view('posts.answer',['answers' => $answers]);
+  }
 }
 
