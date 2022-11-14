@@ -25,7 +25,7 @@
         <div class="col-2">
             @include('partials.sidenav')
         </div>
-        <section id = "content" class="col-10">
+        <section id = "content" class="col-10  border-start border-dark">
           <!-- @yield('content') -->
         </section>
       </div>

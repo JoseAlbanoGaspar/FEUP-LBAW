@@ -1,8 +1,13 @@
 body {
-  background-color: rgb(238, 215, 215);
+  background-color: rgb(169, 169, 169);
 }
 
 .navbar-nav > li{
+  margin-left: 10px;
+}
+
+#sidenav > li{
+  margin-right: 10px;
   margin-left: 10px;
 }
 
