@@ -29,7 +29,10 @@ class UserPolicy
       // Any user can create a new card
       return Auth::check();
     }
-
+    public function editProfile($id_user){
+      //Any user can edit their profile
+      return /*Auth::check() && */ $id_user == 2/*Auth::id()*/;
+    }
     public function delete(User $user, Card $card)
     {
       // Only a card owner can delete it

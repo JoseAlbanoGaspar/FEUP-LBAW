@@ -37,8 +37,8 @@ class UserController extends Controller
     public function update(Request $request){
       $user = User::find($request->id_user);
 
-      //authorize the edition!!!
-
+      //authorize the edition!!! -> Uncomment after implemented loggin
+      //$this->authorize('editProfile',$request->id_user);
       //validate results
       $validator = Validator::make($request->all(),[
             'name' => 'min:5|max:25|regex:/^((?!deleted_user).)*$/',
