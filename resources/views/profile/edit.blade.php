@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action=""> <!-- ROUTE -->
+<form method="POST" action="{{ route('updateProfile') }}"> 
     {{ csrf_field() }}
-
+    @method('PATCH')
+    <input id="id_user" type="hidden" value="{{ $user->id_user }}" name="id_user">
     <label for="name">Name</label>
     <input id="name" type="text" name="name" value="{{ $user->username }}" required autofocus>
     @if ($errors->has('name'))
@@ -24,9 +25,9 @@
     <textarea id="personal_text" type="text" name="personal_text" autofocus>
     {{ $user->personal_text }}
     </textarea>
-    @if ($errors->has('name'))
+    @if ($errors->has('personal_text'))
       <span class="error">
-          {{ $errors->first('name') }}
+          {{ $errors->first('personal_text') }}
       </span>
     @endif
 

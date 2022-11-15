@@ -37,3 +37,4 @@ Route::get('users/{id_user}','UserController@show');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
 Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
+Route::patch('users/edit','UserController@update')->name('updateProfile');
