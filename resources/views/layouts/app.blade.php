@@ -27,6 +27,9 @@
         </div>
         <section id = "content" class="col-10  border-start border-dark">
           @include('partials.question-card')
+          @include('partials.question-card')
+          @include('partials.question-card')
+          @include('partials.question-card')
         </section>
       </div>
     </main>
