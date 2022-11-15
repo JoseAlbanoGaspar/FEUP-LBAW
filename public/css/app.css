@@ -14,3 +14,7 @@ body {
 #search-bar {
   width: 100%;
 }
+
+.post-summary-meta-tags{
+  padding-left: 0;
+}

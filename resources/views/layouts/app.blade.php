@@ -26,7 +26,7 @@
             @include('partials.sidenav')
         </div>
         <section id = "content" class="col-10  border-start border-dark">
-          <!-- @yield('content') -->
+          @include('partials.question-card')
         </section>
       </div>
     </main>
