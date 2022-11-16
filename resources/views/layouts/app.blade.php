@@ -22,10 +22,10 @@
 
     <main>
       <div class="row">
-        <div class="col-md-2 col-12">
+        <div class="col-md-2 col-12  border-top border-dark">
             @include('partials.sidenav')
         </div>
-        <section id = "content" class="col-md-10 col-12 border-start border-dark">
+        <section id = "content" class="col-md-10 col-12 border-start border-top border-dark">
           @yield('content')
         </section>
       </div>
