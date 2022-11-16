@@ -54,12 +54,12 @@ class User extends Authenticatable
 		'personal_text'
 	];
 
-	public function administrator()
+	public static function administrator()
 	{
 		return $this->hasOne(Administrator::class, 'id_admin');
 	}
 
-	public function moderator()
+	public static function moderator()
 	{
 		return $this->hasOne(Moderator::class, 'id_moderator');
 	}

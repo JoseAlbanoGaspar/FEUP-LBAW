@@ -30,3 +30,11 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
+
+// User Profile
+
+Route::get('users/{id_user}','UserController@show');
+Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
+Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
+Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
+Route::patch('users/edit','UserController@update')->name('updateProfile');
