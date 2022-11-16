@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark rounded">
-    <a class="navbar-brand mx-lg-5 mx-md-4 mx-2" href="#">hELP</a>
+    <a class="navbar-brand mx-lg-5 mx-md-4 mx-2" href="#"><h3>hELP</h3></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
