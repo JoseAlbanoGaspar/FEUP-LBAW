@@ -32,7 +32,7 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 // Posts Search
-Route::get('search', 'PostController@search');
+Route::get('search', 'PostController@search')->name('search');
 
 //User Search
 Route::get('search_users', 'UserController@search')->name('search_users');

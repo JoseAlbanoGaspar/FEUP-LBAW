@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@php
+use Illuminate\Http\Request;
+$request = Request::capture();
+@endphp
 @section('title', 'Posts Search')
 
 @section('content')
@@ -8,7 +11,7 @@
         @each('partials.post_listing', $posts, 'post_listing')
     </section>
     @else
-    <p id="results_not_found_message">No posts found matching your search</p>
+        <div class="d-flex flex-row" ><p id="results_not_found_message">No posts found matching your search: </p>&nbsp;<strong>{{$request->query('query')}}</strong></div>
     @endif
 
 @endsection
