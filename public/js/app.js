@@ -177,4 +177,22 @@ function createItem(item) {
   return new_item;
 }
 
+function searchUsers(){
+    let usersSearchBar = document.querySelector('#users_search_bar');
+    if(usersSearchBar){
+        usersSearchBar.nextElementSibling.addEventListener('click', function(event){
+            event.preventDefault();
+            let searchResultsDiv = document.querySelector('#users_search_results');
+            sendAjaxRequest('POST', '/search_users/api', encodeForAjax(usersSearchBar.value), async function(){
+                let response = this.response;
+                console.log(JSON.parse(this.responseText))
+            });
+
+
+        });
+    }
+}
+
+
+searchUsers();
 addEventListeners();
