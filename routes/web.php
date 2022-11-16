@@ -39,7 +39,6 @@ Route::get('search_users', 'UserController@search')->name('search_users');
 Route::post('search_users/api', 'UserController@search_api')->name('search_users_api');
 
 Route::get('questions/{id}', 'PostController@search')->name('questions'); //mudar controller ou substituir por completo
-Route::get('users/{id}', 'UserController@search')->name('users'); //mudar controller ou substituir por completo
 
 // User Profile
 Route::get('users/{id_user}','UserController@show');
