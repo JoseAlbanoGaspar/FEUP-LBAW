@@ -17,6 +17,14 @@ class UserController extends Controller
             ->simplePaginate(10);
         return view('pages.search_users', ['users' => $users]);
     }
+     public function search_api(Request $request){
+        $query = $request->query('query');
+        $users = User::query()
+            ->where('username','LIKE', "%{$query}%")
+            ->orderBy('username', 'ASC')
+            ->simplePaginate(10);
+        return json_encode($users);
+    }
 
     /*
     public function create(Request $request)
