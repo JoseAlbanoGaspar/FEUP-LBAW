@@ -1,5 +1,7 @@
 @php $truncated = (strlen($post_listing->text_body) > 38) ? substr($post_listing->text_body,0,35).'...' :
     $post_listing->text_body;
+    include(app_path() . '/Includes/Utils.php');
+
 @endphp
 @if($post_listing->question)
     <div class="question-card card mx-5 my-2">
@@ -36,9 +38,16 @@
                         @include('partials.profile-card', ['user' => $post_listing->user])
 
                         <time class="user-card-time flex-shrink">
-                            <p> asked 6 mins ago</p>
+                            asked {{timeElapsedString($post_listing->date)}}
                         </time>
-{{--                        get the how much time ago was $post_listing->date --}}
+
+
+
+
+
+
+
+
 
 
 
