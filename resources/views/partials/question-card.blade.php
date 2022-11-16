@@ -1,6 +1,6 @@
 <div class="question-card card mx-5 my-2">
-    <div class = "card-body row">
-        <div class="question-stats col-2">
+    <div class = "card-body d-flex justify-content-center">
+        <div class="question-stats col-2 d-flex justify-content-around flex-column">
             
 
             <div class="question-stats-item">
@@ -11,12 +11,6 @@
                 <span class="question-stats-score-number">0</span>
                 <span class="s-post-summary--stats-item-unit">answers</span>
             </div>
-            <div class="question-stats-item">
-                <span class="question-stats-score-number">3</span>
-                <span class="squestion-stats-score-unit">views</span>
-            </div>
-
-
 
         </div>
         <div class="post-summary col-10">
