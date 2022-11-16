@@ -52,7 +52,7 @@ class Notification extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user')
 //					->where('user.id_user', '=', 'notification.id_user')
-					->where('user.id_user', '=', 'notification.id_user');
+					->where('users.id_user', '=', 'notification.id_user');
 	}
 
 	public function system_notification()

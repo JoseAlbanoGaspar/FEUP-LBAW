@@ -48,8 +48,8 @@ class Edit extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_user')
-					->where('user.id_user', '=', 'edit.id_user')
-					->where('user.id_user', '=', 'edit.id_user');
+					->where('users.id_user', '=', 'edit.id_user')
+					->where('users.id_user', '=', 'edit.id_user');
 	}
 
 	public function post()

@@ -19,6 +19,14 @@
           {{ $errors->first('email') }}
       </span>
     @endif
+    
+    <label for="personal_text">Personal Text</label>
+    <input id="personal_text" type="personal_text" name="personal_text" value="{{ old('personal_text') }}" required>
+    @if ($errors->has('personal_text'))
+      <span class="error">
+          {{ $errors->first('personal_text') }}
+      </span>
+    @endif
 
     <label for="password">Password</label>
     <input id="password" type="password" name="password" required>
@@ -36,4 +44,7 @@
     </button>
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
 </form>
+@auth
+<p>registered with success!!!!</p>
+@endauth
 @endsection

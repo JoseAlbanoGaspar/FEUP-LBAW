@@ -49,7 +49,7 @@ class Report extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user')
 //					->where('user.id_user', '=', 'report.id_user')
-					->where('user.id_user', '=', 'report.id_user');
+					->where('users.id_user', '=', 'report.id_user');
 	}
 
 	public function post()

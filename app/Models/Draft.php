@@ -47,6 +47,6 @@ class Draft extends Model
 	{
 		return $this->belongsTo(User::class, 'id_author')
 //					->where('user.id_user', '=', 'draft.id_author')
-					->where('user.id_user', '=', 'draft.id_author');
+					->where('users.id_user', '=', 'draft.id_author');
 	}
 }

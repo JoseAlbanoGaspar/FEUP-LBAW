@@ -32,6 +32,6 @@ class Administrator extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_admin')
-					->where('user.id_user', '=', 'administrator.id_admin');
+					->where('users.id_user', '=', 'administrator.id_admin');
     }
 }

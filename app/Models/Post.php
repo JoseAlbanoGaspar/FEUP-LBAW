@@ -54,7 +54,7 @@ class Post extends Model
 	{
 		return $this->belongsTo(User::class, 'id_author')
 //					->where('user.id_user', '=', 'post.id_author')
-					->where('user.id_user', '=', 'post.id_author');
+					->where('users.id_user', '=', 'post.id_author');
 	}
 
 	public function question()

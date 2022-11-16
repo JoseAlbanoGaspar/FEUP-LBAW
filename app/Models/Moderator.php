@@ -32,6 +32,6 @@ class Moderator extends Model
 	{
 		return $this->belongsTo(User::class, 'id_moderator')
 //					->where('user.id_user', '=', 'moderator.id_moderator')
-					->where('user.id_user', '=', 'moderator.id_moderator');
+					->where('users.id_user', '=', 'moderator.id_moderator');
 	}
 }
