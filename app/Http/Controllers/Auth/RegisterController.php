@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+//use App\Http\Controllers\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -27,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/users/2';
+    protected $redirectTo = 'users/' . strval(Auth::id());
 
     /**
      * Create a new controller instance.
@@ -64,10 +67,12 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'username' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'personal_text' => $data['personal_text']
         ]);
     }
+
+    
 }
