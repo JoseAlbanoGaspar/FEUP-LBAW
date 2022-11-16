@@ -26,12 +26,12 @@ class UserController extends Controller
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
 
-      return view('profile.profile', ['user' => $user, 'role'=> $role]);
+      return view('pages.profile', ['user' => $user, 'role'=> $role]);
     }
 
     public function getEditProfile($id){
       $user = User::find($id);
-      return view('profile.edit', ['user' => $user]);
+      return view('pages.edit', ['user' => $user]);
     }
 
     public function update(Request $request){

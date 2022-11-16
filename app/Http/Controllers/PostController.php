@@ -34,7 +34,7 @@ class PostController extends Controller
                     ->select('post.text_body','post.date','question.title')
                     ->where('post.id_author',$id_user)->get();
         
-        return view('posts.question',['questions' => $questions]);
+        return view('pages.myquestions',['questions' => $questions]);
     }
 
     /**
@@ -49,7 +49,7 @@ class PostController extends Controller
                   ->select('post.text_body','post.date','question.title')
                   ->where('post.id_author',$id_user)->get();
       
-      return view('posts.answer',['answers' => $answers]);
+      return view('pages.myanswers',['answers' => $answers]);
   }
 }
 
