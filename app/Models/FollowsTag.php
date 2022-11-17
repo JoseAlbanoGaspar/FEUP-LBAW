@@ -34,7 +34,7 @@ class FollowsTag extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user')
 //					->where('user.id_user', '=', 'follows_tag.id_user')
-					->where('user.id_user', '=', 'follows_tag.id_user');
+					->where('users.id_user', '=', 'follows_tag.id_user');
 	}
 
 	public function tag()

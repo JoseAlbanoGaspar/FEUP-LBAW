@@ -29,7 +29,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::post('register', 'Auth\RegisterController@register')->name('registerAction');
 
 // Posts Search
 Route::get('search', 'PostController@search')->name('search');
@@ -40,7 +40,6 @@ Route::post('search_users/api', 'UserController@search_api')->name('search_users
 
 Route::get('questions/{id}', 'PostController@search')->name('questions'); //mudar controller ou substituir por completo
 
-// User Profile
 Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
 Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
@@ -49,4 +48,3 @@ Route::patch('users/edit','UserController@update')->name('updateProfile');
 
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
-
