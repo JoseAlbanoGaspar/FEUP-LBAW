@@ -1,3 +1,23 @@
+function addUserSearchEventListeners() {
+    let usersSearchBar = document.querySelector('#users-search-bar');
+    if(usersSearchBar != null){
+        usersSearchBar.nextElementSibling.addEventListener('click', searchUsersHandler);
+    }
+    //see if path includes /search_users
+    if(window.location.pathname.includes('/search_users')) {
+        let nextButton = document.querySelector('a[rel="next"]');
+        if (nextButton != null) {
+            nextButton.setAttribute('href', '#');
+            nextButton.addEventListener('click', nextButtonEventHandler);
+        }
+        let prevButton = document.querySelector('a[rel="prev"]');
+        if (prevButton != null) {
+            prevButton.setAttribute('href', '#');
+            prevButton.addEventListener('click', prevButtonEventHandler);
+        }
+    }
+}
+
 function addEventListeners() {
   let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
   [].forEach.call(itemCheckers, function(checker) {
@@ -22,6 +42,9 @@ function addEventListeners() {
   let cardCreator = document.querySelector('article.card form.new_card');
   if (cardCreator != null)
     cardCreator.addEventListener('submit', sendCreateCardRequest);
+
+  addUserSearchEventListeners();
+
 }
 
 function encodeForAjax(data) {
@@ -177,64 +200,74 @@ function createItem(item) {
   return new_item;
 }
 
-function searchUsers(){
+function searchUsersHandler(event) {
+    // captureEvents()
+    // console.log(event);
+    event.preventDefault();
+    // wait 1 second after typin
     let usersSearchBar = document.querySelector('#users-search-bar');
-    if(usersSearchBar){
-        usersSearchBar.nextElementSibling.addEventListener('click', function(event){
-            event.preventDefault();
-            // let searchResultsDiv = document.querySelector('#users_search_results');
-            let searchResultsDiv = document.createElement('div');
-            sendAjaxRequest('POST', '/search_users/api', {query: usersSearchBar.firstElementChild.value, page: 4}, async function(){
-                let response = JSON.parse(this.responseText);
-                console.log(JSON.parse(this.responseText))
-                let users = response.data;
-                let links = [];
 
-                console.log(links)
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page");
 
 
-                //use the response to create a list of users with pagination
-                let usersList = document.createElement('ul');
-                    users.forEach(function(user){
-                        let userLi = document.createElement('li');
-                        userLi.innerHTML = `<a href="/users/${user.id_user}">${user.username}</a>`;
-                        usersList.appendChild(userLi);
-                    });
-                searchResultsDiv.innerHTML = '';
-                searchResultsDiv.appendChild(usersList);
-                let linksList = document.createElement('ul');
-                links.forEach(function(link){
-                    let linkLi = document.createElement('li');
-                    linkLi.innerHTML = `<a href="${link.url}">${link.label}</a>`;
-                    linksList.appendChild(linkLi);
-                });
-                searchResultsDiv.appendChild(linksList);
-
-            });
-
-
-        });
+    if(page == null){
+        page = 1;
     }
+    url.searchParams.delete("page");
+    window.history.replaceState({}, document.title, "/search_users?query=" + usersSearchBar.firstElementChild.value);
+    let query = usersSearchBar.firstElementChild.value;
+
+    sendAjaxRequest('POST', '/api/search_users', {query: usersSearchBar.firstElementChild.value, page: page}, async function(){
+        //clear the url parameter 'page'
+
+        let originalContent = document.querySelector('#content');
+        let response = JSON.parse(this.responseText);
+        let parser = new DOMParser();
+        const doc = parser.parseFromString(response.html, 'text/html');
+        let newContent = doc.querySelector('#content');
+        originalContent.innerHTML = newContent.innerHTML;
+        document.querySelector('#users-search-bar').firstElementChild.value = query;
+        document.querySelector('#users-search-bar').firstElementChild.focus();
+
+        addUserSearchEventListeners();
+    });
 }
 
-<div className="mt-4 p-4 box has-text-centered">
-    <nav role="navigation" aria-label="Pagination Navigation" className="flex justify-between">
+function prevButtonEventHandler(event){
+    searchUsersPageButtonsHandler(event, false);
+}
 
-        <a href="http://localhost:8000/search_users?page=1" rel="prev"
-           className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-            « Previous
-        </a>
+function searchUsersPageButtonsHandler(event, next) {
+    let url = new URL(window.location.href);
+    let query = url.searchParams.get("query");
+    let page = url.searchParams.get("page");
+    if (page == null) {
+        page = 1;
+    }
+    event.preventDefault();
+    if (next) {page++;}
+    else {page--;}
+    url.searchParams.set("page", page);
+    window.history.replaceState({}, document.title, url.href);
+
+    sendAjaxRequest('POST', '/api/search_users', {query: query, page: page}, async function () {
+        let originalContent = document.querySelector('#content');
+        let response = JSON.parse(this.responseText);
+        let parser = new DOMParser();
+        const doc = parser.parseFromString(response.html, 'text/html');
+        let newContent = doc.querySelector('#content');
+        originalContent.innerHTML = newContent.innerHTML;
+        document.querySelector('#users-search-bar').firstElementChild.value = query;
+        // document.querySelector('#users-search-bar').firstElementChild.focus();
+        addUserSearchEventListeners();
+    });
+}
+
+function nextButtonEventHandler(event){
+    searchUsersPageButtonsHandler(event, true);
+}
 
 
-        <a href="http://localhost:8000/search_users?page=3" rel="next"
-           className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-            Next »
-        </a>
-    </nav>
 
-</div>
-
-searchUsers();
 addEventListeners();
-
-

@@ -67,16 +67,29 @@ class UserController extends Controller
         $query = $request->query('query');
         $users = User::query()
             ->where('username','LIKE', "%{$query}%")
-            ->orderBy('username', 'ASC')->skip(56)->take(10)
-            ->simplePaginate(10, ['*'], 'page', 2);
-        return view('pages.search_users', ['users' => $users]);
+            ->orderBy('username', 'ASC')
+            ->simplePaginate(10);
+        return view('pages.search_users', ['users' => $users, 'query' => $query]);
     }
-    public function search_api(Request $request){
+    public function searchApi(Request $request){
         $query = $request->input('query');
+        $page = $request->input('page');
+        if(is_null($page)){
+            $page = 1;
+        }
+        else{
+            $page = intval($page);
+        }
         $users = User::query()
             ->where('username','LIKE', "%{$query}%")
-            ->orderBy('username', 'ASC')->offset(30)
-            ->simplePaginate(10);
-        return json_encode(['users' => $users,'hasPages' => $users->links()->paginator->hasPages(), 'links' => $users->links()]);
+            ->orderBy('username', 'ASC')
+            ->simplePaginate(10, ['*'], 'page', $page);
+        $hasPages =  $users->links()->paginator->hasPages();
+        $links =  $users->links()->render();
+        $returnHTML = view('pages.searchUsersResults', ['users' => $users, 'query' => $query])->render();
+        return response()->json(array('success' => true, 'html'=>$returnHTML));
+//        return view('partials.searchUsersResults', ['users' => $users])->render();
+
+//        return json_encode(['users' => $users,'hasPages' =>$hasPages, 'links' => $links]);
     }
 }
