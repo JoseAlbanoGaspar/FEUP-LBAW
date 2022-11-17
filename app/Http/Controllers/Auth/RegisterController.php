@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 //use App\Http\Controllers\Auth\RegistersUsers;
 
 class RegisterController extends Controller
@@ -30,8 +31,12 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'users/' . strval(Auth::id());
+    public function redirectTo()
+    {
+        $id = Auth::id();
 
+        return 'users/' . strval($id);
+    }
     /**
      * Create a new controller instance.
      *
