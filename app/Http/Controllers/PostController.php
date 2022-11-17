@@ -18,7 +18,7 @@ class PostController extends Controller
      * @return Response
      */
     public function show($id_user)
-    {      
+    {
 
       return view('posts.post', ['post' => $post]);
     }
@@ -34,7 +34,7 @@ class PostController extends Controller
                     ->select('post.text_body','post.date','question.title')
                     ->where('post.id_author',$id_user)->get();
         
-        return view('posts.question',['questions' => $questions]);
+        return view('pages.myquestions',['questions' => $questions]);
     }
 
     /**
@@ -49,7 +49,43 @@ class PostController extends Controller
                   ->select('post.text_body','post.date','question.title')
                   ->where('post.id_author',$id_user)->get();
       
-      return view('posts.answer',['answers' => $answers]);
+      return view('pages.myanswers',['answers' => $answers]);
   }
+
+
+    //function that receives a string query and returns a list of posts that match that query
+    public function search(Request $request){
+        $query = $request->query('query');
+        $filters = $request->query('filters');
+
+        if($filters === null){
+            $filters = 'all';
+        }
+
+        if($filters == 'questions'){
+            $posts =  Post::query()
+                ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
+                ->get();
+        }
+        else if($filters == 'answers'){
+            $posts =  Post::query()
+                ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
+                ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
+                ->get();
+        }
+        else{
+            $posts =  Post::query()
+                ->whereRaw('(id_post IN (SELECT id_question FROM question)
+                 or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
+                ->get();
+        }
+
+        return view('pages.search', ['posts' => $posts]);
+
+    }
 }
 

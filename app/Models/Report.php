@@ -47,15 +47,11 @@ class Report extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_user')
-//					->where('user.id_user', '=', 'report.id_user')
-					->where('users.id_user', '=', 'report.id_user');
+		return $this->belongsTo(User::class, 'id_user');
 	}
 
 	public function post()
 	{
-		return $this->belongsTo(Post::class, 'id_post')
-//					->where('post.id_post', '=', 'report.id_post')
-					->where('post.id_post', '=', 'report.id_post');
+		return $this->belongsTo(Post::class, 'id_post');
 	}
 }

@@ -26,12 +26,12 @@ class UserController extends Controller
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
 
-      return view('profile.profile', ['user' => $user, 'role'=> $role]);
+      return view('pages.profile', ['user' => $user, 'role'=> $role]);
     }
 
     public function getEditProfile($id){
       $user = User::find($id);
-      return view('profile.edit', ['user' => $user]);
+      return view('pages.edit', ['user' => $user]);
     }
 
     public function update(Request $request){
@@ -46,7 +46,7 @@ class UserController extends Controller
             'personal_text' => 'max:256',
             'password' => 'nullable|confirmed|min:6',
       ]);
-      
+
       if($validator->fails()){
         return redirect()->route('editProfile',['id_user' => $user->id_user])->withInput()->withErrors($validator);
       }
@@ -60,5 +60,22 @@ class UserController extends Controller
       //store updated information
       $user->save();
       return redirect()->route('editProfile',['id_user' => $user->id_user]);
+    }
+
+
+    public function search(Request $request){
+        $query = $request->query('query');
+        $users = User::where('username','LIKE', "%{$query}%")
+            ->orderBy('username', 'ASC')
+            ->simplePaginate(10);
+        return view('pages.search_users', ['users' => $users]);
+    }
+    public function search_api(Request $request){
+        $query = $request->query('query');
+        $users = User::query()
+            ->where('username','LIKE', "%{$query}%")
+            ->orderBy('username', 'ASC')
+            ->simplePaginate(10);
+        return json_encode($users);
     }
 }

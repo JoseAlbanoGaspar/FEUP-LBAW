@@ -52,9 +52,7 @@ class Post extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_author')
-//					->where('user.id_user', '=', 'post.id_author')
-					->where('users.id_user', '=', 'post.id_author');
+		return $this->belongsTo(User::class, 'id_author');
 	}
 
 	public function question()
@@ -81,4 +79,5 @@ class Post extends Model
 	{
 		return $this->hasMany(Edit::class, 'id_post');
 	}
+
 }
