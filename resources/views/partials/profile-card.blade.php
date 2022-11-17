@@ -2,7 +2,7 @@
     <div class="flex-shrink">
         <a href="{{route('users', ['id_user'=>$user->id_user])}}" class="user-card-avatar">
             <div class="gravatar-wrapper-16">
-                <img src="{{$user->profile_picture}}" alt="Nakute's user avatar" width="16" ,="" height="16" class="avatar-image">
+                <img src="{{$user->profile_picture}}" alt="User avatar" width="16" ,="" height="16" class="avatar-image">
             </div>
         </a>
     </div>

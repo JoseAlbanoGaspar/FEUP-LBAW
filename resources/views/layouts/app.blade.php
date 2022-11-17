@@ -16,7 +16,9 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-  </head>
+    <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
+
+          </head>
   <body>
     @include('partials.navbar')
 

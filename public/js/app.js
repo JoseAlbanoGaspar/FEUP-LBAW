@@ -178,14 +178,38 @@ function createItem(item) {
 }
 
 function searchUsers(){
-    let usersSearchBar = document.querySelector('#users_search_bar');
+    let usersSearchBar = document.querySelector('#users-search-bar');
     if(usersSearchBar){
         usersSearchBar.nextElementSibling.addEventListener('click', function(event){
             event.preventDefault();
-            let searchResultsDiv = document.querySelector('#users_search_results');
-            sendAjaxRequest('POST', '/search_users/api', encodeForAjax(usersSearchBar.value), async function(){
-                let response = this.response;
+            // let searchResultsDiv = document.querySelector('#users_search_results');
+            let searchResultsDiv = document.createElement('div');
+            sendAjaxRequest('POST', '/search_users/api', {query: usersSearchBar.firstElementChild.value, page: 4}, async function(){
+                let response = JSON.parse(this.responseText);
                 console.log(JSON.parse(this.responseText))
+                let users = response.data;
+                let links = [];
+
+                console.log(links)
+
+
+                //use the response to create a list of users with pagination
+                let usersList = document.createElement('ul');
+                    users.forEach(function(user){
+                        let userLi = document.createElement('li');
+                        userLi.innerHTML = `<a href="/users/${user.id_user}">${user.username}</a>`;
+                        usersList.appendChild(userLi);
+                    });
+                searchResultsDiv.innerHTML = '';
+                searchResultsDiv.appendChild(usersList);
+                let linksList = document.createElement('ul');
+                links.forEach(function(link){
+                    let linkLi = document.createElement('li');
+                    linkLi.innerHTML = `<a href="${link.url}">${link.label}</a>`;
+                    linksList.appendChild(linkLi);
+                });
+                searchResultsDiv.appendChild(linksList);
+
             });
 
 
@@ -193,6 +217,24 @@ function searchUsers(){
     }
 }
 
+<div className="mt-4 p-4 box has-text-centered">
+    <nav role="navigation" aria-label="Pagination Navigation" className="flex justify-between">
+
+        <a href="http://localhost:8000/search_users?page=1" rel="prev"
+           className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+            « Previous
+        </a>
+
+
+        <a href="http://localhost:8000/search_users?page=3" rel="next"
+           className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+            Next »
+        </a>
+    </nav>
+
+</div>
 
 searchUsers();
 addEventListeners();
+
+

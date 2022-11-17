@@ -6,9 +6,8 @@
 
 
 @section('content')
-    <!--html searchbar -->
     <form action="{{ route('search_users') }}" method="GET">
-        <label>
+        <label id="users-search-bar">
             <input type="text" name="query" placeholder="Search for users">
         </label>
         <button type="submit">Search</button>
