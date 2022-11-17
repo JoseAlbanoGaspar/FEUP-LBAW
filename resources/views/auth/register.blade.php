@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
+<form method="POST" action="{{ route('registerAction') }}">
     {{ csrf_field() }}
 
-    <label for="name">Name</label>
-    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
-    @if ($errors->has('name'))
+    <label for="username">Name</label>
+    <input id="username" type="text" name="username" value="{{ old('name') }}" required autofocus>
+    @if ($errors->has('username'))
       <span class="error">
-          {{ $errors->first('name') }}
+          {{ $errors->first('username') }}
       </span>
     @endif
 
@@ -17,6 +17,14 @@
     @if ($errors->has('email'))
       <span class="error">
           {{ $errors->first('email') }}
+      </span>
+    @endif
+    
+    <label for="personal_text">Personal Text</label>
+    <input id="personal_text" type="personal_text" name="personal_text" value="{{ old('personal_text') }}" required>
+    @if ($errors->has('personal_text'))
+      <span class="error">
+          {{ $errors->first('personal_text') }}
       </span>
     @endif
 
@@ -36,4 +44,7 @@
     </button>
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
 </form>
+@auth
+<p>registered with success!!!!</p>
+@endauth
 @endsection
