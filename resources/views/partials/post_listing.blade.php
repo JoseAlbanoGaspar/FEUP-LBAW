@@ -5,8 +5,8 @@
 @endphp
 @if($post_listing->question)
     <div class="question-card card mx-5 my-2">
-        <div class = "card-body row">
-            <div class="question-stats col-2">
+        <div class = "card-body d-flex justify-content-center">
+            <div class="question-stats col-2 d-flex justify-content-around flex-column">
 
                 <div class="question-stats-item">
                     <span class="question-stats-score-number">{{$post_listing->question->score}}</span>
@@ -22,7 +22,7 @@
                 <div class="post-summary col-10">
 
                     <div class ="row"><a href="{{route('questions', ['id'=>$post_listing->id_post])}}"><h5 class="card-title">{{$post_listing->question->title}}</h5></a></div>
-                    <div class ="row"><h7 class="card-text">{{$truncated}}</h7></div>
+                    <div class ="row"><h6 class="card-text">{{$truncated}}</h6></div>
 
 
                     <div class="post-summary-meta row d-flex justify-content-between">
@@ -34,25 +34,13 @@
                             </ul>
                         </div>
 
+                        <div class = "user-card col d-inline d-flex justify-content-end">
+                            @include('partials.profile-card', ['user' => $post_listing->user])
 
-                        @include('partials.profile-card', ['user' => $post_listing->user])
-
-                        <time class="user-card-time flex-shrink">
-                            asked {{timeElapsedString($post_listing->date)}}
-                        </time>
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            <time class="user-card-time flex-shrink">
+                                &nbsp;&nbsp;asked {{timeElapsedString($post_listing->date)}}
+                            </time>
+                        </div>
                     </div>
                 </div>
 
