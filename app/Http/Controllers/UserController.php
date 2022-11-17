@@ -65,8 +65,7 @@ class UserController extends Controller
 
     public function search(Request $request){
         $query = $request->query('query');
-        $users = User::query()
-            ->where('username','LIKE', "%{$query}%")
+        $users = User::where('username','LIKE', "%{$query}%")
             ->orderBy('username', 'ASC')
             ->simplePaginate(10);
         return view('pages.search_users', ['users' => $users]);
