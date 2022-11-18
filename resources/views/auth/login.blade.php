@@ -1,63 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
+<form method="POST" action="{{ route('login') }}">
+    {{ csrf_field() }}
 
-<h2 class="m-2 my-4">Login</h2>
+    <label for="email">E-mail</label>
+    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+    @if ($errors->has('email'))
+        <span class="error">
+          {{ $errors->first('email') }}
+        </span>
+    @endif
 
-<div class="container-sm m-5 d-flex justify-content-center">
-    <div style="width: 30rem;">
-        <form method="POST" action="{{ route('login') }}">
-            {{ csrf_field() }}
+    <label for="password" >Password</label>
+    <input id="password" type="password" name="password" required>
+    @if ($errors->has('password'))
+        <span class="error">
+            {{ $errors->first('password') }}
+        </span>
+    @endif
 
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-            <input type="email" name="email" class="form-control" required autofocus/>
-            <label class="form-label" for="email">Email</label>
-            </div>
-        
-    
-            <!-- Password input -->
-            <div class="form-outline mb-3">
-            <input type="password" name="password" class="form-control" required/>
-            <label class="form-label" for="password">Password</label>
-            </div>
+    <label>
+        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+    </label>
 
-            @if ($errors->has('email'))
-                <div class="alert alert-danger" role="alert">
-                    {{ $errors->first('email') }}
-                </div>
-            @endif
-            @if ($errors->has('password'))
-                <div class="alert alert-danger" role="alert">
-                    {{ $errors->first('password') }}
-                </div>
-            @endif
-    
-            <!-- 2 column grid layout -->
-            <div class="row mb-4">
-            <div class="col-md-6 d-flex justify-content-center">
-                <!-- Checkbox -->
-                <div class="form-check mb-3 mb-md-0">
-                <input class="form-check-input" type="checkbox" value="" name="remember" {{ old('remember') ? 'checked' : '' }} />
-                <label class="form-check-label" for="remember"> Remember me </label>
-                </div>
-            </div>
-    
-            <div class="col-md-6 d-flex justify-content-center">
-                <!-- Simple link -->
-                <a href="#!">Forgot password?</a>
-            </div>
-            </div>
-    
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-    
-            <!-- Register buttons -->
-            <div class="text-center">
-            <p>Not a member? <a href="{{ route('register') }}">Register</a></p>
-            </div>
-        </form>
-    </div>
-</div>
-
+    <button type="submit">
+        Login
+    </button>
+    <a class="button button-outline" href="{{ route('register') }}">Register</a>
+</form>
 @endsection

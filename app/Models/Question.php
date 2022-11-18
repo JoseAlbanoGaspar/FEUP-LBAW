@@ -43,7 +43,9 @@ class Question extends Model
 
 	public function post()
 	{
-		return $this->belongsTo(Post::class, 'id_question');
+		return $this->belongsTo(Post::class, 'id_question')
+//					->where('post.id_post', '=', 'question.id_question')
+					->where('post.id_post', '=', 'question.id_question');
 	}
 
 	public function answers()

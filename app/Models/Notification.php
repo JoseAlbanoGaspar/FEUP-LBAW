@@ -50,7 +50,9 @@ class Notification extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_user');
+		return $this->belongsTo(User::class, 'id_user')
+//					->where('user.id_user', '=', 'notification.id_user')
+					->where('user.id_user', '=', 'notification.id_user');
 	}
 
 	public function system_notification()

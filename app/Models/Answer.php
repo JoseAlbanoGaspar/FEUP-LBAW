@@ -48,12 +48,16 @@ class Answer extends Model
 
 	public function post()
 	{
-		return $this->belongsTo(Post::class, 'id_answer');
+		return $this->belongsTo(Post::class, 'id_answer')
+//					->where('post.id_post', '=', 'answer.id_answer')
+					->where('post.id_post', '=', 'answer.id_answer');
 	}
 
 	public function question()
 	{
-		return $this->belongsTo(Question::class, 'id_question');
+		return $this->belongsTo(Question::class, 'id_question')
+//					->where('question.id_question', '=', 'answer.id_question')
+					->where('question.id_question', '=', 'answer.id_question');
 	}
 
 	public function comments()
