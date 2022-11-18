@@ -33,7 +33,7 @@ class PostController extends Controller
                     ->join('question','post.id_post','=','question.id_question')
                     ->select('post.text_body','post.date','question.title')
                     ->where('post.id_author',$id_user)->get();
-        
+
         return view('pages.myquestions',['questions' => $questions]);
     }
 
@@ -48,7 +48,7 @@ class PostController extends Controller
                   ->join('question','answer.id_question', '=','question.id_question')
                   ->select('post.text_body','post.date','question.title')
                   ->where('post.id_author',$id_user)->get();
-      
+
       return view('pages.myanswers',['answers' => $answers]);
   }
 
@@ -85,6 +85,11 @@ class PostController extends Controller
         }
 
         return view('pages.search', ['posts' => $posts]);
+
+    }
+    public function personalFeed(){
+        $posts =  Post::query()->where('id_post', '<', '100')->limit(10)->get();
+        return view('pages.personalFeed', ['posts' => $posts]);
 
     }
 }

@@ -1,6 +1,6 @@
 @php $truncated = (strlen($post_listing->text_body) > 38) ? substr($post_listing->text_body,0,35).'...' :
     $post_listing->text_body;
-    include(app_path() . '/Includes/Utils.php');
+    include_once(app_path() . '/Includes/Utils.php');
 
 @endphp
 @if($post_listing->question)

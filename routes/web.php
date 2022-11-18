@@ -45,5 +45,13 @@ Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAn
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
 Route::patch('users/edit','UserController@update')->name('updateProfile');
 
+//create and protect the route personalFeed so only authenticated users can access it
+//use PostController@personalFeed
+Route::get('personal_feed','PostController@personalFeed')->name('personalFeed'); //->proteger rota
+
+
+
+
+
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
