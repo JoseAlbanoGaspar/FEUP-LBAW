@@ -1,5 +1,5 @@
-@php $truncated = (strlen($post_listing->text_body) > 38) ? substr($post_listing->text_body,0,35).'...' :
-    $post_listing->text_body;
+@php $truncated = (strlen($post->text_body) > 38) ? substr($post->text_body,0,35).'...' :
+    $post->text_body;
     include_once(app_path() . '/Includes/Utils.php');
 @endphp
 
@@ -23,11 +23,13 @@
             <div class ="row"><a href="{{route('questions', ['id'=>$post->answer->question->id_question])}}#{{'answerid-'.$post->answer->id_answer}}"><h5 class="card-text">{{$truncated}}</h5></a></div>
 
 
-            @include('partials.profile-card', ['user' => $post->user])
+            <div class = "user-card col d-inline d-flex justify-content-end">
+                @include('partials.profile-card', ['user' => $post->user])
 
-            <time class="user-card-time flex-shrink">
-                answered {{timeElapsedString($post->date)}}
-            </time>
+                <time class="user-card-time flex-shrink">
+                    &nbsp;&nbsp;asked {{timeElapsedString($post->date)}}
+                </time>
+            </div>
 
         </div>
 

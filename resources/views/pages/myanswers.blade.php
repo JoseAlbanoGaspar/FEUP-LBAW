@@ -6,7 +6,7 @@
     @if(count($answers) == 0)
         <p class="mx-4 my-2 fs-5">No answers found!</p>
     @else
-        @each('partials.question-card', $answers, 'post')
+        @each('partials.answer-card', $answers, 'post')
     @endif
 
     <div class = "m-4 mx-5 d-flex flex-row-reverse">
