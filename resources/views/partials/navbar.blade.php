@@ -27,7 +27,7 @@
                 <a class="nav-link" id="profile-button" href="{{route('users', ['id_user'=> $user->id_user])}}">
 
 
-                    <img src="{{$user->profile_picture}}" alt="User avatar" width="24" height="24" class="bar-sm ">
+                    <img src="{{asset($user->profile_picture)}}" alt="User avatar" width="24" height="24" class="bar-sm ">
                 </a>
                 @else
                 <li class="nav-item" id="login-button">
