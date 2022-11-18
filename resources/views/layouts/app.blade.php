@@ -11,25 +11,26 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <script type="text/javascript">
+        // Fix for Firefox autofocus CSS bug
+        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
+    </script>
+    <script type="text/javascript" src={{ asset('js/app.js') }} defer>
+</script>
   </head>
   <body>
-    @include('partials.navbar')
-
     <main>
-      <div class="row">
-        <div class="col-md-2 col-12  border-top border-dark">
-            @include('partials.sidenav')
-        </div>
-        <section id = "content" class="col-md-10 col-12 border-start border-top border-dark">
-          @yield('content')
-        </section>
-      </div>
+      <header>
+        <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
+        @if (Auth::check())
+        <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+        @endif
+      </header>
+      <section id="content">
+        @yield('content')
+      </section>
     </main>
-    @include('layouts.scripts')
   </body>
 </html>

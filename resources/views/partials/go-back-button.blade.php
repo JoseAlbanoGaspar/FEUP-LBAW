@@ -1,1 +1,0 @@
-<a type="button" class="btn btn-secondary" href="{{ url()->previous() }}">Go Back</a>
