@@ -1,3 +1,23 @@
+function addUserSearchEventListeners() {
+    let usersSearchBar = document.querySelector('#users-search-bar');
+    if(usersSearchBar != null){
+        usersSearchBar.nextElementSibling.addEventListener('click', searchUsersHandler);
+    }
+    //see if path includes /search_users
+    if(window.location.pathname.includes('/search_users')) {
+        let nextButton = document.querySelector('a[rel="next"]');
+        if (nextButton != null) {
+            nextButton.setAttribute('href', '#');
+            nextButton.addEventListener('click', nextButtonEventHandler);
+        }
+        let prevButton = document.querySelector('a[rel="prev"]');
+        if (prevButton != null) {
+            prevButton.setAttribute('href', '#');
+            prevButton.addEventListener('click', prevButtonEventHandler);
+        }
+    }
+}
+
 function addEventListeners() {
   let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
   [].forEach.call(itemCheckers, function(checker) {
@@ -22,6 +42,9 @@ function addEventListeners() {
   let cardCreator = document.querySelector('article.card form.new_card');
   if (cardCreator != null)
     cardCreator.addEventListener('submit', sendCreateCardRequest);
+
+  addUserSearchEventListeners();
+
 }
 
 function encodeForAjax(data) {
@@ -177,22 +200,74 @@ function createItem(item) {
   return new_item;
 }
 
-function searchUsers(){
-    let usersSearchBar = document.querySelector('#users_search_bar');
-    if(usersSearchBar){
-        usersSearchBar.nextElementSibling.addEventListener('click', function(event){
-            event.preventDefault();
-            let searchResultsDiv = document.querySelector('#users_search_results');
-            sendAjaxRequest('POST', '/search_users/api', encodeForAjax(usersSearchBar.value), async function(){
-                let response = this.response;
-                console.log(JSON.parse(this.responseText))
-            });
+function searchUsersHandler(event) {
+    // captureEvents()
+    // console.log(event);
+    event.preventDefault();
+    // wait 1 second after typin
+    let usersSearchBar = document.querySelector('#users-search-bar');
+
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page");
 
 
-        });
+    if(page == null){
+        page = 1;
     }
+    url.searchParams.delete("page");
+    window.history.replaceState({}, document.title, "/search_users?query=" + usersSearchBar.firstElementChild.value);
+    let query = usersSearchBar.firstElementChild.value;
+
+    sendAjaxRequest('POST', '/api/search_users', {query: usersSearchBar.firstElementChild.value, page: page}, async function(){
+        //clear the url parameter 'page'
+
+        let originalContent = document.querySelector('#content');
+        let response = JSON.parse(this.responseText);
+        let parser = new DOMParser();
+        const doc = parser.parseFromString(response.html, 'text/html');
+        let newContent = doc.querySelector('#content');
+        originalContent.innerHTML = newContent.innerHTML;
+        document.querySelector('#users-search-bar').firstElementChild.value = query;
+        document.querySelector('#users-search-bar').firstElementChild.focus();
+
+        addUserSearchEventListeners();
+    });
+}
+
+function prevButtonEventHandler(event){
+    searchUsersPageButtonsHandler(event, false);
+}
+
+function searchUsersPageButtonsHandler(event, next) {
+    let url = new URL(window.location.href);
+    let query = url.searchParams.get("query");
+    let page = url.searchParams.get("page");
+    if (page == null) {
+        page = 1;
+    }
+    event.preventDefault();
+    if (next) {page++;}
+    else {page--;}
+    url.searchParams.set("page", page);
+    window.history.replaceState({}, document.title, url.href);
+
+    sendAjaxRequest('POST', '/api/search_users', {query: query, page: page}, async function () {
+        let originalContent = document.querySelector('#content');
+        let response = JSON.parse(this.responseText);
+        let parser = new DOMParser();
+        const doc = parser.parseFromString(response.html, 'text/html');
+        let newContent = doc.querySelector('#content');
+        originalContent.innerHTML = newContent.innerHTML;
+        document.querySelector('#users-search-bar').firstElementChild.value = query;
+        // document.querySelector('#users-search-bar').firstElementChild.focus();
+        addUserSearchEventListeners();
+    });
+}
+
+function nextButtonEventHandler(event){
+    searchUsersPageButtonsHandler(event, true);
 }
 
 
-searchUsers();
+
 addEventListeners();

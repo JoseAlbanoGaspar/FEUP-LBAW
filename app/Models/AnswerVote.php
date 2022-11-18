@@ -40,7 +40,7 @@ class AnswerVote extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user')
 //					->where('user.id_user', '=', 'answer_vote.id_user')
-					->where('user.id_user', '=', 'answer_vote.id_user');
+					->where('users.id_user', '=', 'answer_vote.id_user');
 	}
 
 	public function answer()

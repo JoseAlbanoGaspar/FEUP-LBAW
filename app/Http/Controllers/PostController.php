@@ -90,5 +90,10 @@ class PostController extends Controller
         return view('pages.search', ['posts' => $posts]);
 
     }
+    public function personalFeed(){
+        $posts =  Post::query()->where('id_post', '<', '100')->limit(10)->get();
+        return view('pages.personalFeed', ['posts' => $posts]);
+
+    }
 }
 

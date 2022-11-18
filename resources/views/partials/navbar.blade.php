@@ -1,3 +1,10 @@
+@php
+    use App\Models\User;
+    if(Auth::check()){
+        $user = Auth::user();
+    }
+@endphp
+
 <nav class="navbar navbar-expand navbar-dark bg-dark rounded">
     <a class="navbar-brand mx-lg-5 mx-md-4 mx-2" href="/"><h3>hELP</h3></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,12 +19,13 @@
           <input class="form-control mx-2" type="text" name='query' placeholder="Search ">
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
         </form>
-        
+
         <ul class="navbar-nav mx-lg-5 mx-md-4 mx-2">
             <li class = "nav-item">
                 @if(Auth::check())
+
                 <a class="nav-link" id="profile-button" href="{{route('users', ['id_user'=> $user->id_user])}}">
-                        {{$user = Auth::user()->username}}
+
 
                     <img src="{{$user->profile_picture}}" alt="User avatar" width="24" height="24" class="bar-sm ">
                 </a>
