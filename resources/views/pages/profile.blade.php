@@ -19,7 +19,7 @@
     <div class="d-grid gap-5-lg gap-2 d-md-block my-4">
         <a type="button" class="btn btn-primary" href="{{ route('myQuestions',['id_user' => $user->id_user]) }}">My questions</a>
         <a type="button" class="btn btn-primary" href="{{ route('myAnswers',['id_user' => $user->id_user]) }}">My answers</a>
-      </div>
+    </div>
 
     <div class="user-profile-about">
     <h3>About:</h3>

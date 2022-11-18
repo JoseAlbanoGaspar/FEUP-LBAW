@@ -1,50 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('registerAction') }}">
-    {{ csrf_field() }}
 
-    <label for="username">Name</label>
-    <input id="username" type="text" name="username" value="{{ old('name') }}" required autofocus>
-    @if ($errors->has('username'))
-      <span class="error">
-          {{ $errors->first('username') }}
-      </span>
-    @endif
+<h2 class="m-2 my-4">Login</h2>
 
-    <label for="email">E-Mail Address</label>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
-    @if ($errors->has('email'))
-      <span class="error">
-          {{ $errors->first('email') }}
-      </span>
-    @endif
-    
-    <label for="personal_text">Personal Text</label>
-    <input id="personal_text" type="personal_text" name="personal_text" value="{{ old('personal_text') }}" required>
-    @if ($errors->has('personal_text'))
-      <span class="error">
-          {{ $errors->first('personal_text') }}
-      </span>
-    @endif
+<div class="container-sm m-5 d-flex justify-content-center">
+    <div style="width: 30rem;">
+        <form method="POST" action="{{ route('register') }}">
+            {{ csrf_field() }}
 
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" required>
-    @if ($errors->has('password'))
-      <span class="error">
-          {{ $errors->first('password') }}
-      </span>
-    @endif
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required/>
+            <label class="form-label" for="name">Username</label>
+            </div>
+            @if ($errors->has('username'))
+            <span class="error">
+                {{ $errors->first('username') }}
+            </span>
+            @endif
 
-    <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+            <input type="email" name="email" class="form-control"  value="{{ old('email') }}" required/>
+            <label class="form-label" for="email">Email</label>
+            </div>
+            @if ($errors->has('email'))
+            <span class="error">
+                {{ $errors->first('email') }}
+            </span>
+            @endif
+            
 
-    <button type="submit">
-      Register
-    </button>
-    <a class="button button-outline" href="{{ route('login') }}">Login</a>
-</form>
-@auth
-<p>registered with success!!!!</p>
-@endauth
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+            <input type="password" name="password" class="form-control" required/>
+            <label class="form-label" for="password">Password</label>
+            </div>
+            @if ($errors->has('password'))
+            <span class="error">
+                {{ $errors->first('password') }}
+            </span>
+            @endif
+
+            <!-- Repeat Password input -->
+            <div class="form-outline mb-4">
+            <input type="password" name="password-confirm" class="form-control" required/>
+            <label class="form-label" for="password-confirm">Repeat password</label>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="form-check d-flex justify-content-center mb-4">
+            <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
+                aria-describedby="registerCheckHelpText" />
+            <label class="form-check-label" for="registerCheck">
+                I have read and agree to the terms
+            </label>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+        </form>
+
+        <!-- Login button -->
+        <div class="text-center">
+            <p>Already have an account? <a href="{{ route('login') }}">Login</a></p>
+        </div>
+    </div>
+</div>
+
 @endsection
