@@ -6,7 +6,7 @@
     
     <div class="d-flex justify-content-start align-items-center">
         <div class="gravatar-wrapper-16 m-2 me-5">
-            <img src="{{ $user->profile_picture }}"  alt="{{ $user->username }}'s user avatar" width="100" ,="" height="100" class="avatar-image rounded-circle">
+            <img src="{{ asset($user->profile_picture) }}"  alt="{{ $user->username }}'s user avatar" width="100" ,="" height="100" class="avatar-image rounded-circle">
         </div>
 
         <div class="d-flex justify-content-around flex-column">

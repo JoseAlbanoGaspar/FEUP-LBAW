@@ -7,7 +7,7 @@
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">
 
-    <form method="POST" action="{{ route('updateProfile') }}"> 
+    <form method="POST" action="{{ route('updateProfile') }}" enctype="multipart/form-data"> 
         {{ csrf_field() }}
         @method('PATCH')
 
@@ -36,6 +36,10 @@
         </span>
         @endif
 
+        <!-- Profile image -->
+        <input id="profile_picture" type="file" class="form-control" name="profile_picture">
+        <label for="profile_picture" class="col-md-4 control-label">Profile Picture</label>
+          
         <!-- Personal text input -->
         <div class="form-outline mb-4">
           <textarea name="personal_text" class="form-control" rows="5">{{ $user->personal_text }}</textarea>
