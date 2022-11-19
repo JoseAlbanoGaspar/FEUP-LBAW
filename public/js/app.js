@@ -219,7 +219,6 @@ function searchUsersHandler(event) {
     let query = usersSearchBar.firstElementChild.value;
 
     sendAjaxRequest('POST', '/api/search_users', {query: usersSearchBar.firstElementChild.value, page: page}, async function(){
-        //clear the url parameter 'page'
 
         let originalContent = document.querySelector('#content');
         let response = JSON.parse(this.responseText);

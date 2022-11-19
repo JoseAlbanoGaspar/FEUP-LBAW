@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Answer;
+//import the filter method
+use Illuminate\Support\Collection;
 
 class PostController extends Controller
 {
@@ -88,9 +91,46 @@ class PostController extends Controller
 
     }
     public function personalFeed(){
-        $posts =  Post::query()->where('id_post', '<', '100')->limit(10)->get();
-        return view('pages.personalFeed', ['posts' => $posts]);
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+        else{
+            return redirect('login');
+        }
+        $posts =  Post::query()->orderBy('date', 'DESC')->get();
 
+
+        $questions = $posts->filter(
+            function ($post) {
+                return $post->question != null;
+            }
+        );
+
+        $userTags = $user->followed_tags;
+
+        $questions = $questions->sortByDesc(
+            function ($question) use ($userTags) {
+                $questionTags = $question->question->tags;
+                $intersect = $questionTags->intersect($userTags);
+                return $intersect->count();
+            }
+        );
+
+        $questions = $questions->take(30);
+
+        return view('pages.personalFeed', ['posts' => $questions]);
+    }
+
+    public function showAllQuestions(){
+        $posts =  Post::query()->orderBy('date', 'DESC')->whereIn('id_post', Question::query()->get(['id_question']))->paginate(20);
+
+        return view('pages.allQuestions', ['posts' => $posts]);
+    }
+
+    public function showAllPosts(){
+        $posts =  Post::query()->orderBy('date', 'DESC')->paginate(20);
+
+        return view('pages.home', ['posts' => $posts]);
     }
 }
 

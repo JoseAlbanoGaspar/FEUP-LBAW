@@ -1,5 +1,4 @@
 @php
-    use App\Models\User;
     if(Auth::check()){
         $user = Auth::user();
     }

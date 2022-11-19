@@ -35,6 +35,11 @@ class Tag extends Model
 	{
 		return $this->belongsToMany(Question::class, 'question_tag', 'id_tag', 'id_question');
 	}
+    public function users()
+	{
+        return $this->belongsToMany(User::class, 'follows_tag', 'id_tag', 'id_user');
+    }
+
 
 	public function follow_tag_notificationss()
 	{

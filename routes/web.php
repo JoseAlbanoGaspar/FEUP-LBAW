@@ -11,7 +11,7 @@
 |
 */
 // Home
-Route::get('/', 'HomeController@home');
+Route::redirect('/', '/home');
 
 // Cards
 Route::get('cards', 'CardController@list');
@@ -38,6 +38,7 @@ Route::get('search', 'PostController@search')->name('search');
 Route::get('search_users', 'UserController@search')->name('search_users');
 
 Route::get('questions/{id}', 'PostController@search')->name('questions'); //mudar controller ou substituir por completo
+Route::get('questions', 'PostController@showAll')->name('allQuestions');
 
 Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
@@ -45,9 +46,8 @@ Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAn
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
 Route::patch('users/edit','UserController@update')->name('updateProfile');
 
-//create and protect the route personalFeed so only authenticated users can access it
-//use PostController@personalFeed
-Route::get('personal_feed','PostController@personalFeed')->name('personalFeed'); //->proteger rota
+Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
+Route::get('home','PostController@showAllPosts')->name('home');
 
 
 
