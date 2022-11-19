@@ -7,10 +7,7 @@
     <div class = "card-body d-flex justify-content-center p-3">
         <div class="question-stats col-2 d-flex justify-content-between flex-column py-4">
 
-            <div class="question-stats-item">
-                <span class="question-stats-score-number">{{$post->question->score}}</span>
-                <span class="question-stats-score-unit">votes</span>
-            </div>
+            @include('partials.stats-score', ['score' => $post->question->score])
 
             <div class="question-stats-item">
                 <span class="question-stats-answers-number">{{count($post->question->answers)}}</span>
