@@ -123,13 +123,26 @@ class PostController extends Controller
     }
 
     public function showAllQuestions(){
-        $posts =  Post::query()->orderBy('date', 'DESC')->whereIn('id_post', Question::query()->get(['id_question']))->paginate(20);
+        $posts =  Post::query()->orderBy('date', 'DESC')
+            ->whereIn('id_post', Question::query()
+                ->get(['id_question']))
+            ->paginate(20);
 
         return view('pages.allQuestions', ['posts' => $posts]);
     }
 
     public function showAllPosts(){
         $posts =  Post::query()->orderBy('date', 'DESC')->paginate(20);
+
+        return view('pages.home', ['posts' => $posts]);
+    }
+    public function showTopQuestions(){
+        $date = date('Y-m-d', strtotime('-2 months'));
+        $posts =  Post::query()->whereIn('id_post', Question::query()->get(['id_question']))
+            ->orderByRaw('(SELECT score FROM question WHERE id_post = id_question) DESC')
+            ->orderByRaw('(SELECT count(id_question) FROM answer WHERE id_question = id_post) DESC')
+            ->where('date','>',$date)
+            ->paginate(20);
 
         return view('pages.home', ['posts' => $posts]);
     }

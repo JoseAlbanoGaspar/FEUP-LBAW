@@ -56,10 +56,10 @@ class UserController extends Controller
       $user->email = $request->email;
       $user->personal_text = $request->personal_text;
       if($request->password != NULL) $user->password = bcrypt($request->password);
-      
+
       $img = $request->profile_picture;
       $path = 'storage/images/';
-      $imageName = Auth::id(). '-profile-picture.' . $img->extension(); 
+      $imageName = Auth::id(). '-profile-picture.' . $img->extension();
       $img->storeAs('public/images', $imageName);
       $user->profile_picture = $path . $imageName;
 

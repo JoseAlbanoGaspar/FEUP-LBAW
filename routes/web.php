@@ -11,7 +11,7 @@
 |
 */
 // Home
-Route::redirect('/', '/home');
+Route::get('/', 'HomeController@home');
 
 // Cards
 Route::get('cards', 'CardController@list');
@@ -53,7 +53,7 @@ Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
 
 
 Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
-Route::get('home','PostController@showAllPosts')->name('home');
+Route::get('home','PostController@showTopQuestions')->name('home');
 
 
 
