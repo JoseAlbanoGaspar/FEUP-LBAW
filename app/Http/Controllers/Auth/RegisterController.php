@@ -71,11 +71,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $path = 'storage/images/';
+        $profile_image_url = $path . 'default-user.jpg';
+        
+        
+        
+        if(array_key_exists('profile_picture', $data)){
+            $img = $data['profile_picture'];
+            $new_id = DB::table('users')->latest('id_user')->first() + 1;
+            $imageName = strval($new_id). '-profile-picture.' . $img->extension(); 
+            $img->storeAs('public/images', $imageName);
+            $profile_image_url = $path . $imageName;
+        }
+
         return User::create([
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'personal_text' => $data['personal_text']
+            'personal_text' => $data['personal_text'],
+            'profile_picture' => $profile_image_url
         ]);
     }
 

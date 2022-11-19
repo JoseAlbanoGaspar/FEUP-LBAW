@@ -9,8 +9,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Answer;
-//import the filter method
-use Illuminate\Support\Collection;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -32,11 +31,12 @@ class PostController extends Controller
      * @return Response
      */
     public function showQuestions($id_user){
-        $questions = DB::table('post')
-                    ->join('question','post.id_post','=','question.id_question')
-                    ->select('post.text_body','post.date','question.title')
-                    ->where('post.id_author',$id_user)->get();
-
+        $posts = User::find($id_user)->posts()->get();
+        $questions = $posts->filter(
+            function($post){
+                return $post->question != null;
+            }
+        );
         return view('pages.myquestions',['questions' => $questions]);
     }
 
@@ -46,11 +46,12 @@ class PostController extends Controller
      * @return Response
      */
     public function showAnswers($id_user){
-      $answers = DB::table('post')
-                  ->join('answer','post.id_post','=','answer.id_answer')
-                  ->join('question','answer.id_question', '=','question.id_question')
-                  ->select('post.text_body','post.date','question.title')
-                  ->where('post.id_author',$id_user)->get();
+      $posts = User::find($id_user)->posts()->get();
+      $answers = $posts->filter(
+          function($post){
+              return $post->answer != null;
+          }
+      );
 
       return view('pages.myanswers',['answers' => $answers]);
   }

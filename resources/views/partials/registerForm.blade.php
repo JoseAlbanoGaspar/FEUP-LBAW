@@ -1,8 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
-
-<h2 class="m-2 my-4">Register</h2>
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">
         <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
@@ -61,23 +56,8 @@
             <label class="form-label" for="password_confirmation">Repeat password</label>
             </div>
 
-            <!-- Checkbox -->
-            <div class="form-check d-flex justify-content-center mb-4">
-            <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-                aria-describedby="registerCheckHelpText" />
-            <label class="form-check-label" for="registerCheck">
-                I have read and agree to the terms
-            </label>
-            </div>
-
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-3">{{$button_name}}</button>
-        </form>
-
-        <!-- Login button -->
-        <div class="text-center">
-            <p>Already have an account? <a href="{{ route('login') }}">Login</a></p>
-        </div>
+            <button type="submit" class="btn btn-primary btn-block mb-3">Register User</button>
+        </form>      
     </div>
 </div>
-@endsection

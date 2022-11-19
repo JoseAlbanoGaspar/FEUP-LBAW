@@ -46,6 +46,12 @@ Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAn
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
 Route::patch('users/edit','UserController@update')->name('updateProfile');
 
+//admin page
+Route::get('admin', 'AdminController@show');
+Route::post('admin/tags','TagController@createTag')->name('createTag');
+Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
+
+
 Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
 Route::get('home','PostController@showAllPosts')->name('home');
 
