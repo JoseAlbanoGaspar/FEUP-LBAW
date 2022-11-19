@@ -4,8 +4,8 @@
 @endphp
 
 <div class="question-card card mx-5 my-2">
-    <div class = "card-body d-flex justify-content-center">
-        <div class="question-stats col-2 d-flex justify-content-around flex-column">
+    <div class = "card-body d-flex justify-content-center p-3">
+        <div class="question-stats col-2 d-flex justify-content-between flex-column py-4">
 
             <div class="question-stats-item">
                 <span class="question-stats-score-number">{{$post->question->score}}</span>
@@ -20,20 +20,20 @@
 
         <div class="post-summary col-10">
 
-            <div class ="row"><a href="{{route('questions', ['id'=>$post->id_post])}}"><h5 class="card-title">{{$post->question->title}}</h5></a></div>
+            <div class ="row"><a class="text-decoration-none" href="{{route('questions', ['id'=>$post->id_post])}}"><h5 class="card-title">{{$post->question->title}}</h5></a></div>
             <div class ="row"><h6 class="card-text">{{$truncated}}</h6></div>
 
 
-            <div class="post-summary-meta row d-flex justify-content-between">
+            <div class="post-summary-meta row d-flex justify-content-between mt-2">
                 <div class="col d-flex justify-content-start">
                     <ul class="post-summary-meta-tags list-ls-none d-inline">
                         @foreach($post->question->tags as $tag)
-                            <li class="d-inline mr4"><a href="{{route('tags', ['name' => $tag->name])}}" class="post-tag flex--item mt0">{{$tag->name}}</a></li>
+                            <li class="d-inline mr4"><a role="button" class="btn btn-outline-primary btn-sm" href="{{route('tags', ['name' => $tag->name])}}" class="post-tag flex--item">{{$tag->name}}</a></li>
                         @endforeach
                     </ul>
                 </div>
 
-                <div class = "user-card col d-inline d-flex justify-content-end">
+                <div class = "user-card col d-inline d-flex justify-content-end text-wrap">
                     @include('partials.profile-card', ['user' => $post->user])
 
                     <time class="user-card-time flex-shrink">
