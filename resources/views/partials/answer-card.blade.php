@@ -4,23 +4,29 @@
 @endphp
 
 <div class="answer-card card mx-5 my-2">
-    <div class = "card-body row">
-        <div class="answer-stats col-2">
+    <div class = "card-body d-flex justify-content-center p-3">
+        <div class="answer-stats col-2 d-flex justify-content-center flex-column py-4">
 
             <div class="answer-stats-item">
                 <span class="answer-stats-score-number">{{$post->answer->score}}</span>
                 <span class="answer-stats-score-unit">votes</span>
             </div>
-
-            <div class="answer-stats-item">
-                <span class="answer-stats-is-solution">{{$post->answer->is_solution}}</span>
-            </div>
         </div>
 
         <div class="post-summary col-10">
 
-            <div class ="row"><h6 class="original-question-title">Original question:</h6> <a href="{{route('questions', ['id'=>$post->answer->question->id_question])}}"><h6 class="card-title">{{$post->answer->question->title}}</h6></a></div>
-            <div class ="row"><a href="{{route('questions', ['id'=>$post->answer->question->id_question])}}#{{'answerid-'.$post->answer->id_answer}}"><h5 class="card-text">{{$truncated}}</h5></a></div>
+            <div class ="row">
+                <h6 class="original-question-title">Original question:</h6> 
+                <a href="{{route('questions', ['id'=>$post->answer->question->id_question])}}">
+                    <h6 class="card-title">{{$post->answer->question->title}}</h6>
+                </a>
+            </div>
+
+            <div class ="row">
+                <a class="text-decoration-none" href="{{route('questions', ['id'=>$post->answer->question->id_question])}}#{{'answerid-'.$post->answer->id_answer}}">
+                    <h5 class="card-text is-solution-{{$post->answer->is_solution}}">{{$truncated}}</h5>
+                </a>
+            </div>
 
 
             <div class = "user-card col d-inline d-flex justify-content-end">

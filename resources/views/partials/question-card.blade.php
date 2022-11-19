@@ -20,7 +20,12 @@
 
         <div class="post-summary col-10">
 
-            <div class ="row"><a class="text-decoration-none" href="{{route('questions', ['id'=>$post->id_post])}}"><h5 class="card-title">{{$post->question->title}}</h5></a></div>
+            <div class ="row">
+                <a class="text-decoration-none" href="{{route('questions', ['id'=>$post->id_post])}}">
+                    <h5 class="card-title">{{$post->question->title}}</h5>
+                </a>
+            </div>
+            
             <div class ="row"><h6 class="card-text">{{$truncated}}</h6></div>
 
 
