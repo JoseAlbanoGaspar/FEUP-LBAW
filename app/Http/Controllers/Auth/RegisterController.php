@@ -78,7 +78,8 @@ class RegisterController extends Controller
         
         if(array_key_exists('profile_picture', $data)){
             $img = $data['profile_picture'];
-            $imageName = Auth::id(). '-profile-picture.' . $img->extension(); 
+            $new_id = DB::table('users')->latest('id_user')->first() + 1;
+            $imageName = strval($new_id). '-profile-picture.' . $img->extension(); 
             $img->storeAs('public/images', $imageName);
             $profile_image_url = $path . $imageName;
         }
