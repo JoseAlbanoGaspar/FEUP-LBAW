@@ -2,7 +2,7 @@
 
 @section('content')
 <h2>Administration Page</h2>
-@include('partials.search_users',['users' => $users])
+@include('partials.adminUsers')
 
 @include('partials.tag_management',['tags' => $tags])
 
