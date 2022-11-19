@@ -9,4 +9,14 @@
         </div>
     @endif
    <a class='align-self-end' href="{{route('users', ['id_user' => $user_listing->id_user])}}"> <h4> {{$user_listing->username}}  </h4> </a>
+   <!--$user = Auth::user()
+    if($user->admin()) -->
+    <div class="flex-shrink">
+        <a href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">
+            <button>Edit</button>
+        </a>
+        <a href=""> <!-- define route (not for A8) -->
+            <button>Delete</button>
+        </a>
+    </div>
 </article>

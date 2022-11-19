@@ -45,6 +45,10 @@ Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAn
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
 Route::patch('users/edit','UserController@update')->name('updateProfile');
 
+//admin page
+Route::get('admin', 'AdminController@show');
+Route::post('admin/tags','TagController@createTag')->name('createTag');
+Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
 //create and protect the route personalFeed so only authenticated users can access it
 //use PostController@personalFeed
 Route::get('personal_feed','PostController@personalFeed')->name('personalFeed'); //->proteger rota
