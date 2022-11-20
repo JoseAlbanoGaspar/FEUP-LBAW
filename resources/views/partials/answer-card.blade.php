@@ -14,7 +14,7 @@
         <div class="post-summary col-10">
 
             <div class ="row">
-                <h6 class="original-question-title">Original question:</h6> 
+                <h6 class="original-question-title">Original question:</h6>
                 <a href="{{route('questions', ['id'=>$post->answer->question->id_question])}}">
                     <h6 class="card-title">{{$post->answer->question->title}}</h6>
                 </a>
@@ -39,7 +39,7 @@
                 @include('partials.profile-card', ['user' => $post->user])
 
                 <time class="user-card-time flex-shrink">
-                    &nbsp;&nbsp;asked {{timeElapsedString($post->date)}}
+                    &nbsp;&nbsp;answered {{timeElapsedString($post->date)}}
                 </time>
             </div>
 

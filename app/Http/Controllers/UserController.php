@@ -58,10 +58,12 @@ class UserController extends Controller
       if($request->password != NULL) $user->password = bcrypt($request->password);
 
       $img = $request->profile_picture;
-      $path = 'storage/images/';
-      $imageName = Auth::id(). '-profile-picture.' . $img->extension();
-      $img->storeAs('public/images', $imageName);
-      $user->profile_picture = $path . $imageName;
+      if($img != null){
+          $path = 'storage/images/';
+          $imageName = Auth::id(). '-profile-picture.' . $img->extension();
+          $img->storeAs('public/images', $imageName);
+          $user->profile_picture = $path . $imageName;
+      }
 
       //store updated information
       $user->save();
@@ -75,7 +77,7 @@ class UserController extends Controller
             ->where('username','LIKE', "%{$query}%")
             ->orderBy('username', 'ASC')
             ->simplePaginate(10);
-        return view('pages.search_users', ['users' => $users, 'query' => $query]);
+        return view('pages.searchUsers', ['users' => $users, 'query' => $query]);
     }
     public function searchApi(Request $request){
         $query = $request->input('query');

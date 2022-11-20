@@ -3,5 +3,5 @@
 @section('title', 'User Search')
 
 @section('content')
-    @include('partials.search_users',['users' => $users])
+    @include('partials.searchUsers',['users' => $users])
 @endsection

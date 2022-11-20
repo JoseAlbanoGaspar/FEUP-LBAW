@@ -1,4 +1,4 @@
-<form action="{{ route('search_users') }}" method="GET">
+<form action="{{ route('searchUsers') }}" method="GET">
     <label id="users-search-bar">
         <input  type="text" name="query" placeholder="Search for users" value="{{$query}}">
     </label>

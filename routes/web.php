@@ -35,10 +35,10 @@ Route::post('register', 'Auth\RegisterController@register')->name('registerActio
 Route::get('search', 'PostController@search')->name('search');
 
 //User Search
-Route::get('search_users', 'UserController@search')->name('search_users');
+Route::get('search_users', 'UserController@search')->name('searchUsers');
 
 Route::get('questions/{id}', 'PostController@search')->name('questions'); //mudar controller ou substituir por completo
-Route::get('questions', 'PostController@showAll')->name('allQuestions');
+Route::get('questions', 'PostController@showAllQuestions')->name('allQuestions');
 
 Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');

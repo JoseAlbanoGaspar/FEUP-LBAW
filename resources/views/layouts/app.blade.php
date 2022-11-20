@@ -24,14 +24,20 @@
 
     <main>
       <div class="row">
-        <div class="col-md-2 col-12  border-top border-dark">
+        <div class="col-md-2 col-12 ">
             @include('partials.sidenav')
         </div>
-        <section id = "content" class="col-md-10 col-12 border-start border-top border-dark">
+        <section id = "content" class="col-md-10 col-12 ">
           @yield('content')
         </section>
       </div>
     </main>
     @include('layouts.scripts')
   </body>
+    <footer class="footer bg-dark">
+        <h3 class="container">
+            <small class="text-muted">hELP</small>
+        </h3>
+    </footer>
+
 </html>

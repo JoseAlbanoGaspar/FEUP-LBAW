@@ -2,6 +2,13 @@
     if(Auth::check()){
         $user = Auth::user();
     }
+    $currentRoute = Route::currentRouteName();
+    if ($currentRoute === 'search' && isset($_GET['query'])) {
+        $query = $_GET['query'];
+    }
+    else{
+        $query = '';
+    }
 @endphp
 
 <nav class="navbar navbar-expand navbar-dark bg-dark rounded">
@@ -15,7 +22,7 @@
     <div class="d-flex justify-content-between collapse navbar-collapse" id="navbar-content">
 
         <form id= "search-bar" class="d-flex flex-row mx-3" method="get" action="{{route('search')}}">
-          <input class="form-control mx-2" type="text" name='query' placeholder="Search ">
+          <input class="form-control mx-2" type="text" name='query' placeholder="Search " value="{{$query}}">
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
         </form>
 

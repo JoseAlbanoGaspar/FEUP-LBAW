@@ -7,7 +7,7 @@
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">
 
-    <form method="POST" action="{{ route('updateProfile') }}" enctype="multipart/form-data"> 
+    <form method="POST" action="{{ route('updateProfile') }}" enctype="multipart/form-data">
         {{ csrf_field() }}
         @method('PATCH')
 
@@ -39,7 +39,7 @@
         <!-- Profile image -->
         <input id="profile_picture" type="file" class="form-control" name="profile_picture">
         <label for="profile_picture" class="col-md-4 control-label">Profile Picture</label>
-          
+
         <!-- Personal text input -->
         <div class="form-outline mb-4">
           <textarea name="personal_text" class="form-control" rows="5">{{ $user->personal_text }}</textarea>
@@ -65,8 +65,8 @@
 
         <!-- Repeat Password input -->
         <div class="form-outline mb-4">
-        <input type="password" name="password-confirm" class="form-control" />
-        <label class="form-label" for="password-confirm">Repeat password</label>
+        <input type="password" name="password_confirmation" class="form-control" />
+        <label class="form-label" for="password_confirmation">Repeat password</label>
         </div>
 
         <!-- Submit and Go Back button -->
@@ -74,7 +74,7 @@
           @include('partials.go-back-button')
           <button type="submit" class="btn btn-primary btn-block">Edit</button>
         </div>
-        
+
     </form>
   </div>
 </div>

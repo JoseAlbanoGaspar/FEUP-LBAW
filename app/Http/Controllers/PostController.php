@@ -61,31 +61,97 @@ class PostController extends Controller
     public function search(Request $request){
         $query = $request->query('query');
         $filters = $request->query('filters');
+        $sortReceived = $request->query('sort');
+        $orderReceived = $request->query('order');
+        if($sortReceived !== 'date' && $sortReceived !== 'score'){
+            $sort = '';
+        }
+        else{
+            $sort = $sortReceived;
+        }
+        if($orderReceived == 'ascending') {
+            $order = 'ASC';
+        }
+        else{
+            $order = 'DESC';
+        }
 
         if($filters === null){
             $filters = 'all';
         }
 
-        if($filters == 'questions'){
-            $posts =  Post::query()
-                ->whereRaw('id_post IN (SELECT id_question FROM question)')
-                ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
-                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
-                ->get();
+        if($filters == 'questions') {
+            if ($sort === 'score') {
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? or (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderByRaw('(SELECT score FROM question WHERE id_post = id_question), ?', $order)
+                    ->paginate(20);
+            } else if ($sort === 'date') {
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? or (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderBy('date', $order)
+                    ->paginate(20);
+            } else {
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? or (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->paginate(20);
+            }
         }
         else if($filters == 'answers'){
-            $posts =  Post::query()
-                ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
-                ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
-                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
-                ->get();
+            if($sort === 'score') {
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ?', ["%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderByRaw('(SELECT score FROM answer WHERE id_answer = id_post), ?', [$order])
+                    ->paginate(20);
+            }
+            else if($sort === 'date'){
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ?', ["%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderBy('date', $order)
+                    ->paginate(20);
+            }
+            else{
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
+                    ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ?', ["%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->paginate(20);
+            }
         }
         else{
-            $posts =  Post::query()
-                ->whereRaw('(id_post IN (SELECT id_question FROM question)
-                 or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$query}%")
-                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$query}%")
-                ->get();
+            if($sort === 'score') {
+                $posts = Post::query()
+                    ->whereRaw('(id_post IN (SELECT id_question FROM question)
+                 or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? OR (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderByRaw('(SELECT score FROM answer WHERE id_answer = id_post),  ?', [$order])
+                    ->paginate(20);
+            }
+            else if($sort === 'date') {
+                $posts = Post::query()
+                    ->whereRaw('(id_post IN (SELECT id_question FROM question)
+                 or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? OR (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderBy('date', $order)
+                    ->paginate(20);
+            }
+            else{
+                $posts = Post::query()
+                    ->whereRaw('(id_post IN (SELECT id_question FROM question)
+                 or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? OR (SELECT title FROM question WHERE id_question = id_post) LIKE ?', ["%$query%", "%$query%", "%$query%"])
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->paginate(20);
+            }
         }
 
         return view('pages.search', ['posts' => $posts]);
