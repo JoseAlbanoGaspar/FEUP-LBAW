@@ -13,6 +13,18 @@ use App\Models\Moderator;
 
 class UserController extends Controller
 {
+    public function post_score($posts){
+      $up_post = 0;
+      $down_post = 0;
+      
+      foreach($posts as $vote){
+        if($vote->score == -1) $up_post = $up_post + 1;
+        if($vote->score == 1) $down_post = $down_post + 1;
+      }
+
+      $post_score = ['up' => $up_post,'down' => $down_post];
+      return $post_score;
+    }
     /**
      * Shows the user for a given id.
      *
@@ -26,7 +38,12 @@ class UserController extends Controller
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
 
-      return view('pages.profile', ['user' => $user, 'role'=> $role]);
+      $question_votes = $this->post_score($user->question_votes()->get());
+      $answer_votes = $this->post_score($user->answer_votes()->get());
+      
+      
+
+      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes]);
     }
 
     public function getEditProfile($id){
