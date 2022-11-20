@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Tag;
 
+use App\Http\Controllers\Auth\RegisterController;
 
 class AdminController extends Controller
 {
@@ -30,6 +31,10 @@ class AdminController extends Controller
             ->simplePaginate(10);
 
       return view('pages.admin', ['users' => $users, 'tags'=> $tags,'query' => $query]);
+    }
+    public function createUser(Request $request){
+      $new_user = RegisterController::create($request->all());
+      return redirect()->route('users',['id_user' => $new_user->id_user]);
     }
 
 }
