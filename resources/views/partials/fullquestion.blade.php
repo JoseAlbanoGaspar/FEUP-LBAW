@@ -64,11 +64,11 @@
 		</div>
 		@endforeach
 
-		<form id="post-form" action="/questions/{{$post->id_post}}/answer/submit" method="post">
+		<form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
 			<h2 class="space" id="your-answer-header">
 				Your Answer
 			</h2>
-			<textarea class="form-control" aria-label="Add answe" placeholder="Add answer"></textarea>
+			<textarea class="form-control" aria-label="Add answe" placeholder="Add answer" rows="8"></textarea>
 			<div class="form-submit clear-both d-flex flex-row">
 				<button id="submit-button" class="btn btn-outline-secondary" type="submit">
 					Post Your Answer </button>

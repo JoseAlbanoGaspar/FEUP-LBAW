@@ -26,5 +26,25 @@ class QuestionController extends PostController
         return view('pages.question', ['post' => $post, 'answers' => $answers]);
     }
 
+    public function postAnswer(Request $request, $id)
+    {
+        $question = Post::find($id);
+
+        //adicionar resposta
+
+
+    }
+
+    public function getAskForm()
+    {
+        return view('pages.askForm');
+    }
+
+    public function postQuestion(Request $request)
+    {
+        //adicionar pergunta
+
+
+    }
 }
 

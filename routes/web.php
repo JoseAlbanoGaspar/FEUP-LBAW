@@ -37,11 +37,6 @@ Route::get('search', 'PostController@search')->name('search');
 //User Search
 Route::get('search_users', 'UserController@search')->name('searchUsers');
 
-
-Route::get('questions/{id}', 'QuestionController@show')->name('questions'); //mudar controller ou substituir por completo
-
-Route::get('questions', 'PostController@showAllQuestions')->name('allQuestions');
-
 Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
 Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
@@ -60,6 +55,16 @@ Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
 Route::get('home','PostController@showTopQuestions')->name('home');
 
 
+// Questions
+Route::get('questions', 'PostController@showAllQuestions')->name('allQuestions');
+Route::get('questions/ask', 'QuestionController@getAskForm')->name('FormToAskQuestion');
+Route::post('questions/ask', 'QuestionController@postQuestion')->name('postQuestion');
+Route::get('questions/{id_question}', 'QuestionController@show')->name('question');
+Route::post('questions/{id_question}/answer', 'QuestionController@postAnswer')->name('postAnswer');
+
+Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updatePostForm');
+Route::patch('posts/edit','PostController@update')->name('updatePost');
+Route::delete('post/edit','PostController@delete')->name('deletePost');
 
 
 
