@@ -28,14 +28,28 @@
 
 
     <div class="user-profile-votes">
+        <h3>Interactions with questions:</h3>
         <ul class="list-group gap-2">
             <li class="list-group-item d-flex justify-content-between align-items-center">
             Upvotes
-            <span class="badge bg-primary rounded-pill">800</span>
+            <span class="badge bg-primary rounded-pill">{{$question_votes['up']}}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
             Downvotes
-            <span class="badge bg-primary rounded-pill">30</span>
+            <span class="badge bg-primary rounded-pill">{{$question_votes['down']}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="user-profile-votes">
+        <h3>Interactions with answers:</h3>
+        <ul class="list-group gap-2">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+            Upvotes
+            <span class="badge bg-primary rounded-pill">{{$answer_votes['up']}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+            Downvotes
+            <span class="badge bg-primary rounded-pill">{{$answer_votes['down']}}</span>
             </li>
         </ul>
     </div>
