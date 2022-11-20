@@ -28,6 +28,18 @@
 					</small>
 				</div>
 
+				<div class="d-flex align-items-center">
+					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+		   
+				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
+					<form method='POST' action='{{route('deletePost')}}'>
+						{{-- csfr_field() --}}
+						@method('DELETE')
+						<input type="hidden" value="{{ $post->id_post }}" name="id_post"/>
+						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
+					</form>
+				</div>
+
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
 		</div>
@@ -57,7 +69,19 @@
 					<small>
 						<a>{{$answer->post->user->username}}</a> answered 1(FALTA)day ago
 					</small>
+
+					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
+					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+			
+					<!-- FALTA UM POP UP PARA CONFIRMAR -->
+					<form method='POST' action='{{route('deletePost')}}'>
+						{{-- csfr_field() --}}
+						@method('DELETE')
+						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
+						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
+					</form>
 				</div>
+
 
 				@include('partials.comments', ['comments' => $answer->comments])
 			</div>

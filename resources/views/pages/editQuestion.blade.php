@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2 class="m-2 my-4">Ask Question</h2>
+<h2 class="m-2 my-4">Edit Question</h2>
 
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">
@@ -92,7 +92,7 @@
         <!-- Submit and Go Back button -->
         <div class = "m-4 mx-5 d-flex justify-content-between">
           @include('partials.go-back-button')
-          <button type="submit" class="btn btn-primary btn-block">Ask</button>
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>
 
     </form>
