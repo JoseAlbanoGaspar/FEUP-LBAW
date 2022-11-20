@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
 
-          </head>
+  </head>
   <body>
     @include('partials.navbar')
 
@@ -34,10 +34,12 @@
     </main>
     @include('layouts.scripts')
   </body>
-    <footer class="footer bg-dark">
-        <h3 class="container">
+    <footer class="footer bg-dark d-flex justify-content-start">
+      <a href="/" class="text-decoration-none">
+        <h3 class="container mb-0 mr-5">
             <small class="text-muted">hELP</small>
         </h3>
+      </a>
     </footer>
 
 </html>
