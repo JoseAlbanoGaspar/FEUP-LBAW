@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Tag;
 
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserController;
 
 class AdminController extends Controller
 {
@@ -24,16 +24,14 @@ class AdminController extends Controller
     public function show(Request $request)
     {
       $tags = Tag::all();
-      $query = $request->query('query');
-      $users = User::query()
-            ->where('username','LIKE', "%{$query}%")
-            ->orderBy('username', 'ASC')
-            ->simplePaginate(10);
-
-      return view('pages.admin', ['users' => $users, 'tags'=> $tags,'query' => $query]);
+      return view('pages.admin', ['tags'=> $tags]);
     }
     public function createUser(Request $request){
-      $new_user = RegisterController::create($request->all());
+      $validator = UserController::validator($request->all());
+      if($validator->fails()){
+        return redirect()->route('admin',['tags' => Tag::all()])->withInput()->withErrors($validator);
+      }
+      $new_user = UserController::create($request->all());
       return redirect()->route('users',['id_user' => $new_user->id_user]);
     }
 

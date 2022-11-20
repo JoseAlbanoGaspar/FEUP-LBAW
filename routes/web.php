@@ -47,7 +47,7 @@ Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editPr
 Route::patch('users/edit','UserController@update')->name('updateProfile');
 
 //admin page
-Route::get('admin', 'AdminController@show');
+Route::get('admin', 'AdminController@show')->name('admin');
 Route::post('admin/tags','TagController@createTag')->name('createTag');
 Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
 Route::post('admin/createUser', 'AdminController@createUser')->name('createUser');
