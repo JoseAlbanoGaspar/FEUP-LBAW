@@ -23,10 +23,13 @@ class AdminController extends Controller
      */
     public function show(Request $request)
     {
+      $this->authorize('isAdmin',$request->user());
       $tags = Tag::all();
       return view('pages.admin', ['tags'=> $tags]);
     }
+    
     public function createUser(Request $request){
+      $this->authorize('isAdmin');
       $validator = UserController::validator($request->all());
       if($validator->fails()){
         return redirect()->route('admin',['tags' => Tag::all()])->withInput()->withErrors($validator);
@@ -36,6 +39,7 @@ class AdminController extends Controller
     }
 
     public function makeAdmin(Request $request){
+      $this->authorize('isAdmin');
       Administrator::create(['id_admin' => $request->id_user]);
       return redirect()->route('users',['id_user' => $request->id_user]);
     }

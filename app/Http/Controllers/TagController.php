@@ -14,11 +14,13 @@ class TagController extends Controller
      * @return Response
      */
     public function createTag(Request $req){
+        $this->authorize('isAdmin');
         Tag::create(['name' => $req->tag]);
         return redirect()->back();
     }
 
     public function deleteTag(Request $req){
+        $this->authorize('isAdmin');
         $tag = Tag::find($req->id_tag);
         $tag->delete();
         return redirect()->back();

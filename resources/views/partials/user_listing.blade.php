@@ -12,8 +12,8 @@
         <h4> {{$user_listing->username}}  
         </h4> 
     </a>
-   <!--$user = Auth::user()
-    if($user->admin()) -->
+   
+    @if(Auth::user()->can('isAdmin'))
     <div class="flex-shrink">
          <a role="button" type="button" class="btn btn-secondary btn-sm mx-2" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
 
@@ -25,4 +25,5 @@
             <button type="submit">Make Admin</button>
         </form>
     </div>
+    @endif
 </article>
