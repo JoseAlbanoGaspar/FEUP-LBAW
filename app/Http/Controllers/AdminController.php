@@ -24,7 +24,6 @@ class AdminController extends Controller
      */
     public function show(Request $request)
     {
-      //if(!count(Auth::user()->administrator()->get())) abort(403);
       $this->authorize('isAdministrator', App\Model\User::class);
       $tags = Tag::all();
       return view('pages.admin', ['tags'=> $tags]);
@@ -41,7 +40,7 @@ class AdminController extends Controller
     }
 
     public function makeAdmin(Request $request){
-      $this->authorize('isAdministrator', App\Model\User::class);
+      //$this->authorize('isAdministrator', App\Model\User::class);
       Administrator::create(['id_admin' => $request->id_user]);
       return redirect()->route('users',['id_user' => $request->id_user]);
     }

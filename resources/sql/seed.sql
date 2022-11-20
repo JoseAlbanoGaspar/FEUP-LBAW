@@ -37,7 +37,7 @@ CREATE TABLE users (
 	username VARCHAR(25) UNIQUE NOT NULL,
 	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
-	profile_picture TEXT,
+	profile_picture TEXT DEFAULT 'storage/images/default-user.jpg',
 	personal_text TEXT,
 	blocked BOOLEAN DEFAULT '0',
 	remember_token VARCHAR
@@ -139,7 +139,7 @@ CREATE TABLE question_tag (
                                PRIMARY KEY (id_tag, id_question),
                                    CONSTRAINT FK_TAG
                                         FOREIGN KEY(id_tag)
-                                            REFERENCES tag(id_tag),
+                                            REFERENCES tag(id_tag) ON DELETE CASCADE,
                                     CONSTRAINT FK_QUESTION
                                         FOREIGN KEY(id_question)
                                             REFERENCES question(id_question) ON DELETE CASCADE
@@ -235,7 +235,7 @@ CREATE TABLE follows_tag (
     PRIMARY KEY (id_user, id_tag),
 	    CONSTRAINT FK_TAG
 			FOREIGN KEY(id_tag)
-				REFERENCES tag(id_tag),
+				REFERENCES tag(id_tag) ON DELETE CASCADE,
 		CONSTRAINT FK_USER
 			FOREIGN KEY(id_user)
 				REFERENCES users(id_user) ON DELETE CASCADE
