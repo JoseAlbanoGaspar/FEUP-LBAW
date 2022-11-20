@@ -33,14 +33,12 @@ class QuestionTag extends Model
 	public function tag()
 	{
 		return $this->belongsTo(Tag::class, 'id_tag')
-//					->where('tag.id_tag', '=', 'question_tag.id_tag')
 					->where('tag.id_tag', '=', 'question_tag.id_tag');
 	}
 
 	public function question()
 	{
 		return $this->belongsTo(Question::class, 'id_question')
-//					->where('question.id_question', '=', 'question_tag.id_question')
 					->where('question.id_question', '=', 'question_tag.id_question');
 	}
 }

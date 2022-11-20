@@ -1,15 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'User Search')
-
-
-
-
 @section('content')
-    <!--html searchbar -->
     <form action="{{ route('search_users') }}" method="GET">
-        <label>
-            <input type="text" name="query" placeholder="Search for users">
+        <label id="users-search-bar">
+            <input type="text" name="query" placeholder="Search for users" >
         </label>
         <button type="submit">Search</button>
     </form>

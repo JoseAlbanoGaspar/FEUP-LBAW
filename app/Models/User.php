@@ -38,7 +38,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
-    protected $table = 'user';
+    protected $table = 'users';
     protected $primaryKey = 'id_user';
 	public $timestamps = false;
 
@@ -54,12 +54,12 @@ class User extends Authenticatable
 		'personal_text'
 	];
 
-	public static function administrator()
+	public function administrator()
 	{
 		return $this->hasOne(Administrator::class, 'id_admin');
 	}
 
-	public static function moderator()
+	public function moderator()
 	{
 		return $this->hasOne(Moderator::class, 'id_moderator');
 	}
@@ -88,6 +88,11 @@ class User extends Authenticatable
 	{
 		return $this->hasMany(FollowsTag::class, 'id_user');
 	}
+
+    public function followed_tags()
+	{
+        return $this->belongsToMany(Tag::class, 'follows_tag', 'id_user', 'id_tag');
+    }
 
 	public function follows_questions()
 	{

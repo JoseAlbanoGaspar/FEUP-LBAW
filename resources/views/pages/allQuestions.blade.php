@@ -1,9 +1,8 @@
 @extends('layouts.app')
-
-@section('title', 'Home')
+@section('title', 'All Questions')
 
 @section('content')
-    <h1 class="my-4 mx-5"> Home </h1>
+    <h1 class="my-4 mx-5"> Questions </h1>
 
     @if((count($posts) > 0))
         <section id="search_results">
@@ -16,7 +15,7 @@
             </div>
         @endif
     @else
-        <div class="d-flex flex-row" ><p id="results_not_found_message">Unable to get posts. </p>&nbsp;</div>
+        <div class="d-flex flex-row" ><p id="results_not_found_message">Unable to get questions. </p>&nbsp;</div>
     @endif
 
 

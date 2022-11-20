@@ -29,20 +29,39 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::post('register', 'Auth\RegisterController@register')->name('registerAction');
 
 // Posts Search
-Route::get('search', 'PostController@search');
+Route::get('search', 'PostController@search')->name('search');
 
 //User Search
-Route::get('search_users', 'UserController@search')->name('search_users');
-Route::post('search_users/api', 'UserController@search_api')->name('search_users_api');
+Route::get('search_users', 'UserController@search')->name('searchUsers');
+
 
 Route::get('questions/{id}', 'QuestionController@show')->name('questions'); //mudar controller ou substituir por completo
 
-// User Profile
-Route::get('users/{id_user}','UserController@show');
+Route::get('questions', 'PostController@showAllQuestions')->name('allQuestions');
+
+Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
 Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
 Route::patch('users/edit','UserController@update')->name('updateProfile');
+
+//admin page
+Route::get('admin', 'AdminController@show')->name('admin');
+Route::post('admin/tags','TagController@createTag')->name('createTag');
+Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
+Route::post('admin/createUser', 'AdminController@createUser')->name('createUser');
+Route::post('admin/makeAdmin','AdminController@makeAdmin')->name('makeAdmin');
+
+
+Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
+Route::get('home','PostController@showTopQuestions')->name('home');
+
+
+
+
+
+//Tags
+Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9

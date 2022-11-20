@@ -16,20 +16,30 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
+
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     @include('partials.navbar')
 
     <main>
       <div class="row">
-        <div class="col-2">
+        <div class="col-md-2 col-12 ">
             @include('partials.sidenav')
         </div>
-        <section id = "content" class="col-10  border-start border-dark">
+        <section id = "content" class="col-md-10 col-12 ">
           @yield('content')
         </section>
       </div>
     </main>
     @include('layouts.scripts')
   </body>
+    <footer class="footer bg-dark d-flex justify-content-start mt-auto">
+      <a href="/" class="text-decoration-none">
+        <h3 class="container mb-0 mr-5">
+            <small class="text-muted">hELP</small>
+        </h3>
+      </a>
+    </footer>
+
 </html>
