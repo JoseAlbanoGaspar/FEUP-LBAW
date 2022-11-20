@@ -48,17 +48,17 @@ class UserController extends Controller
 
     public function getEditProfile($id){
       $user = User::find($id);
+      $this->authorize('editProfile',$user);
       return view('pages.edit', ['user' => $user]);
     }
 
     public function update(Request $request){
       $user = User::find($request->id_user);
 
-      //authorize the edition!!! -> Uncomment after implemented loggin
-      //$this->authorize('editProfile',$request->id_user);
+      $this->authorize('editProfile',$user);
       //validate results
       $validator = Validator::make($request->all(),[
-            'name' => 'min:5|max:25|regex:/^((?!deleted_user).)*$/',
+            'username' => 'min:5|max:25|regex:/^((?!deleted_user).)*$/',
             'email' => 'min:5|max:30|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/',
             'personal_text' => 'max:256',
             'password' => 'nullable|confirmed|min:6',
