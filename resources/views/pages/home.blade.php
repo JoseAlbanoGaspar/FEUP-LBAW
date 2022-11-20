@@ -1,7 +1,10 @@
 @extends('layouts.app')
+
 @section('title', 'Home')
 
 @section('content')
+    <h1 class="my-4 mx-5"> Home </h1>
+
     @if((count($posts) > 0))
         <section id="search_results">
             @each('partials.post_listing', $posts, 'post_listing')

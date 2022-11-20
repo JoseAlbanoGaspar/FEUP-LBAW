@@ -2,6 +2,8 @@
 @section('title', 'All Questions')
 
 @section('content')
+    <h1 class="my-4 mx-5"> Questions </h1>
+
     @if((count($posts) > 0))
         <section id="search_results">
             @each('partials.post_listing', $posts, 'post_listing')
