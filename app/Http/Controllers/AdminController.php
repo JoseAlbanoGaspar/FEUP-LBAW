@@ -13,6 +13,7 @@ use App\Models\Tag;
 
 use App\Http\Controllers\UserController;
 
+
 class AdminController extends Controller
 {
     /**
@@ -23,13 +24,14 @@ class AdminController extends Controller
      */
     public function show(Request $request)
     {
-      $this->authorize('isAdmin',$request->user());
+      //if(!count(Auth::user()->administrator()->get())) abort(403);
+      $this->authorize('isAdministrator', App\Model\User::class);
       $tags = Tag::all();
       return view('pages.admin', ['tags'=> $tags]);
     }
     
     public function createUser(Request $request){
-      $this->authorize('isAdmin');
+      $this->authorize('isAdministrator', App\Model\User::class);
       $validator = UserController::validator($request->all());
       if($validator->fails()){
         return redirect()->route('admin',['tags' => Tag::all()])->withInput()->withErrors($validator);
@@ -39,7 +41,7 @@ class AdminController extends Controller
     }
 
     public function makeAdmin(Request $request){
-      $this->authorize('isAdmin');
+      $this->authorize('isAdministrator', App\Model\User::class);
       Administrator::create(['id_admin' => $request->id_user]);
       return redirect()->route('users',['id_user' => $request->id_user]);
     }

@@ -192,7 +192,7 @@ CREATE TABLE follow_tag_notif (
 	id_notif INT PRIMARY KEY,
 	id_tag INT,
 	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
-	CONSTRAINT FK_TAG FOREIGN KEY (id_tag) REFERENCES tag(id_tag)
+	CONSTRAINT FK_TAG FOREIGN KEY (id_tag) REFERENCES tag(id_tag) ON DELETE CASCADE
 );
 
 
@@ -201,7 +201,7 @@ CREATE TABLE marked_as_solution_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
 	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
-	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer) ON DELETE CASCADE
 );
 
 
@@ -211,14 +211,14 @@ CREATE TABLE new_badge_notif (
 	id_notif INT PRIMARY KEY,
 	id_badge INT,
 	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
-	CONSTRAINT FK_BADGE FOREIGN KEY (id_badge) REFERENCES badge(id_badge)
+	CONSTRAINT FK_BADGE FOREIGN KEY (id_badge) REFERENCES badge(id_badge) ON DELETE CASCADE
 );
 
 CREATE TABLE new_answer_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
 	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
-	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer) ON DELETE CASCADE
 );
 
 
@@ -226,7 +226,7 @@ CREATE TABLE followed_question_notif (
 	id_notif INT PRIMARY KEY,
 	id_answer INT,
 	CONSTRAINT FK_NOTIF FOREIGN KEY (id_notif) REFERENCES notification (id_notif) ON DELETE CASCADE,
-	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer)
+	CONSTRAINT FK_ANSWER FOREIGN KEY (id_answer) REFERENCES answer(id_answer) ON DELETE CASCADE
 );
 
 CREATE TABLE follows_tag (
