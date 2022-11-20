@@ -18,5 +18,10 @@
         <a href=""> <!-- define route (not for A8) -->
             <button>Delete</button>
         </a>
+        <form method='POST' action="{{route('makeAdmin')}}">
+            {{ csrf_field() }}
+            <input type="hidden" value="{{$user_listing->id_user}}" name="id_user"/>
+            <button type="submit">Make Admin</button>
+        </form>
     </div>
 </article>

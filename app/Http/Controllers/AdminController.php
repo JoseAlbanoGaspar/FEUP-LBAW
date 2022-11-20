@@ -35,4 +35,9 @@ class AdminController extends Controller
       return redirect()->route('users',['id_user' => $new_user->id_user]);
     }
 
+    public function makeAdmin(Request $request){
+      Administrator::create(['id_admin' => $request->id_user]);
+      return redirect()->route('users',['id_user' => $request->id_user]);
+    }
+
 }

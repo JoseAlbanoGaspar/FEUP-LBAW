@@ -51,6 +51,7 @@ Route::get('admin', 'AdminController@show')->name('admin');
 Route::post('admin/tags','TagController@createTag')->name('createTag');
 Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
 Route::post('admin/createUser', 'AdminController@createUser')->name('createUser');
+Route::post('admin/makeAdmin','AdminController@makeAdmin')->name('makeAdmin');
 
 
 Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
