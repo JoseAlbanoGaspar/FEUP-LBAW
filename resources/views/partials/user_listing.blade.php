@@ -15,9 +15,14 @@
    <!--$user = Auth::user()
     if($user->admin()) -->
     <div class="flex-shrink">
-        <a role="button" type="button" class="btn btn-secondary btn-sm mx-2" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
+         <a role="button" type="button" class="btn btn-secondary btn-sm mx-2" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
 
         <!-- define route (not for A8) -->
         <a role="button" type="button" class="btn btn-secondary btn-sm" href="\">Delete</a>
+        <form method='POST' action="{{route('makeAdmin')}}">
+            {{ csrf_field() }}
+            <input type="hidden" value="{{$user_listing->id_user}}" name="id_user"/>
+            <button type="submit">Make Admin</button>
+        </form>
     </div>
 </article>
