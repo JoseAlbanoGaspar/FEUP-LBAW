@@ -4,7 +4,10 @@
     </label>
     <button class="btn btn-secondary mx-3" type="submit"><i class="fa fa-search"></i></button>
 </form>
-
+@if(Auth::check() && Auth::user()->can('isAdmin'))
+<label>See as admin</label>
+<input type="checkbox" checked="true" />
+@endif
 @if((count($users) > 0))
     <section id="search_users_results my-3 mx-3">
         @each('partials.user_listing', $users, 'user_listing')

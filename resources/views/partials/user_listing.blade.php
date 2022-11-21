@@ -13,7 +13,7 @@
         </h4> 
     </a>
    
-    @if(Auth::user()->can('isAdmin'))
+    @if(Auth::check() && Auth::user()->can('isAdmin'))
     <div class="flex-shrink">
          <a role="button" type="button" class="btn btn-secondary btn-sm mx-2" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
 

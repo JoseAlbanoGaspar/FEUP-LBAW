@@ -55,7 +55,7 @@
     </div>
 
         
-    @if (Auth::user()->can('editProfile', $user))
+    @if (Auth::check() && Auth::user()->can('editProfile', $user))
         <form class="my-3" method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
             <button type="submit" class="btn btn-secondary">Edit Profile  <i class="fa fa-pencil" aria-hidden="true"></i></button>
         </form>
