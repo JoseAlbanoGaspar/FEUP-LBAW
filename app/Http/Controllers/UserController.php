@@ -16,7 +16,7 @@ class UserController extends Controller
     public function post_score($posts){
       $up_post = 0;
       $down_post = 0;
-      
+
       foreach($posts as $vote){
         if($vote->score == -1) $up_post = $up_post + 1;
         if($vote->score == 1) $down_post = $down_post + 1;
@@ -40,27 +40,27 @@ class UserController extends Controller
 
       $question_votes = $this->post_score($user->question_votes()->get());
       $answer_votes = $this->post_score($user->answer_votes()->get());
-      
-      
+
+
 
       return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes]);
     }
 
     public function getEditProfile($id){
       $user = User::find($id);
+      $this->authorize('editProfile',$user);
       return view('pages.edit', ['user' => $user]);
     }
 
     public function update(Request $request){
       $user = User::find($request->id_user);
 
-      //authorize the edition!!! -> Uncomment after implemented loggin
-      //$this->authorize('editProfile',$request->id_user);
+      $this->authorize('editProfile',$user);
       //validate results
       $validator = Validator::make($request->all(),[
-            'name' => 'min:5|max:25|regex:/^((?!deleted_user).)*$/',
-            'email' => 'min:5|max:30|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/',
-            'personal_text' => 'max:256',
+            'username' => 'min:5|max:25|regex:/^((?!deleted_user).)*$/',
+            'email' => 'min:5|max:50|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/',
+            'personal_text' => 'max:255',
             'password' => 'nullable|confirmed|min:6',
       ]);
 
@@ -112,9 +112,6 @@ class UserController extends Controller
 
         $returnHTML = view('pages.searchUsersResults', ['users' => $users, 'query' => $query])->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
-//        return view('partials.searchUsersResults', ['users' => $users])->render();
-
-//        return json_encode(['users' => $users,'hasPages' =>$hasPages, 'links' => $links]);
     }
     /**
      * Get a validator for an incoming registration request.
@@ -125,10 +122,11 @@ class UserController extends Controller
     public static function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|min:5|regex:/^((?!deleted_user).)*$/|max:25|unique:users',
+            'email' => 'required|string|email|min:5|max:50|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'personal_text' => 'max:255'
+            'personal_text' => 'max:255',
+            'terms'=> 'accepted'
         ]);
     }
 
@@ -142,14 +140,14 @@ class UserController extends Controller
     {
         $path = 'storage/images/';
         $profile_image_url = $path . 'default-user.jpg';
-        
-        
-        
+
+
+
         if(array_key_exists('profile_picture', $data)){
             $img = $data['profile_picture'];
             $new_id = DB::table('users')->latest('id_user')->first()->id_user + 1;
-            
-            $imageName = strval($new_id). '-profile-picture.' . $img->extension(); 
+
+            $imageName = strval($new_id). '-profile-picture.' . $img->extension();
             $img->storeAs('public/images', $imageName);
             $profile_image_url = $path . $imageName;
         }

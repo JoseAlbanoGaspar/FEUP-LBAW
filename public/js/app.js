@@ -220,10 +220,7 @@ function createItem(item) {
 }
 
 function searchUsersHandler(event) {
-    // captureEvents()
-    // console.log(event);
     event.preventDefault();
-    // wait 1 second after typin
     let usersSearchBar = document.querySelector('#users-search-bar');
 
     let url = new URL(window.location.href);
@@ -457,6 +454,14 @@ function addApplySearchOptionEventListener() {
             window.location.replace(url);
         });
     }
+}
+
+function adminMode(){
+    let adminButtons = document.querySelectorAll('.admin');
+    for(let button of adminButtons){
+        button.classList.toggle('notadmin');
+    }
+
 }
 
 

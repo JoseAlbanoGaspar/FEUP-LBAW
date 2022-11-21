@@ -40,18 +40,18 @@ Route::get('search_users', 'UserController@search')->name('searchUsers');
 Route::get('users/{id_user}','UserController@show')->name('users');
 Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
 Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
-Route::get('users/{id_user}/edit','UserController@getEditProfile')->name('editProfile');
-Route::patch('users/edit','UserController@update')->name('updateProfile');
+Route::get('users/{id_user}/edit','UserController@getEditProfile')->middleware('auth')->name('editProfile');
+Route::patch('users/edit','UserController@update')->middleware('auth')->name('updateProfile');
 
 //admin page
-Route::get('admin', 'AdminController@show')->name('admin');
-Route::post('admin/tags','TagController@createTag')->name('createTag');
-Route::delete('admin/tags','TagController@deleteTag')->name('deleteTag');
-Route::post('admin/createUser', 'AdminController@createUser')->name('createUser');
-Route::post('admin/makeAdmin','AdminController@makeAdmin')->name('makeAdmin');
+Route::get('admin', 'AdminController@show')->middleware('auth')->name('admin');
+Route::post('admin/tags','TagController@createTag')->middleware('auth')->name('createTag');
+Route::delete('admin/tags','TagController@deleteTag')->middleware('auth')->name('deleteTag');
+Route::post('admin/createUser', 'AdminController@createUser')->middleware('auth')->name('createUser');
+Route::post('admin/makeAdmin','AdminController@makeAdmin')->middleware('auth')->name('makeAdmin');
 
 
-Route::get('personal_feed','PostController@personalFeed')->name('personalFeed');
+Route::get('personal_feed','PostController@personalFeed')->middleware('auth')->name('personalFeed');
 Route::get('home','PostController@showTopQuestions')->name('home');
 
 

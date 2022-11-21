@@ -19,6 +19,9 @@
     <div class="d-grid gap-5-lg gap-2 d-md-block my-4">
         <a type="button" class="btn btn-primary" href="{{ route('myQuestions',['id_user' => $user->id_user]) }}">My questions</a>
         <a type="button" class="btn btn-primary" href="{{ route('myAnswers',['id_user' => $user->id_user]) }}">My answers</a>
+        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user )
+        <a type="button" class="btn btn-primary" href="{{ route('admin') }}">Admin</a>
+        @endif
     </div>
 
     <div class="user-profile-about">
@@ -55,9 +58,11 @@
     </div>
 
         
- 
-    <form class="my-3" method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
-        <button type="submit" class="btn btn-secondary">Edit Profile  <i class="fa fa-pencil" aria-hidden="true"></i></button>
-    </form>
+    @if (Auth::check() && Auth::user()->can('editProfile', $user))
+        <form class="my-3" method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
+            <button type="submit" class="btn btn-secondary">Edit Profile  <i class="fa fa-pencil" aria-hidden="true"></i></button>
+        </form>
+    @endif
+   
 </article>
 @endsection

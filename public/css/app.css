@@ -22,3 +22,7 @@ body {
 .fa-check{
   color: #5cb85c;
 }
+
+.notadmin{
+  display: none;
+}
