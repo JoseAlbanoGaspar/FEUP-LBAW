@@ -60,6 +60,11 @@
             <input type="password" name="password_confirmation" class="form-control" required/>
             <label class="form-label" for="password_confirmation">Repeat password</label>
             </div>
+            @if ($errors->has('terms'))
+            <span class="error">
+                {{ $errors->first('terms') }}
+            </span>
+            @endif
 
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-center mb-4">
