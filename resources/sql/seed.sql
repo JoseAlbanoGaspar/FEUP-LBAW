@@ -1065,6 +1065,8 @@ END TRANSACTION;
  */
 
 
+insert into users (username, email, password, profile_picture, personal_text) values ('admin', 'admin@admin.com', '$2y$10$MhJeCSrNVCOhVHbKeSwffuKfXdvAzQ/HIDCMmJExcrvLEwEtqDOLS', 'storage/images/default-user.jpg', '');
+insert into users (username, email, password, profile_picture, personal_text) values ('helper', 'helper@help.com', '$2y$10$MhJeCSrNVCOhVHbKeSwffuKfXdvAzQ/HIDCMmJExcrvLEwEtqDOLS', 'storage/images/default-user.jpg', '');
 insert into users (username, email, password, profile_picture, personal_text) values ('anuschke0', 'pdaouse0@nature.com', 'Eb3BBl', 'https://robohash.org/etcorporispossimus.png?size=50x50&set=set1', '');
 insert into users (username, email, password, profile_picture, personal_text) values ('bekell1', 'rpennicard1@hao123.com', '9FEnHZkC', 'https://robohash.org/officiaipsamofficiis.png?size=50x50&set=set1', 'maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede ac diam cras pellentesque volutpat dui maecenas tristique est et tempus semper est quam pharetra magna ac consequat metus sapien ut nunc vestibulum ante ipsum primis in');
 insert into users (username, email, password, profile_picture, personal_text) values ('pcalven2', 'bdaudray2@sfgate.com', 'W2l5yKN4Ffj', 'storage/images/default-user.jpg', 'vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare imperdiet sapien');
@@ -1167,6 +1169,7 @@ insert into users (username, email, password, profile_picture, personal_text) va
 insert into users (username, email, password, profile_picture, personal_text) values ('mcommings2r', 'bsmithyman2r@spiegel.de', 'Uad8SHcY4', 'https://robohash.org/animicumquenam.png?size=50x50&set=set1', 'sollicitudin ut suscipit a feugiat et eros vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare imperdiet sapien urna pretium nisl ut volutpat sapien arcu sed augue aliquam erat volutpat in congue etiam justo etiam pretium iaculis');
 
 insert into administrator (id_admin) values (96);
+insert into administrator (id_admin) values (1);
 insert into administrator (id_admin) values (53);
 
 insert into moderator (id_moderator) values (18);

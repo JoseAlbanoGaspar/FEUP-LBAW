@@ -69,8 +69,8 @@ class UserController extends Controller
       }
 
       //updating...
-      $user->username = $request->name;
-      $user->email = $request->email;
+      $user->username = strtolower($request->name);
+      $user->email = strtolower($request->email);
       $user->personal_text = $request->personal_text;
       if($request->password != NULL) $user->password = bcrypt($request->password);
 
@@ -153,8 +153,8 @@ class UserController extends Controller
         }
 
         return User::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
+            'username' => strtolower($data['username']),
+            'email' => strtolower($data['email']),
             'password' => bcrypt($data['password']),
             'personal_text' => $data['personal_text'],
             'profile_picture' => $profile_image_url
