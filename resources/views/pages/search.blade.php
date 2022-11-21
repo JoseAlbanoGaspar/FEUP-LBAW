@@ -17,7 +17,6 @@ $request = Request::capture();
             <a id="search-filter-questions" class="search-filter dropdown-item">Questions</a>
             <div class="dropdown-divider"></div>
             <a id="search-filter-answers" class="search-filter dropdown-item">Answers</a>
-            {{--            <a class="dropdown-item" href="{{route('search', ['filters' => 'questions'])}}">Questions</a>--}}
         </div>
     </div>
     <div id="dropdown-sort" class="dropdown">
@@ -31,6 +30,8 @@ $request = Request::capture();
         </div>
     </div>
     <div id="dropdown-order" class="dropdown">
+                <i class="align-self-end fa fa-chevron-right" aria-hidden="true"></i>
+
         <button class="btn btn-sm btn-neutral dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             Order
         </button>
@@ -48,7 +49,7 @@ $request = Request::capture();
     </section>
     @if ($posts->links()->paginator->hasPages())
         <div class="mt-4 p-4 box has-text-centered">
-            {{ $posts->links() }}
+            {{ $posts->withQueryString()->links() }}
         </div>
     @endif
     @else

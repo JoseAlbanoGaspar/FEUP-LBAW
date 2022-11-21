@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 
 /*
@@ -15,4 +16,4 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
-Route::post('search_users', 'UserController@searchApi')->name('searchUsersApi');
+Route::post('search_users', [UserController::class, 'searchApi'])->name('searchUsersApi');

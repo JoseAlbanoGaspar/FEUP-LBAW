@@ -92,8 +92,7 @@ class UserController extends Controller
             ->where('username','LIKE', "%{$query}%")
             ->orderBy('username', 'ASC')
             ->simplePaginate(10, ['*'], 'page', $page);
-        $hasPages =  $users->links()->paginator->hasPages();
-        $links =  $users->links()->render();
+
         $returnHTML = view('pages.searchUsersResults', ['users' => $users, 'query' => $query])->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
 //        return view('partials.searchUsersResults', ['users' => $users])->render();

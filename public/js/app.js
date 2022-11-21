@@ -17,48 +17,51 @@ function addUserSearchEventListeners() {
     }
 }
 
+function selectSearchOptionsFromPath(url) {
+    let filters = url.searchParams.get("filters");
+    let order = url.searchParams.get("order");
+    let sort = url.searchParams.get("sort");
+
+    if (filters === "all") {
+        document.getElementById("search-filter-all").classList.add("active");
+    } else if (filters === "questions") {
+        document.getElementById("search-filter-questions").classList.add("active");
+    } else if (filters === "answers") {
+        document.getElementById("search-filter-answers").classList.add("active");
+    }
+
+    if (order === "ascending") {
+        document.getElementById("search-order-ascending").classList.add("active");
+    } else if (order === "descending") {
+        document.getElementById("search-order-descending").classList.add("active");
+    }
+
+    if (sort === "date") {
+        document.getElementById("search-sort-date").classList.add("active");
+    } else if (sort === "score") {
+        document.getElementById("search-sort-score").classList.add("active");
+    }
+}
+
 function addEventListeners() {
     let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
     [].forEach.call(itemCheckers, function (checker) {
         checker.addEventListener('change', sendItemUpdateRequest);
     });
-
-    let itemCreators = document.querySelectorAll('article.card form.new_item');
-    [].forEach.call(itemCreators, function (creator) {
-        creator.addEventListener('submit', sendCreateItemRequest);
-    });
-
-    let itemDeleters = document.querySelectorAll('article.card li a.delete');
-    [].forEach.call(itemDeleters, function (deleter) {
-        deleter.addEventListener('click', sendDeleteItemRequest);
-    });
-
-    let cardDeleters = document.querySelectorAll('article.card header a.delete');
-    [].forEach.call(cardDeleters, function (deleter) {
-        deleter.addEventListener('click', sendDeleteCardRequest);
-    });
-
-    let cardCreator = document.querySelector('article.card form.new_card');
-    if (cardCreator != null)
-        cardCreator.addEventListener('submit', sendCreateCardRequest);
-
     addUserSearchEventListeners();
 
     if (window.location.pathname.includes("search")) {
         let url = new URL(window.location.href);
-        let filters = url.searchParams.get("filters");
-        let order = url.searchParams.get("order");
-        let sort = url.searchParams.get("sort");
+        selectSearchOptionsFromPath(url);
 
         let filterAnchors = document.querySelectorAll('.search-filter');
         let sortAnchors = document.querySelectorAll('.search-sort');
         let orderAnchors = document.querySelectorAll('.search-order');
 
-
-        if(filterAnchors != null) {filterAnchors.forEach(filterButtonsHandler(filterAnchors, filters));}
-        if(orderAnchors != null){orderAnchors.forEach(orderButtonsHandler(orderAnchors, order));}
-        if(sortAnchors != null){sortAnchors.forEach(sortButtonsHandler(sortAnchors, sort));}
-        addApplySearchOptionEventListener(filters, order, sort);
+        if(filterAnchors != null) {filterAnchors.forEach(optionsButtonsHandler(filterAnchors));}
+        if(orderAnchors != null){orderAnchors.forEach(optionsButtonsHandler(orderAnchors));}
+        if(sortAnchors != null){sortAnchors.forEach(optionsButtonsHandler(sortAnchors));}
+        addApplySearchOptionEventListener();
     }
 
 }
@@ -252,6 +255,7 @@ function userSearchResponseHandler(query, page) {
     sendAjaxRequest('POST', '/api/search_users', {query: query, page: page}, async function () {
         let originalContent = document.querySelector('#content');
         let response = JSON.parse(this.responseText);
+        console.log(this.responseText);
         let parser = new DOMParser();
         const doc = parser.parseFromString(response.html, 'text/html');
         let newContent = doc.querySelector('#content');
@@ -297,7 +301,23 @@ function highlightSidenav(){
 }
 
 
-function filterButtonsHandler(anchors, filters) {
+function createRemoveOptionsButton(applyButton) {
+    let removeOptionsButton = document.createElement("button");
+    removeOptionsButton.classList.add("btn", "btn-danger");
+    removeOptionsButton.id = "remove-options-button";
+    removeOptionsButton.innerText = "Remove Options";
+    document.querySelector("#dropdown-order").after(removeOptionsButton);
+    removeOptionsButton.addEventListener("click", function (event) {
+        let anchors = document.querySelectorAll(".dropdown a");
+        anchors.forEach(anchor => {
+            anchor.classList.remove("active");
+        });
+        removeOptionsButton.remove();
+        applyButton.remove();
+    });
+}
+
+function filterButtonsHandler(anchors) {
 
     return anchor => {
         anchor.addEventListener("click", function (event) {
@@ -308,100 +328,131 @@ function filterButtonsHandler(anchors, filters) {
                 applyButton.id = "apply-search-button";
                 applyButton.innerText = "Apply";
                 document.querySelector("#dropdown-order").after(applyButton);
+                createRemoveOptionsButton(applyButton);
             }
             event.preventDefault();
-
-            if(anchor.id === "search-filter-all"){
-                filters = "all";
-            }
-            else if(anchor.id === "search-filter-answers"){
-                filters = "answers";
-            }
-            else if(anchor.id === "search-filter-questions"){
-                filters = "questions";
-            }
 
             anchors.forEach(anchor => {
                 anchor.classList.remove("active");
             });
             anchor.classList.add("active");
-            addApplySearchOptionEventListener(filters, null, null);
+            addApplySearchOptionEventListener();
         });
     };
 }
-function orderButtonsHandler(anchors, order) {
+function orderButtonsHandler(anchors) {
 
     return anchor => {
         anchor.addEventListener("click", function (event) {
             let applyButton = document.querySelector("#apply-search-button");
             if(applyButton == null){
                 applyButton = document.createElement("button");
+
                 applyButton.classList.add("btn", "btn-primary");
                 applyButton.id = "apply-search-button";
                 applyButton.innerText = "Apply";
                 document.querySelector("#dropdown-order").after(applyButton);
+                createRemoveOptionsButton(applyButton);
             }
             event.preventDefault();
-
-            if(anchor.id === "search-order-ascending"){
-                order = "ascending";
-            }
-            else if(anchor.id === "search-order-descending"){
-                order = "descending";
-            }
 
             anchors.forEach(anchor => {
                 anchor.classList.remove("active");
             });
             anchor.classList.add("active");
-            addApplySearchOptionEventListener(null, order, null);
+            addApplySearchOptionEventListener();
         });
     };
 }
-function sortButtonsHandler(anchors, sort) {
+function sortButtonsHandler(anchors) {
 
     return anchor => {
         anchor.addEventListener("click", function (event) {
             let applyButton = document.querySelector("#apply-search-button");
             if(applyButton == null){
                 applyButton = document.createElement("button");
+
                 applyButton.classList.add("btn", "btn-primary");
                 applyButton.id = "apply-search-button";
                 applyButton.innerText = "Apply";
                 document.querySelector("#dropdown-order").after(applyButton);
+                createRemoveOptionsButton(applyButton);
             }
             event.preventDefault();
-
-            if(anchor.id === "search-sort-score"){
-                sort = "score";
-            }
-            else if(anchor.id === "search-sort-date"){
-                sort = "date";
-            }
 
             anchors.forEach(anchor => {
                 anchor.classList.remove("active");
             });
             anchor.classList.add("active");
-            addApplySearchOptionEventListener(null, null, sort);
+
+            addApplySearchOptionEventListener();
+        });
+    };
+}
+function optionsButtonsHandler(anchors) {
+
+    return anchor => {
+        anchor.addEventListener("click", function (event) {
+            let applyButton = document.querySelector("#apply-search-button");
+            if(applyButton == null){
+                applyButton = document.createElement("button");
+
+                applyButton.classList.add("btn", "btn-primary");
+                applyButton.id = "apply-search-button";
+                applyButton.innerText = "Apply";
+                document.querySelector("#dropdown-order").after(applyButton);
+                createRemoveOptionsButton(applyButton);
+            }
+            event.preventDefault();
+
+            anchors.forEach(anchor => {
+                anchor.classList.remove("active");
+            });
+            anchor.classList.add("active");
+
+            addApplySearchOptionEventListener();
         });
     };
 }
 
-function addApplySearchOptionEventListener(filters, order, sort) {
+function addApplySearchOptionEventListener() {
     let applyButton = document.querySelector("#apply-search-button");
     if (applyButton != null) {
         applyButton.addEventListener("click", function (event) {
+            let filterElement = document.querySelector(".search-filter.active");
+            let orderElement = document.querySelector(".search-order.active");
+            let sortElement = document.querySelector(".search-sort.active");
+
+            let filters, order, sort;
+            if(filterElement != null){
+                filters = filterElement.id.split("-")[2];
+            }
+            if(orderElement != null){
+                order = orderElement.id.split("-")[2];
+            }
+            if(sortElement != null){
+                sort = sortElement.id.split("-")[2];
+            }
+
             event.preventDefault();
             let url = new URL(window.location.href);
             if (filters != null) {
                 url.searchParams.set("filters", filters);
             }
+            else{
+                url.searchParams.delete("filters");
+            }
             if (order != null) {
                 url.searchParams.set("order", order);
             }
+            else{
+                url.searchParams.delete("order");
+            }
             if (sort != null) {
                 url.searchParams.set("sort", sort);
+            }
+            else{
+                url.searchParams.delete("sort");
             }
             window.location.replace(url);
         });
