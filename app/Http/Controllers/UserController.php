@@ -126,7 +126,8 @@ class UserController extends Controller
             'username' => 'required|string|min:5|regex:/^((?!deleted_user).)*$/|max:25|unique:users',
             'email' => 'required|string|email|min:5|max:50|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'personal_text' => 'max:255'
+            'personal_text' => 'max:255',
+            'terms'=> 'accepted'
         ]);
     }
 
