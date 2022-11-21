@@ -4,9 +4,9 @@
     </label>
     <button class="btn btn-secondary mx-3" type="submit"><i class="fa fa-search"></i></button>
 </form>
-@if(Auth::check() && Auth::user()->can('isAdmin'))
+@if(Auth::check() && Auth::user()->administrator())
 <label>See as admin</label>
-<input type="checkbox" checked="true" />
+<input type="checkbox" checked="true" onclick="adminMode()"/>
 @endif
 @if((count($users) > 0))
     <section id="search_users_results my-3 mx-3">

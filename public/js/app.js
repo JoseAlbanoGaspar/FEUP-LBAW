@@ -408,6 +408,14 @@ function addApplySearchOptionEventListener(filters, order, sort) {
     }
 }
 
+function adminMode(){
+    let adminButtons = document.querySelectorAll('.admin');
+    for(let button of adminButtons){
+        button.classList.toggle('notadmin');
+    }
+    
+}
+
 
 
 highlightSidenav();

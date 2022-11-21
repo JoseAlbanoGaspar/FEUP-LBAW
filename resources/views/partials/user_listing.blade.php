@@ -13,16 +13,16 @@
         </h4> 
     </a>
    
-    @if(Auth::check() && Auth::user()->can('isAdmin'))
+    @if(Auth::check() && Auth::user()->administrator())
     <div class="flex-shrink">
-         <a role="button" type="button" class="btn btn-secondary btn-sm mx-2" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
+         <a role="button" type="button" class="btn btn-secondary btn-sm mx-2 admin" href="{{route('editProfile',['id_user' => $user_listing->id_user]) }}">Edit</a>
 
         <!-- define route (not for A8) -->
-        <a role="button" type="button" class="btn btn-secondary btn-sm" href="\">Delete</a>
+        <a role="button" type="button" class="btn btn-secondary btn-sm admin" href="\">Delete</a>
         <form method='POST' action="{{route('makeAdmin')}}">
             {{ csrf_field() }}
             <input type="hidden" value="{{$user_listing->id_user}}" name="id_user"/>
-            <button type="submit">Make Admin</button>
+            <button type="submit" class="admin">Make Admin</button>
         </form>
     </div>
     @endif
