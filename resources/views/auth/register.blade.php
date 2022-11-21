@@ -71,7 +71,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-3">{{$button_name}}</button>
+            <button type="submit" class="btn btn-primary btn-block mb-3">Register</button>
         </form>
 
         <!-- Login button -->

@@ -80,4 +80,14 @@ class Answer extends Model
 	{
 		return $this->hasMany(AnswerVote::class, 'id_answer');
 	}
+
+	public function score()
+	{
+		$votes = $this->answer_votes();
+		$sum = 0;
+		foreach ($votes as $vote) {
+			$sum += $vote->score;
+    	}
+		return $sum;
+	}
 }

@@ -13,6 +13,18 @@ use App\Models\Moderator;
 
 class UserController extends Controller
 {
+    public function post_score($posts){
+      $up_post = 0;
+      $down_post = 0;
+      
+      foreach($posts as $vote){
+        if($vote->score == -1) $up_post = $up_post + 1;
+        if($vote->score == 1) $down_post = $down_post + 1;
+      }
+
+      $post_score = ['up' => $up_post,'down' => $down_post];
+      return $post_score;
+    }
     /**
      * Shows the user for a given id.
      *
@@ -26,7 +38,12 @@ class UserController extends Controller
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
 
-      return view('pages.profile', ['user' => $user, 'role'=> $role]);
+      $question_votes = $this->post_score($user->question_votes()->get());
+      $answer_votes = $this->post_score($user->answer_votes()->get());
+      
+      
+
+      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes]);
     }
 
     public function getEditProfile($id){
@@ -98,5 +115,51 @@ class UserController extends Controller
 //        return view('partials.searchUsersResults', ['users' => $users])->render();
 
 //        return json_encode(['users' => $users,'hasPages' =>$hasPages, 'links' => $links]);
+    }
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public static function validator(array $data)
+    {
+        return Validator::make($data, [
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'personal_text' => 'max:255'
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\Models\User
+     */
+    public static function create(array $data)
+    {
+        $path = 'storage/images/';
+        $profile_image_url = $path . 'default-user.jpg';
+        
+        
+        
+        if(array_key_exists('profile_picture', $data)){
+            $img = $data['profile_picture'];
+            $new_id = DB::table('users')->latest('id_user')->first()->id_user + 1;
+            
+            $imageName = strval($new_id). '-profile-picture.' . $img->extension(); 
+            $img->storeAs('public/images', $imageName);
+            $profile_image_url = $path . $imageName;
+        }
+
+        return User::create([
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'personal_text' => $data['personal_text'],
+            'profile_picture' => $profile_image_url
+        ]);
     }
 }

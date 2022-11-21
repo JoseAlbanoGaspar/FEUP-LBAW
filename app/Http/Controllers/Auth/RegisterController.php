@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 //use App\Http\Controllers\Auth\RegistersUsers;
+use App\Http\Controllers\UserController;
 
 class RegisterController extends Controller
 {
@@ -55,12 +57,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'personal_text' => 'max:255'
-        ]);
+        return UserController::validator($data);
     }
 
     /**
@@ -71,26 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $path = 'storage/images/';
-        $profile_image_url = $path . 'default-user.jpg';
-        
-        
-        
-        if(array_key_exists('profile_picture', $data)){
-            $img = $data['profile_picture'];
-            $new_id = DB::table('users')->latest('id_user')->first() + 1;
-            $imageName = strval($new_id). '-profile-picture.' . $img->extension(); 
-            $img->storeAs('public/images', $imageName);
-            $profile_image_url = $path . $imageName;
-        }
-
-        return User::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'personal_text' => $data['personal_text'],
-            'profile_picture' => $profile_image_url
-        ]);
+        return UserController::create($data);
     }
 
     

@@ -70,4 +70,14 @@ class Question extends Model
 	{
 		return $this->hasMany(QuestionVote::class, 'id_question');
 	}
+
+	public function score()
+	{
+		$votes = $this->question_votes()->get();
+		$sum = 0;
+		foreach ($votes as $vote) {
+			$sum += $vote->score;
+    	}
+		return $sum;
+	}
 }

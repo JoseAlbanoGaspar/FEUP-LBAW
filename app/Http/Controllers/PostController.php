@@ -242,5 +242,20 @@ class PostController extends Controller
 
         return view('pages.home', ['posts' => $posts]);
     }
+
+    public function updatePostForm($id){
+        $post = Post::find($id);
+        return view('pages.editQuestion', ['post' => $post]);
+    }
+
+    public function update(Request $request){
+        //dar update
+    }
+
+    public function delete(Request $request){
+        //remover
+    }
+
+    
 }
 
