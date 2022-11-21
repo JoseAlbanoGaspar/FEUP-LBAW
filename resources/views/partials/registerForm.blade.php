@@ -2,7 +2,7 @@
     <div style="width: 30rem;">
         <form method="POST" action="{{ route('createUser') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
-
+            <input type="hidden" name="terms" value="yes"/>
             <!-- Username input -->
             <div class="form-outline mb-4">
             <input type="text" name="username" class="form-control" value="{{ old('username') }}" required/>
