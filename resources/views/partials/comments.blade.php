@@ -17,7 +17,7 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add comment" aria-label="Add comment" aria-describedby="basic-addon2">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button">Submit</button>
+              <button class="btn btn-outline-secondary mx-3" type="button">Submit</button>
             </div>
         </div>
     </form>
