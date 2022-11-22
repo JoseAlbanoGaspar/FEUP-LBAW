@@ -22,6 +22,7 @@
     <div class="d-flex justify-content-between collapse navbar-collapse" id="navbar-content">
 
         <form id= "search-bar" class="d-flex flex-row mx-3" method="get" action="{{route('search')}}">
+{{--            {{ csrf_field() }}--}}
           <input class="form-control mx-2" type="text" name='query' placeholder="Search " value="{{$query}}">
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
         </form>

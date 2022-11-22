@@ -2332,6 +2332,11 @@ VALUES
     (54,1),
     (4,16),
     (83,22),
+    (83,22),
+    (2,22),
+    (2,1),
+    (2,2),
+    (2,3),
     (10,6);
 INSERT INTO follows_tag (id_user, id_tag)
 VALUES

@@ -110,7 +110,7 @@ class UserController extends Controller
             ->orderBy('username', 'ASC')
             ->simplePaginate(10, ['*'], 'page', $page);
 
-        $returnHTML = view('pages.searchUsersResults', ['users' => $users, 'query' => $query])->render();
+        $returnHTML = view('pages.searchUsers', ['users' => $users, 'query' => $query])->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
     }
     /**

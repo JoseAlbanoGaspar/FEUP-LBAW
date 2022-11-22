@@ -2,7 +2,7 @@
 
 @section('content')
     <form action="{{ route('searchUsers') }}" method="GET">
-        <label id="users-search-bar">
+        <label id="users-search-bar" class="mx-2">
             <input type="text" name="query" placeholder="Search for users" >
         </label>
         <button type="submit">Search</button>

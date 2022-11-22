@@ -6,6 +6,7 @@ $request = Request::capture();
 {{--@section('title', 'Posts Search')--}}
 
 @section('content')
+<h5 class="text-left">Search results for: {{$request->input('query')}}</h5>
 <div class="d-flex flex-row">
     <div id="dropdown-filter" class="dropdown">
         <button class="btn btn-sm btn-neutral dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -30,7 +31,7 @@ $request = Request::capture();
         </div>
     </div>
     <div id="dropdown-order" class="dropdown">
-                <i class="align-self-end fa fa-chevron-right" aria-hidden="true"></i>
+        <i class="align-self-end fa fa-chevron-right" aria-hidden="true"></i>
 
         <button class="btn btn-sm btn-neutral dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             Order
@@ -42,7 +43,8 @@ $request = Request::capture();
         </div>
     </div>
 </div>
-<h4 class="text-left">Search results for: {{$request->input('query')}}</h4>
+
+
     @if((count($posts) > 0))
     <section id="search_results">
         @each('partials.post_listing', $posts, 'post_listing')

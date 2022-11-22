@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Post;
 use App\Models\Question;
 use App\Models\Answer;
+use const http\Client\Curl\AUTH_ANY;
 
 class QuestionController extends PostController
 {
@@ -35,8 +37,16 @@ class QuestionController extends PostController
 
     }
 
-    public function getAskForm()
+    /**
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function getAskForm(Request $request)
     {
+
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+        $this->authorize('askQuestion');
         return view('pages.askForm');
     }
 

@@ -62,7 +62,7 @@ class PostController extends Controller
         $filters = $request->query('filters');
         $sortReceived = $request->query('sort');
         $order = $request->query('order');
-        if($order === 'descending') $order = 'desc';
+        if($order === 'descending' || is_null($order)) $order = 'desc';
         else $order = 'asc';
         if($sortReceived !== 'date' && $sortReceived !== 'score'){
             $sort = '';
@@ -123,7 +123,7 @@ class PostController extends Controller
                         ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
                         ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ?)', ["%$query%", "%$query%"])
                         ->orderByRaw('(SELECT score FROM answer WHERE id_answer = id_post) DESC')
-//                        ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                        ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                         ->paginate(20);
                 }
             }
@@ -132,7 +132,7 @@ class PostController extends Controller
                     ->whereRaw('id_post IN (SELECT id_answer FROM answer)')
                     ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ?)', ["%$query%", "%$query%"])
                     ->orderBy('date', $order)
-//                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                     ->paginate(20);
             }
             else{
@@ -152,7 +152,7 @@ class PostController extends Controller
                     ->orderByRaw('(SELECT score
                                 FROM (SELECT id_question as id, score FROM question  UNION ALL SELECT id_answer as id, score FROM answer) as score
                                 WHERE id = id_post) ASC')
-//                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                     ->paginate(20);
 
                 }
@@ -163,7 +163,7 @@ class PostController extends Controller
                         ->orderByRaw('(SELECT score
                                 FROM (SELECT id_question as id, score FROM question  UNION ALL SELECT id_answer as id, score FROM answer) as score
                                 WHERE id = id_post) DESC')
-//                        ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
+                        ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                         ->paginate(20);
                 }
             }
@@ -171,8 +171,8 @@ class PostController extends Controller
                 $posts = Post::query()
                     ->whereRaw('((id_post IN (SELECT id_question FROM question)
                  or id_post IN (SELECT id_answer FROM answer)) and tsvectors @@ plainto_tsquery(\'english\', ?) OR text_body LIKE ? OR (SELECT title FROM question WHERE id_question = id_post) LIKE ?)', ["%$query%", "%$query%", "%$query%"])
-//                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                     ->orderBy('date', $order)
+                    ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%$query%")
                     ->paginate(20);
             }
             else{
@@ -218,11 +218,61 @@ class PostController extends Controller
         return view('pages.personalFeed', ['posts' => $questions]);
     }
 
-    public function showAllQuestions(){
-        $posts =  Post::query()->orderBy('date', 'DESC')
-            ->whereIn('id_post', Question::query()
-                ->get(['id_question']))
-            ->paginate(20);
+    public function showAllQuestions(Request $request){
+        $sort = $request->input('sort');
+        $order = $request->input('order');
+        if($sort !== 'date' && $sort !== 'score' && $sort !== 'answercount'){
+            $sort = '';
+        }
+        if($order === 'descending' || is_null($order)) $order = 'desc';
+        else $order = 'asc';
+
+        if($sort === 'score'){
+            if($order === 'asc'){
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->orderByRaw('(SELECT score FROM question WHERE id_question = id_post) ASC')
+                    ->paginate(20);
+            }
+            else{
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->orderByRaw('(SELECT score FROM question WHERE id_question = id_post) DESC')
+                    ->paginate(20);
+            }
+        }
+        else if($sort === 'date'){
+            $posts = Post::query()
+                ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                ->orderBy('date', $order)
+                ->paginate(20);
+        }
+        else if($sort === 'answercount'){
+            if($order === 'asc'){
+                $posts = Post::query()
+                    ->whereRaw('id_post IN (SELECT id_question FROM question)')
+                    ->orderByRaw('(SELECT count(*) FROM answer WHERE id_question = id_post) ASC')
+                    ->paginate(20);
+            }
+            else{
+                $posts = Post::query()
+                    ->whereIn('id_post', Question::query()
+                        ->get(['id_question']))
+                    ->orderByRaw('(SELECT count(*) FROM answer WHERE id_question = id_post) DESC')
+                    ->paginate(20);
+            }
+        }
+
+        else{
+            $posts =  Post::query()
+                ->whereIn('id_post', Question::query()
+                    ->get(['id_question']))
+                ->orderBy('date', 'DESC')
+                ->paginate(20);
+        }
+
+
+
 
         return view('pages.allQuestions', ['posts' => $posts]);
     }
@@ -256,6 +306,6 @@ class PostController extends Controller
         //remover
     }
 
-    
+
 }
 

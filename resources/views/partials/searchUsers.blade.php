@@ -1,10 +1,12 @@
  <div class = "mx-4">
-    <form action="{{ route('searchUsers') }}" method="GET" class="m-4 d-flex flex-row">
-        <label id="users-search-bar mx-2">
+    <form action="" class="m-4 d-flex flex-row" >
+{{--        {{ csrf_field() }}--}}
+        <label id="users-search-bar" class="mx-2">
             <input  class="form-control mx-2" type="text" name='query' placeholder="Search for users" value="{{$query}}">
         </label>
-        <button class="btn btn-secondary mx-3" type="submit"><i class="fa fa-search"></i></button>
+        <button class="btn btn-secondary mx-3" type="button"><i class="fa fa-search"></i></button>
     </form>
+
 @if(Auth::check() && Auth::user()->administrator())
 <label>See as admin</label>
 <input type="checkbox" checked="true" onclick="adminMode()"/>
