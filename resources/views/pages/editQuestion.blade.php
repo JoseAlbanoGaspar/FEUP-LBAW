@@ -27,7 +27,7 @@
 
         <!-- text body input -->
         <div class="form-outline mb-4">
-        <textarea name="text_body" class="form-control" value="{{$post->text_body}}" rows="10"></textarea>
+        <textarea name="text_body" class="form-control" rows="10">{{$post->text_body}}</textarea>
         <label class="form-label" for="text_body">Question body</label>
         </div>
         @if ($errors->has('text_body'))
