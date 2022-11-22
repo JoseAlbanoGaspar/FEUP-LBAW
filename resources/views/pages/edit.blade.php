@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2 class="m-2 my-4">Edit</h2>
+<h2 class="m-2 my-4">Edit User Profile</h2>
 
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">

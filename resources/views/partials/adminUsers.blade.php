@@ -1,4 +1,4 @@
 <h2>Administrate Users:</h2>
-<a href="{{ route('searchUsers')}}">Search Existent User </a>
-<h4>Create new user</h4>
+<h5 class="m-2 my-4"><a class="text-decoration-none" href="{{ route('searchUsers')}}">Search Existing Users <i class="fa fa-search" aria-hidden="true"></i></a></h5>
+<h5 class="m-2 my-4">Create new user</h5>
 @include('partials.registerForm')

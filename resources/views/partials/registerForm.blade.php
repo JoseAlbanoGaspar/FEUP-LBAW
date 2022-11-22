@@ -1,8 +1,8 @@
 <div class="container-sm m-5 d-flex justify-content-center">
-    <div style="width: 30rem;">
+    <div style="width: 30rem;" class="me-3">
         <form method="POST" action="{{ route('createUser') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
-
+            <input type="hidden" name="terms" value="yes"/>
             <!-- Username input -->
             <div class="form-outline mb-4">
             <input type="text" name="username" class="form-control" value="{{ old('username') }}" required/>

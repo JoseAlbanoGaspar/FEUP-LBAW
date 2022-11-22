@@ -1,4 +1,4 @@
-@php $truncated = (strlen($post->text_body) > 38) ? substr($post->text_body,0,35).'...' :
+@php $truncated = (strlen($post->text_body) > 273) ? substr($post->text_body,0,270).'...' :
     $post->text_body;
     include_once(app_path() . '/Includes/Utils.php');
 @endphp
@@ -22,7 +22,7 @@
                     <h5 class="card-title">{{$post->question->title}}</h5>
                 </a>
             </div>
-            
+
             <div class ="row"><h6 class="card-text">{{$truncated}}</h6></div>
 
 

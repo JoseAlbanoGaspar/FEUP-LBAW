@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-//use App\Http\Controllers\Auth\RegistersUsers;
 use App\Http\Controllers\UserController;
 
 class RegisterController extends Controller
@@ -71,5 +70,5 @@ class RegisterController extends Controller
         return UserController::create($data);
     }
 
-    
+
 }

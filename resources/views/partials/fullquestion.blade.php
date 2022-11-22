@@ -6,7 +6,7 @@
 			{{$post->question->title}}
 		</h1>
 		<small id='modified'>This question has been modified(FALTA AQUI) by <a>Joao7890</a> 2 hours ago</small>
-		
+
 		<div class="post-layout d-flex flex-row">
 			<div class="flex--item">
 				@include('partials.votebutton', ['post' => $post->question])
@@ -30,7 +30,7 @@
 
 				<div class="d-flex align-items-center">
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
-		   
+
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
 						{{ csrf_field() }}
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 
 	<div id="answers">
@@ -58,7 +58,7 @@
 			let edit_field = 0;
 		</script>
 		@foreach ($answers as $answer)
-		<div class="post-layout d-flex flex-row">
+		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row">
 			<div class="flex--item">
 				@include('partials.votebutton', ['post' => $answer])
 			</div>
@@ -73,7 +73,6 @@
 						<a>{{$answer->post->user->username}}</a> answered 1(FALTA)day ago
 					</small>
 
-					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
 					<button id="editButton-{{$answer->id_answer}}" class="btn btn-secondary btn-sm mx-2 text-center" onclick="editAnswer({{$answer->id_answer}}, {{$answer->post->text_body}})">Edit</button>
 
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->

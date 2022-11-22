@@ -29,9 +29,13 @@ class UserPolicy
       // Any user can create a new card
       return Auth::check();
     }
-    public function editProfile($id_user){
-      //Any user can edit their profile
-      return /*Auth::check() && */ $id_user == 2/*Auth::id()*/;
+    public function isAdministrator(User $user){
+      return count($user->administrator()->get());
+    }
+    public function editProfile(User $auth,User $user){
+      //Users can only edit their own profiles or admin
+      
+      return (Auth::check() && $user->id_user == Auth::id()) || count(Auth::user()->administrator()->get());
     }
     public function delete(User $user, Card $card)
     {
