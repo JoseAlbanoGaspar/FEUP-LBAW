@@ -19,7 +19,7 @@
     <div class="d-grid gap-5-lg gap-2 d-md-block my-4">
         <a type="button" class="btn btn-primary" href="{{ route('myQuestions',['id_user' => $user->id_user]) }}">My questions</a>
         <a type="button" class="btn btn-primary" href="{{ route('myAnswers',['id_user' => $user->id_user]) }}">My answers</a>
-        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user )
+        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user && count(Auth::user()->administrator()->get()))
         <a type="button" class="btn btn-primary" href="{{ route('admin') }}">Admin</a>
         @endif
     </div>
