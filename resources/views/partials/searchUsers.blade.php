@@ -13,7 +13,7 @@
 @endif
     @if((count($users) > 0))
         <section id="search_users_results my-3 mx-3">
-            @each('partials.user_listing', $users, 'user_listing')
+            @each('partials.userListing', $users, 'userListing')
         </section>
         @if ($users->links()->paginator->hasPages())
             <div class="box has-text-centered my-3">
@@ -23,7 +23,7 @@
     @else
         <div class="box has-text-centered">
             <p id="results_not_found_message">No users found matching your search</p>
-            @include('partials.go-back-button')
+            @include('partials.goBackButton')
         </div>
     @endif
  </div>

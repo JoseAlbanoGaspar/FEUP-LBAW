@@ -18,19 +18,24 @@ class AdminController extends Controller
 {
     /**
      * Shows the user for a given id.
-     *
      * @param  int  $id
      * @return Response
      */
     public function show(Request $request)
     {
-      $this->authorize('isAdministrator', App\Model\User::class);
+      $this->authorize('isAdministrator', User::class);
       $tags = Tag::all();
       return view('pages.admin', ['tags'=> $tags]);
     }
-    
+
+    /**
+     * Create a new user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function createUser(Request $request){
-      $this->authorize('isAdministrator', App\Model\User::class);
+      $this->authorize('isAdministrator', User::class);
       $validator = UserController::validator($request->all());
       if($validator->fails()){
         return redirect()->route('admin',['tags' => Tag::all()])->withInput()->withErrors($validator);

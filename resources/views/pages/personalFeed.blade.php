@@ -5,7 +5,7 @@
     <h1 class="my-4 mx-5">Personal Feed</h1>
     @if((count($posts) > 0))
         <section id="search_results">
-            @each('partials.post_listing', $posts, 'post_listing')
+            @each('partials.postListing', $posts, 'postListing')
         </section>
     @else
         <div class="d-flex flex-row" ><p id="results_not_found_message">Unable to get your personal feed. </p>&nbsp;</div>

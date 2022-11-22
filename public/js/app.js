@@ -23,7 +23,7 @@ function selectSearchOptionsFromPath(url) {
     let order = url.searchParams.get("order");
     let sort = url.searchParams.get("sort");
 
-    if(filters != null || order != null || sort != null){
+    if (filters != null || order != null || sort != null) {
         createApplyNoOptions();
     }
 
@@ -45,18 +45,13 @@ function selectSearchOptionsFromPath(url) {
         document.getElementById("search-sort-date").classList.add("active");
     } else if (sort === "score") {
         document.getElementById("search-sort-score").classList.add("active");
-    }else if (sort === "answercount") {
+    } else if (sort === "answercount") {
         document.getElementById("search-sort-answercount").classList.add("active");
     }
-
 
 }
 
 function addEventListeners() {
-    let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
-    [].forEach.call(itemCheckers, function (checker) {
-        checker.addEventListener('change', sendItemUpdateRequest);
-    });
     addUserSearchEventListeners();
 
     if (window.location.pathname.includes("search") && !window.location.pathname.includes("search_")) {
@@ -67,12 +62,17 @@ function addEventListeners() {
         let sortAnchors = document.querySelectorAll('.search-sort');
         let orderAnchors = document.querySelectorAll('.search-order');
 
-        if(filterAnchors != null) {filterAnchors.forEach(optionsButtonsHandler(filterAnchors));}
-        if(orderAnchors != null){orderAnchors.forEach(optionsButtonsHandler(orderAnchors));}
-        if(sortAnchors != null){sortAnchors.forEach(optionsButtonsHandler(sortAnchors));}
+        if (filterAnchors != null) {
+            filterAnchors.forEach(optionsButtonsHandler(filterAnchors));
+        }
+        if (orderAnchors != null) {
+            orderAnchors.forEach(optionsButtonsHandler(orderAnchors));
+        }
+        if (sortAnchors != null) {
+            sortAnchors.forEach(optionsButtonsHandler(sortAnchors));
+        }
         addApplySearchOptionEventListener();
     }
-    //check if the url path is questions or questions with parameters nut not questions/*
     if (window.location.pathname.includes("questions") && !window.location.pathname.includes("questions/")) {
         let url = new URL(window.location.href);
         selectSearchOptionsFromPath(url);
@@ -80,8 +80,12 @@ function addEventListeners() {
         let sortAnchors = document.querySelectorAll('.search-sort');
         let orderAnchors = document.querySelectorAll('.search-order');
 
-        if(orderAnchors != null){orderAnchors.forEach(optionsButtonsHandler(orderAnchors));}
-        if(sortAnchors != null){sortAnchors.forEach(optionsButtonsHandler(sortAnchors));}
+        if (orderAnchors != null) {
+            orderAnchors.forEach(optionsButtonsHandler(orderAnchors));
+        }
+        if (sortAnchors != null) {
+            sortAnchors.forEach(optionsButtonsHandler(sortAnchors));
+        }
         addApplySearchOptionEventListener();
     }
 
@@ -104,18 +108,12 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-function sendItemUpdateRequest() {
-    let item = this.closest('li.item');
-    let id = item.getAttribute('data-id');
-    let checked = item.querySelector('input[type=checkbox]').checked;
-
-    sendAjaxRequest('post', '/api/item/' + id, {done: checked}, itemUpdatedHandler);
-}
-
-
-
 function prevButtonEventHandler(event) {
     searchUsersPageButtonsHandler(event, false);
+}
+
+function nextButtonEventHandler(event) {
+    searchUsersPageButtonsHandler(event, true);
 }
 
 function searchUsersHandler(event) {
@@ -180,24 +178,19 @@ function searchUsersPageButtonsHandler(event, next) {
     userSearchResponseHandler(query, page);
 }
 
-function nextButtonEventHandler(event) {
-    searchUsersPageButtonsHandler(event, true);
-}
-
-function highlightSidenav(){
+function highlightSidenav() {
     if (window.location.pathname.includes("users")) {
-        document.getElementById("users-sidenav").classList.replace("link-dark","selected");
-    }else if (window.location.pathname.includes("questions")){
-        document.getElementById("questions-sidenav").classList.replace("link-dark","selected");
-    }else if (window.location.pathname.includes("home")){
-        document.getElementById("homepage-sidenav").classList.replace("link-dark","selected");
-    }else if (window.location.pathname.includes("personal_feed")){
-        document.getElementById("personalfeed-sidenav").classList.replace("link-dark","selected");
+        document.getElementById("users-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("questions")) {
+        document.getElementById("questions-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("home")) {
+        document.getElementById("homepage-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("personal_feed")) {
+        document.getElementById("personalfeed-sidenav").classList.replace("link-dark", "selected");
     }
 }
 
-
-function createApplyNoOptions(){
+function createApplyNoOptions() {
 
     let applyNoOptionsButton = document.createElement("button");
     applyNoOptionsButton.classList.add("btn");
@@ -218,6 +211,7 @@ function createApplyNoOptions(){
         window.location.replace(url);
     });
 }
+
 function createRemoveOptionsButton(applyButton) {
     let applyNoOptionsButton = document.querySelector(".apply-no-options");
     if (applyNoOptionsButton != null) {
@@ -249,7 +243,7 @@ function optionsButtonsHandler(anchors) {
         anchor.addEventListener("click", function (event) {
             event.preventDefault();
             let applyButton = document.querySelector("#apply-search-button");
-            if(applyButton == null){
+            if (applyButton == null) {
 
                 applyButton = document.createElement("button");
                 applyButton.classList.add("btn", "btn-primary");
@@ -278,13 +272,13 @@ function addApplySearchOptionEventListener() {
             let sortElement = document.querySelector(".search-sort.active");
 
             let filters, order, sort;
-            if(filterElement != null){
+            if (filterElement != null) {
                 filters = filterElement.id.split("-")[2];
             }
-            if(orderElement != null){
+            if (orderElement != null) {
                 order = orderElement.id.split("-")[2];
             }
-            if(sortElement != null){
+            if (sortElement != null) {
                 sort = sortElement.id.split("-")[2];
             }
 
@@ -292,20 +286,17 @@ function addApplySearchOptionEventListener() {
             let url = new URL(window.location.href);
             if (filters != null) {
                 url.searchParams.set("filters", filters);
-            }
-            else{
+            } else {
                 url.searchParams.delete("filters");
             }
             if (order != null) {
                 url.searchParams.set("order", order);
-            }
-            else{
+            } else {
                 url.searchParams.delete("order");
             }
             if (sort != null) {
                 url.searchParams.set("sort", sort);
-            }
-            else{
+            } else {
                 url.searchParams.delete("sort");
             }
             window.location.replace(url);
@@ -314,16 +305,15 @@ function addApplySearchOptionEventListener() {
 
 }
 
-function adminMode(){
+function adminMode() {
     let adminButtons = document.querySelectorAll('.admin');
-    if(adminButtons) {
+    if (adminButtons) {
         for (let button of adminButtons) {
             button.classList.toggle('notadmin');
         }
     }
 
 }
-
 
 
 highlightSidenav();

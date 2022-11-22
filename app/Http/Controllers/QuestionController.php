@@ -10,15 +10,14 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Post;
 use App\Models\Question;
 use App\Models\Answer;
-use const http\Client\Curl\AUTH_ANY;
 
 class QuestionController extends PostController
 {
     /**
      * Shows the question for a given id.
      *
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show($id)
     {

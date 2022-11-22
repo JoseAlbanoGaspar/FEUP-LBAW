@@ -10,7 +10,7 @@
 
     @if((count($users) > 0))
         <section id="search_users_results">
-            @each('partials.user_listing', $users, 'user_listing')
+            @each('partials.userListing', $users, 'userListing')
         </section>
         @if ($users->links()->paginator->hasPages())
             <div class="mt-4 p-4 box has-text-centered">

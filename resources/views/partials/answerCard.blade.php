@@ -3,11 +3,11 @@
     include_once(app_path() . '/Includes/Utils.php');
 @endphp
 
-<div class="answer-card card mx-5 my-2">
+<div class="answerCard card mx-5 my-2">
     <div class = "card-body d-flex justify-content-center p-3">
         <div class="answer-stats col-2 d-flex justify-content-center flex-column py-4">
 
-            @include('partials.stats-score', ['score' => $post->answer->score])
+            @include('partials.statsScore', ['score' => $post->answer->score])
 
         </div>
 
@@ -36,7 +36,7 @@
 
 
             <div class = "user-card col d-inline d-flex justify-content-end">
-                @include('partials.profile-card', ['user' => $post->user])
+                @include('partials.profileCard', ['user' => $post->user])
 
                 <time class="user-card-time flex-shrink">
                     &nbsp;&nbsp;answered {{timeElapsedString($post->date)}}

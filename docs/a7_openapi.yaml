@@ -228,30 +228,7 @@ paths:
                   description: 'Failed edition. Redirect to edit form.'
                   value: '/users/{id}/edit'
 
-    delete:
-      operationId: R109
-      summary: 'R109: Delete user action'
-      description: 'Delete user option. Access: OWN, ADM, MOD'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-              required:
-                - user_id
-
-      responses:
-        '200':
-          description: 'Ok.'
-
-  /users/{id}/myquestions:
+  /users/{id}/questions:
     get:
       operationId: R110
       summary: 'R110: View questions from a user'
@@ -271,7 +248,7 @@ paths:
           description: 'Ok. Show questions from a user'
 
 
-  /users/{id}/myanswers:
+  /users/{id}/answers:
     get:
       operationId: R111
       summary: 'R111: View answers from a user'
@@ -663,18 +640,6 @@ paths:
                   type: integer
               required:
                 - tag_id
-
-      responses:
-        '200':
-          description: 'Ok.'
-
-  /admin/reported:
-    get:
-      operationId: R403
-      summary: 'R403: Get all reported posts'
-      description: 'Get all reported posts. Access: MOD, ADM'
-      tags:
-        - 'M04: User Administration and Static pages'
 
       responses:
         '200':

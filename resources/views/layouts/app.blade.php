@@ -20,12 +20,12 @@
 
   </head>
   <body class="d-flex flex-column min-vh-100">
-    @include('partials.navbar')
+    @include('partials.navBar')
 
     <main>
       <div class="row">
         <div class="col-md-2 col-12 ">
-            @include('partials.sidenav')
+            @include('partials.sideNav')
         </div>
         <section id = "content" class="col-md-10 col-12 ">
           @yield('content')

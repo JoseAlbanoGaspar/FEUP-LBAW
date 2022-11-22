@@ -9,7 +9,7 @@
 
 		<div class="post-layout d-flex flex-row">
 			<div class="flex--item">
-				@include('partials.votebutton', ['post' => $post->question])
+				@include('partials.voteButton', ['post' => $post->question])
 			</div>
 
 
@@ -57,7 +57,7 @@
 		@foreach ($answers as $answer)
 		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row">
 			<div class="flex--item">
-				@include('partials.votebutton', ['post' => $answer])
+				@include('partials.voteButton', ['post' => $answer])
 			</div>
 
 

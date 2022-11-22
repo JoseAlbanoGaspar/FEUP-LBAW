@@ -25,7 +25,7 @@
       </h2>
       <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
         <div class="accordion-body">
-            @include('partials.tag_management',['tags' => $tags])
+            @include('partials.tagManagement',['tags' => $tags])
         </div>
       </div>
     </div>

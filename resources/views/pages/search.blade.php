@@ -47,7 +47,7 @@ $request = Request::capture();
 
     @if((count($posts) > 0))
     <section id="search_results">
-        @each('partials.post_listing', $posts, 'post_listing')
+        @each('partials.postListing', $posts, 'postListing')
     </section>
     @if ($posts->links()->paginator->hasPages())
         <div class="mt-4 p-4 box has-text-centered">
