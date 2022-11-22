@@ -5,7 +5,7 @@
 <div id="question_header" class="d-flex flex-column mx-3 mx-md-5 mt-5">
 	<div class="d-flex flex-row align-items-center justify-content-between">
 		<h1 id="question_title">{{$post->question->title}}</h1>
-		<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('FormToAskQuestion') }}">Ask Question</a>
+		<a role="button" class="btn btn-secondary btn mx-2 text-center" href="{{ route('FormToAskQuestion') }}">Ask Question</a>
 	</div>
 
 	{{--A bar that includes the post date, the edit date and the number of answers--}}
@@ -30,6 +30,18 @@
 			<div class="flex--item w-100 px-3">
 
 				<p id='post-text-body'>{{$post->text_body}}</p>
+
+				<div class="d-flex flex-row justify-content-end py-1 p-2">
+					<small>
+						<div class = "user-card col d-inline d-flex justify-content-end">
+							@include('partials.profile-card', ['user' => $post->user])
+			
+							<time class="user-card-time flex-shrink">
+								&nbsp;asked {{timeElapsedString($post->date)}}
+							</time>
+						</div>
+					</small>
+				</div>
 
 				<div class="d-flex flex-row fw-wrap justify-content-between m-2">
 					<div class="col d-flex justify-content-start">
@@ -62,27 +74,36 @@
 
 	<div id="answers" class="mt-5">
 		<div id="answers-header">
-			<h3 class="mb0" data-answercount="2">
+			<h3 class="mb-3">
 				<span itemprop="answerCount">{{count($answers)}}</span> Answers
 			</h3>
 		</div>
 
 		@foreach ($answers as $answer)
-		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row">
+		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row mb-3">
 			<div class="flex--item">
 				@include('partials.votebutton', ['post' => $answer])
 			</div>
 
 
-			<div class="flex--item m-2 w-100">
+			<div class="flex--item px-3 w-100">
 
-				<p id='post-text-body' class="p-3">{{$answer->post->text_body}}</p>
+				<p id='post-text-body'>{{$answer->post->text_body}}</p>
 
-				<div class="d-flex flex-row fw-wrap p-2">
+				<div class="d-flex flex-row justify-content-end py-1 p-2">
 					<small>
-						<a>{{$answer->post->user->username}}</a> answered 1(FALTA)day ago
+						<div class = "user-card col d-inline d-flex justify-content-end">
+							@include('partials.profile-card', ['user' => $answer->post->user])
+			
+							<time class="user-card-time flex-shrink">
+								&nbsp;answered {{timeElapsedString($answer->post->date)}}
+							</time>
+						</div>
 					</small>
+				</div>
 
+
+				<div class="d-flex flex-row">
 					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
@@ -102,11 +123,13 @@
 		@endforeach
 
 		<form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
-			<h2 class="space" id="your-answer-header">
+			
+			<h3 class="mb-3">
 				Your Answer
-			</h2>
-			<textarea class="form-control" aria-label="Add answe" placeholder="Add answer" rows="8"></textarea>
-			<div class="form-submit clear-both d-flex flex-row">
+			</h3>
+
+			<textarea class="form-control" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
+			<div class="form-submit clear-both d-flex flex-row justify-content-end mt-3">
 				<button id="submit-button" class="btn btn-outline-secondary" type="submit">
 					Post Your Answer </button>
 				<button class="btn btn-outline-secondary">

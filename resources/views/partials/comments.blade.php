@@ -5,10 +5,10 @@
             <span class="comment-body">{{ $comment->post->text_body}}</span>
 
             <div class="d-inline-flex ai-center">
-                –&nbsp;<a href="/users/{{ $comment->post->user->id_user}}" class="comment-user">{{ $comment->post->user->username}}</a>
+                –&nbsp;<a href="{{route('users', ['id_user'=>$comment->post->user->id_user])}}" class="comment-user">{{ $comment->post->user->username}}</a>
             </div>
             <div class="comment-date d-inline-flex ai-center">
-                &nbsp;{{ $comment->post->date}}
+                &nbsp;{{timeElapsedString($comment->post->date)}}
             </div>
         </li>
         @endforeach
