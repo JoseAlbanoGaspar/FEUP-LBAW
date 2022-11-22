@@ -33,7 +33,7 @@
 		   
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
-						{{-- csfr_field() --}}
+						{{ csrf_field() }}
 						@method('DELETE')
 						<input type="hidden" value="{{ $post->id_post }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
@@ -53,7 +53,10 @@
 				<span itemprop="answerCount">{{count($answers)}}</span> Answers
 			</h2>
 		</div>
-		
+		<script>
+			let text = 0;
+			let edit_field = 0;
+		</script>
 		@foreach ($answers as $answer)
 		<div class="post-layout d-flex flex-row">
 			<div class="flex--item">
@@ -61,9 +64,9 @@
 			</div>
 
 
-			<div class="flex--item m-2 w-100">
+			<div id='answer-content-{{$answer->id_answer}}' class="flex--item m-2 w-100">
 
-				<p id='post-text-body' class="p-3">{{$answer->post->text_body}}</p>
+				<p id='answer-text-body-{{$answer->id_answer}}' class="p-3">{{$answer->post->text_body}}</p>
 
 				<div class="d-flex flex-row fw-wrap p-2">
 					<small>
@@ -71,11 +74,11 @@
 					</small>
 
 					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
-					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
-			
+					<button id="editButton-{{$answer->id_answer}}" class="btn btn-secondary btn-sm mx-2 text-center" onclick="editAnswer({{$answer->id_answer}}, {{$answer->post->text_body}})">Edit</button>
+
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
-						{{-- csfr_field() --}}
+						{{ csrf_field() }}
 						@method('DELETE')
 						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
@@ -87,16 +90,18 @@
 			</div>
 		</div>
 		@endforeach
-
+		
 		<form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
+			{{ csrf_field() }}
 			<h2 class="space" id="your-answer-header">
 				Your Answer
 			</h2>
-			<textarea class="form-control" aria-label="Add answe" placeholder="Add answer" rows="8"></textarea>
+			<input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
+			<textarea class="form-control" name="text_body" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
 			<div class="form-submit clear-both d-flex flex-row">
-				<button id="submit-button" class="btn btn-outline-secondary" type="submit">
+				<button id="submit-button" class="btn btn-secondary btn-sm mx-2 text-center" type="submit">
 					Post Your Answer </button>
-				<button class="btn btn-outline-secondary">
+				<button class="btn btn-secondary btn-sm mx-2 text-center">
 					Discard
 				</button>
 			</div>

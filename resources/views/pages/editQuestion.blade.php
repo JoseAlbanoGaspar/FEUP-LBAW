@@ -12,8 +12,9 @@
         @method('PATCH')
 
         <!-- ID FALTA AINDA-->
-        <input id="id_user" type="hidden" value="id" name="id_user">
-
+        <input type="hidden" value="{{ $post->id_post }}" name="id_post">
+        <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
+        
         <!-- title input -->
         <div class="form-outline mb-4">
         <input type="text" name="title" class="form-control" value="{{$post->question->title}}" autofocus/>
@@ -27,7 +28,7 @@
 
         <!-- text body input -->
         <div class="form-outline mb-4">
-        <textarea name="text_body" class="form-control" value="{{$post->text_body}}" rows="10"></textarea>
+        <textarea name="text_body" class="form-control" rows="10">{{$post->text_body}}</textarea>
         <label class="form-label" for="text_body">Question body</label>
         </div>
         @if ($errors->has('text_body'))
@@ -38,7 +39,11 @@
 
         <!-- Tags -->
         <div class="form-outline mb-4">
+        @if($post->question->tags->contains(0))
         <input type="text" name="tag1" class="form-control" value="{{$post->question->tags[0]->name}}"/>
+        @else
+        <input type="text" name="tag1" class="form-control"/>
+        @endif
         <label class="form-label" for="tag1">Tag 1</label>
         </div>
         @if ($errors->has('tag1'))
@@ -48,7 +53,7 @@
         @endif
 
         <div class="form-outline mb-4">
-        @if(count($post->question->tags)>1)
+        @if($post->question->tags->contains(1))
         <input type="text" name="tag2" class="form-control" value="{{$post->question->tags[1]->name}}"/>
         @else
         <input type="text" name="tag2" class="form-control"/>
@@ -62,7 +67,7 @@
         @endif
 
         <div class="form-outline mb-4">
-        @if(count($post->question->tags)>2)
+        @if($post->question->tags->contains(2))
         <input type="text" name="tag3" class="form-control" value="{{$post->question->tags[2]->name}}"/>
         @else
         <input type="text" name="tag3" class="form-control"/>
@@ -76,7 +81,7 @@
         @endif
 
         <div class="form-outline mb-4">
-        @if(count($post->question->tags)>3)
+        @if($post->question->tags->contains(3))
         <input type="text" name="tag4" class="form-control" value="{{$post->question->tags[3]->name}}"/>
         @else
         <input type="text" name="tag4" class="form-control"/>

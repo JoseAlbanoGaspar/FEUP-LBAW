@@ -408,7 +408,25 @@ function addApplySearchOptionEventListener(filters, order, sort) {
     }
 }
 
-
+function editAnswer(id, text){
+							
+    edit_field = document.createElement("div");
+    edit_field.innerHTML = `				
+    <form method="PATCH" action="posts/edit" enctype="multipart/form-data">
+        <input type="hidden" value="${id}" name="id_post">
+        <textarea class="form-control" name="text_body" aria-label="Edit answer" rows="8">${text}</textarea>
+        <button id="submit-button" class="btn btn-secondary btn-sm mx-2 text-center" type="submit">
+            Post Your Answer </button>
+        <button class="btn btn-secondary btn-sm mx-2 text-center">
+            Discard
+        </button>
+    </form>`;
+    toBeDeleted = document.getElementById(`answer-content-${id}`);
+    document.body.insertBefore(edit_field, toBeDeleted);
+    toBeDeleted.remove();
+    document.getElementById(`editButton-${id}`).innerHTML = `Submit`;
+    
+}
 
 highlightSidenav();
 addEventListeners();

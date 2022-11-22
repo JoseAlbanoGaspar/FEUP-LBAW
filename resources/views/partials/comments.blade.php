@@ -14,10 +14,11 @@
         @endforeach
     </ul>
     <form id="post-comment-form" action="/questions/{{$post->id_post}}/comment/submit" method="post" class="d-inline">
+        {{ csrf_field() }}
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add comment" aria-label="Add comment" aria-describedby="basic-addon2">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button">Submit</button>
+              <button class="btn btn-secondary btn-sm mx-2 text-center" type="button">Submit</button>
             </div>
         </div>
     </form>

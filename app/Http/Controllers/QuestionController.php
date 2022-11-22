@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use Carbon\Carbon;
 use App\Models\Post;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Tag;
 
 class QuestionController extends PostController
 {
@@ -26,25 +28,61 @@ class QuestionController extends PostController
         return view('pages.question', ['post' => $post, 'answers' => $answers]);
     }
 
-    public function postAnswer(Request $request, $id)
-    {
-        $question = Post::find($id);
-
-        //adicionar resposta
-
-
-    }
-
     public function getAskForm()
     {
         return view('pages.askForm');
     }
 
+    public function postAnswer(Request $request, $id)
+    {
+        $data = $request->all();
+        Post::create([
+            'id_author' => $data['id_author'],
+            'date' => Carbon::now()->format('Y'),
+            'text_body' => $data['text_body']
+        ]);
+
+        $new_id = DB::table('post')->latest('id_post')->first()->id_post;
+        
+        Answer::create([
+            'id_answer' => $new_id,
+            'id_question' => $id,
+            'is_solution' => '0',
+            'score' => 0
+        ]);
+
+        return redirect()->route('question',['id_question' => $id]);
+
+    }
+    
     public function postQuestion(Request $request)
     {
-        //adicionar pergunta
+        $data = $request->all();
+        Post::create([
+            'id_author' => $data['id_author'],
+            'date' => Carbon::now()->format('Y'),
+            'text_body' => $data['text_body']
+        ]);
 
+        $new_id = DB::table('post')->latest('id_post')->first()->id_post;
+            
+        Question::create([
+            'id_question' => $new_id,
+            'title' => $data['title']
+        ]);
+        
+        $question = Question::find($new_id);
 
+        for ($i=1; $i < 5; $i++) { 
+            if($data['tag'.$i] != NULL) {
+                $tag = Tag::where('name',$data['tag'.$i])->first();
+                if($tag == NULL) Tag::create(['name' => $data['tag'.$i]]);
+                $question->tags[$i-1] = $tag;
+            }
+        }
+        $question->save();
+
+        return redirect()->route('question',['id_question' => $new_id]);
     }
 }
 
