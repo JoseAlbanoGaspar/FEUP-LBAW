@@ -26,7 +26,11 @@
 
     <div class="user-profile-about">
     <h3>About:</h3>
-    <p class="fs-5">{{ $user->personal_text }}</p>
+    @if(empty($user->personal_text))
+        <p class="fs-5">No personal text found!</p>
+    @else
+        <p class="fs-5">{{ $user->personal_text }}</p>
+    @endif
     </div>
 
 
