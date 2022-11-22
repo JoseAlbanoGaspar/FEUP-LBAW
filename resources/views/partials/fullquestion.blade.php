@@ -63,7 +63,7 @@
 
 			<div class="flex--item m-2 w-100">
 
-				<p id='post-text-body' class="p-3">{{$answer->post->text_body}}</p>
+				<p id='post-text-body' class="p-3 pedit-{{$answer->id_answer}}">{{$answer->post->text_body}}</p>
 
 				<div class="d-flex flex-row fw-wrap p-2">
 					<small>
@@ -71,7 +71,7 @@
 					</small>
 
 					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
-					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+					<a role="button" onclick="editAnswer({{$answer->id_answer}})" class="btn btn-secondary btn-sm mx-2 text-center">Edit</a>
 
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>

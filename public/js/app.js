@@ -464,7 +464,16 @@ function adminMode(){
 
 }
 
-
+function editAnswer(id){
+    let classname = '.pedit-' + id;
+    
+    let p = document.querySelector(classname);
+    let text = p.textContent;
+    let form = document.createElement('div');
+    form.innerHTML = 
+    "<form method='POST' action=''><textarea name=''>" + text + "</textarea><button type='submit'>Edit</button></form>";
+    console.log(form);
+}
 
 highlightSidenav();
 addEventListeners();
