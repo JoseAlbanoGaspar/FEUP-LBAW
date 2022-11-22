@@ -71,7 +71,7 @@
 					</small>
 
 					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
-					<a role="button" onclick="editAnswer({{$answer->id_answer}})" class="btn btn-secondary btn-sm mx-2 text-center">Edit</a>
+					<a role="button" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})" class="btn btn-secondary btn-sm mx-2 text-center">Edit</a>
 
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>

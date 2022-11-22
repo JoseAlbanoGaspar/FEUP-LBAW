@@ -249,7 +249,21 @@ class PostController extends Controller
     }
 
     public function update(Request $request){
-        //dar update
+        $post = Post::find($request->id_post);
+        
+        $validator = Validator::make($request->all(),[
+            'text_body' => 'max:511'
+        ]);
+        
+        if($validator->fails()){
+            return redirect()->route('home')->withInput()->withErrors($validator);
+          }
+
+        $post->text_body = $request->text_body;
+        $post->date = new DateTime;
+
+        $post->save();
+        return redirect()->route('question',['id_question' => $request->id_question]);
     }
 
     public function delete(Request $request){
