@@ -6,8 +6,10 @@ info:
   description: 'Web Resources Specification (A7) for LBAW2214'
 
 servers:
-- url: http://localhost:8000 #TODO voltar a pôr lbaw2214
+- url: http://localhost:8000
   description: Local dev server
+- url: http://lbaw2214.lbaw.fe.up.pt
+  description: Production server
 
 externalDocs:
   description: Find more info here.
