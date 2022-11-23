@@ -91,7 +91,7 @@ CREATE TABLE answer (
                                     REFERENCES post(id_post) ON DELETE CASCADE,
                             CONSTRAINT FK_QUESTION
                                 FOREIGN KEY(id_question)
-                                    REFERENCES question(id_question)
+                                    REFERENCES question(id_question) ON DELETE CASCADE
 );
 
 
@@ -103,9 +103,9 @@ CREATE TABLE comment (
             FOREIGN KEY(id_comment)
                 REFERENCES post(id_post) ON DELETE CASCADE,
         FOREIGN KEY(id_question)
-            REFERENCES question(id_question),
+            REFERENCES question(id_question) ON DELETE CASCADE,
         FOREIGN KEY(id_answer)
-            REFERENCES answer(id_answer),
+            REFERENCES answer(id_answer) ON DELETE CASCADE,
          CONSTRAINT COMMENT_BELONGS_TO_ONE_POST
                      CHECK ((id_question is NULL) != (id_answer is NULL))
 );
@@ -299,7 +299,7 @@ CREATE TABLE report (
 	    UNIQUE (id_user, id_post),
     CONSTRAINT FK_POST
         FOREIGN KEY(id_post)
-            REFERENCES post(id_post),
+            REFERENCES post(id_post) ON DELETE CASCADE,
     CONSTRAINT FK_USER
         FOREIGN KEY(id_user)
             REFERENCES users(id_user)
@@ -317,7 +317,7 @@ CREATE TABLE edit (
 	    UNIQUE (id_user, id_post, date),
     CONSTRAINT FK_ANSWER
         FOREIGN KEY(id_post)
-            REFERENCES post(id_post),
+            REFERENCES post(id_post) ON DELETE CASCADE,
     CONSTRAINT FK_USER
         FOREIGN KEY(id_user)
             REFERENCES users(id_user)

@@ -321,16 +321,16 @@ function editAnswer(id, pgid) {
     let text = p.textContent;
     let form = document.createElement('div');
     form.innerHTML =
-        "<form method='POST' action='/../posts/edit'><input type='hidden' name='_token' value='" + csfr + "'><input value=" + pgid + " name='id_question' type='hidden'/><input value=" + id + " name='id_post' type='hidden'/><textarea id='text-area' name='text_body'>" + text + "</textarea><button id='edit-post-button' type='submit'>Edit</button></form><a role='button' class='btn btn-secondary btn-sm mx-2 text-center' href='" + pgid + "'>Cancel</a>";
+        "<form method='POST' action='/../posts/edit'><input type='hidden' name='_token' value='" + csfr + "'><input value=" + pgid + " name='id_question' type='hidden'/><input value=" + id + " name='id_post' type='hidden'/><textarea id='text-area' name='text_body'>" + text + "</textarea><button class='edit-post-button' type='submit'>Edit</button></form><a role='button' class='btn btn-secondary btn-sm mx-2 text-center' href='" + pgid + "'>Cancel</a>";
     console.log(form);
     p.parentNode.insertBefore(form, p);
-    let edit = p.nextElementSibling.firstElementChild.nextElementSibling;
-    let deleted = edit.nextElementSibling;
-    console.log(edit);
+    let editButton = document.querySelector('#edit-answer-button-' + id);
+    let deleted = editButton.nextElementSibling;
     console.log(deleted);
-    edit.parentNode.removeChild(edit);
-    deleted.parentNode.removeChild(deleted);
-    p.parentNode.removeChild(p);
+    console.log(editButton);
+    editButton.remove();
+    deleted.remove();
+    p.remove();
 }
 
 /*

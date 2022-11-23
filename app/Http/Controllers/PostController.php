@@ -314,7 +314,7 @@ class PostController extends Controller
         return view('pages.editQuestion', ['post' => $post]);
     }
 
-    public function update(Request $request){
+    public function updateAnswer(Request $request){
         $post = Post::find($request->id_post);
 
         $validator = Validator::make($request->all(),[
@@ -331,8 +331,14 @@ class PostController extends Controller
         return redirect(route('question',['id_question' => $request->id_question]).'#answerid-'.$request->id_post);
     }
 
+
     public function delete(Request $request){
         $post = Post::find($request->id_post);
+        if($post->answer){
+            $id_question = $post->answer->id_question;
+            $post->delete();
+            return redirect()->route('question',['id_question' => $id_question]);
+        }
         /*if($post->comment()) $post->comment->delete();
         else if ($post->answer()) {
             $post->answer->deleteComments();
@@ -346,12 +352,14 @@ class PostController extends Controller
         return redirect()->route('allQuestions');
     }
 
-    /*
-
     public function update(Request $request){
 
         $data = $request->all();
         $post = Post::find($data['id_post']);
+        if($post->answer){
+            return $this->updateAnswer($request);
+        }
+
         $question = Question::find($post->question->id_question);
 
         Log::info($data);
@@ -395,7 +403,5 @@ class PostController extends Controller
         //return redirect()->route('updatePostForm',['id_post' => $data['id_post']]);
     }
 
-
-     */
 }
 

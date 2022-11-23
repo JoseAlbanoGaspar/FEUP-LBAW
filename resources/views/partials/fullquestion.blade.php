@@ -53,7 +53,8 @@
 					</div>
 				</div>
 
-				<div class="d-flex align-items-center">
+                @if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
+                <div class="d-flex align-items-center">
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
@@ -64,6 +65,7 @@
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
 				</div>
+                @endif
 
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
@@ -106,11 +108,11 @@
 				</div>
 
 
-				<div class="d-flex flex-row">
-					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
-					<a role="button" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+                @if(Auth::check() && (Auth::user()->id_user === $answer->post->id_author || Auth::user()->administrator || Auth::user()->moderator))
+                <div class="d-flex flex-row">
+					<a role="button" id="edit-answer-button-{{$answer->id_answer}}" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})"
+                       class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
-					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
 						{{ csrf_field() }}
 						@method('DELETE')
@@ -118,6 +120,7 @@
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
 				</div>
+                @endif
 
 
 				@include('partials.comments', ['comments' => $answer->comments])
@@ -125,13 +128,14 @@
 		</div>
 		@endforeach
 
-		<form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
+        @auth
+            <form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
             {{ csrf_field() }}
             <h3 id="your-answer-header" class="space mb-3">
 				Your Answer
 			</h3>
             <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
-            <textarea class="form-control" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
+            <textarea name="text_body" class="form-control" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
 			<div class="form-submit clear-both d-flex flex-row justify-content-end mt-3">
 				<button id="submit-button" class="btn btn-outline-secondary" type="submit">
 					Post Your Answer </button>
@@ -140,5 +144,6 @@
 				</button>
 			</div>
 		</form>
+            @endauth
 	</div>
 </div>

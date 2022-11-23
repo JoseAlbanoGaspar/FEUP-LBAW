@@ -31,6 +31,18 @@ class QuestionController extends PostController
 
     public function postAnswer(Request $request, $id)
     {
+//        $this->authorize('postAnswer', [Answer::Class, Question::find($id)]);
+
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+        $post = Post::find($id);
+        $id_user = Auth::id();
+
+        if($id_user == $post->id_author){
+            return redirect()->route('question', ['id_question' => $id]);
+        }
+
         $data = $request->all();
         Post::create([
             'id_author' => $data['id_author'],

@@ -7,14 +7,14 @@
 <div class="container-sm m-5 d-flex justify-content-center">
     <div style="width: 30rem;">
 
-    <form method="POST" action="{{ route('updatePost') }}" enctype="multipart/form-data">
+    <form method="post" action="{{ route('updatePost') }}" enctype="multipart/form-data">
+{{--        @method('patch')--}}
         {{ csrf_field() }}
-        @method('PATCH')
 
         <!-- ID FALTA AINDA-->
         <input type="hidden" value="{{ $post->id_post }}" name="id_post">
         <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
-        
+
         <!-- title input -->
         <div class="form-outline mb-4">
         <input type="text" name="title" class="form-control" value="{{$post->question->title}}" autofocus/>
