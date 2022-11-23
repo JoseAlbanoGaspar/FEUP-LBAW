@@ -86,7 +86,12 @@
 		</script>
 		@foreach ($answers as $answer)
 		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row mb-3">
-			<div class="flex--item">
+			<div class="d-flex flex-column align-items-center">
+
+				@if($answer->is_solution)
+					<h5> <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question onwer accepted this as the best answer" class="text-center"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+				@endif
+
 				@include('partials.voteButton', ['post' => $answer])
 			</div>
 
