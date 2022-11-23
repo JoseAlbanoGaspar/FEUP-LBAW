@@ -11,7 +11,7 @@
 	{{--A bar that includes the post date, the edit date and the number of answers--}}
 	<div class="d-flex flex-row align-items-center justify-content-start">
 		<time class="p-2">Posted {{timeElapsedString($post->date)}}</time>
-		<time class="p-2">Edited TODO</time>
+		{{--<time class="p-2">Edited TODO</time>--}}
 		<span class="p-2">{{sizeof($answers)}} answers</span>
 	</div>
 </div>
