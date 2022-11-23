@@ -187,7 +187,7 @@ paths:
   /users/edit:
     patch:
       operationId: R108
-      summary: 'R108: edit action'
+      summary: 'R108: Edit profile'
       description: 'Submit user profile changes. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -251,10 +251,10 @@ paths:
         '200':
           description: 'Ok.'
 
-  /users/{id}/myquestions:
+  /users/{id}/myQuestions:
     get:
       operationId: R110
-      summary: 'R110: View questions from a user'
+      summary: 'R110: View all questions from a user'
       description: 'Show the questions of the user with id = {id}. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -271,10 +271,10 @@ paths:
           description: 'Ok. Show questions from a user'
 
 
-  /users/{id}/myanswers:
+  /users/{id}/myAnswers:
     get:
       operationId: R111
-      summary: 'R111: View answers from a user'
+      summary: 'R111: View all answers from a user'
       description: 'Show the answers of the user with id = {id}. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -418,7 +418,7 @@ paths:
                   description: 'Failed posting. Redirect to ask question page.'
                   value: '/questions/ask'
 
-  /search/?query={query}&filters={filters}&sort={sort}&order={order}:
+  /search?query={query}&filters={filters}&sort={sort}&order={order}:
     get:
       operationId: R206
       summary: 'R206: Get search for posts'
@@ -533,7 +533,7 @@ paths:
       tags:
         - 'M03: Users'
       responses:
-        '302':
+        '308':
           description: 'Redirect immediately to the homepage.'
           headers:
             Location:
@@ -571,7 +571,7 @@ paths:
           description: 'Ok. Show Personal Feed'
 
 
-  /search_users/{query}:
+  /search_users?query={query}&page={page}:
     get:
       operationId: R304
       summary: 'R304: Shows the user search bar or display the search results.'
@@ -584,6 +584,11 @@ paths:
           name: query
           schema:
             type: string
+          required: false
+        - in: path
+          name: page
+          schema:
+            type: integer
           required: false
 
       responses:
@@ -598,20 +603,17 @@ paths:
       tags:
         - 'M03: Users'
 
-      parameters: #search bar auto preenchida com base no url??
+      parameters: 
         - in: path
           name: query
           schema:
             type: string
           required: false
-
-      requestBody:
-        required: true
-        content:
-          text/plain:
-            schema:
-              type: string  #syntax correta? não tem de levar nome?
-
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: false
 
       responses:
         '302':
@@ -623,18 +625,31 @@ paths:
               examples:
                 302Success:
                   description: 'Successful search. Redirect search results.'
-                  value: '/search_users/{query}'
+                  value: '/search_users?query={query}&page={page}'
                 302Failure:
                   description: 'Failed to process the search. Redirect to user search.'
                   value: '/search_users'
 
+  /admin: 
+    get:
+      operationId: R401
+      summary: 'R401: Renders the admin page.'
+      description: 'Page with user administration and tag management. ACCESS: ADM'
+      tags:
+        - 'M04: User Administration'
+
+      responses:
+          '200':
+            description: 'Ok. Show user search page.'
+
+
   /admin/tags:
     post:
-      operationId: R401
-      summary: 'R401: Create tag'
+      operationId: R402
+      summary: 'R402: Create tag'
       description: 'Create new tag. Access: ADM'
       tags:
-        - 'M04: User Administration and Static pages'
+        - 'M04: User Administration'
 
       requestBody:
         required: true
@@ -649,14 +664,26 @@ paths:
                 - tag
 
       responses:
-        '200':
-          description: 'Ok.'
+        '302':
+          description: 'Redirect after create tag.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully created tag.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to create tag.'
+                  value: '/admin'
+
     delete:
-      operationId: R402
-      summary: 'R402: Delete tag'
+      operationId: R403
+      summary: 'R403: Delete tag'
       description: 'Delete tag. Access: ADM'
       tags:
-        - 'M04: User Administration and Static pages'
+        - 'M04: User Administration'
 
       requestBody:
         required: true
@@ -671,19 +698,102 @@ paths:
                 - tag_id
 
       responses:
-        '200':
-          description: 'Ok.'
+        '302':
+          description: 'Redirect after create tag.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully deleted tag.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to delete tag.'
+                  value: '/admin'
 
-  /admin/reported:
-    get:
-      operationId: R403
-      summary: 'R403: Get all reported posts'
-      description: 'Get all reported posts. Access: MOD, ADM'
+  /admin/createUser:
+    post:
+      operationId: R404
+      summary: 'R404: Create user'
+      description: 'Create new user. Access: ADM'
       tags:
-        - 'M04: User Administration and Static pages'
+        - 'M04: User Administration'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                profile_picture:
+                  type: string
+                  format: binary
+                personal_text:
+                  type: string
+                password_check:
+                  type: string
+              required:
+                - email
+                - username
+                - password
+                - password_check
 
       responses:
-        '200':
-          description: 'Ok.'
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Create user sucessful.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to create a new user'
+                  value: '/admin'
 
+
+  /admin/makeAdmin:
+    post:
+      operationId: R405
+      summary: 'R405: Make admin'
+      description: 'Promote a user so he has admin acess. Access: ADM'
+      tags:
+        - 'M04: User Administration'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+              required:
+                - user_id
+
+      responses:
+        '302':
+          description: 'Redirect after processing the make admin request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'The user is now an admin.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to promote to admin.'
+                  value: '/admin'
 
