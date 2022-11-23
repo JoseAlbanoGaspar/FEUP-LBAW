@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -256,14 +258,14 @@ class PostController extends Controller
         ]);
         
         if($validator->fails()){
-            return redirect()->route('home')->withInput()->withErrors($validator);
-          }
+            return redirect()->route('question',['id_question' => $request->id_question]);
+        }
 
         $post->text_body = $request->text_body;
         $post->date = new DateTime;
-
+        
         $post->save();
-        return redirect()->route('question',['id_question' => $request->id_question]);
+        return redirect(route('question',['id_question' => $request->id_question]).'#answerid-'.$request->id_post);
     }
 
     public function delete(Request $request){
