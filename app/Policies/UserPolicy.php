@@ -3,12 +3,12 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Card;
+
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Auth;
 
-class CardPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -29,7 +29,14 @@ class CardPolicy
       // Any user can create a new card
       return Auth::check();
     }
-
+    public function isAdministrator(User $user){
+      return count($user->administrator()->get());
+    }
+    public function editProfile(User $auth,User $user){
+      //Users can only edit their own profiles or admin
+      
+      return (Auth::check() && $user->id_user == Auth::id()) || count(Auth::user()->administrator()->get());
+    }
     public function delete(User $user, Card $card)
     {
       // Only a card owner can delete it

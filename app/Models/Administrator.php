@@ -29,6 +29,10 @@ class Administrator extends Model
 		'id_admin' => 'int'
 	];
 
+	protected $fillable = [
+		'id_admin'
+	];
+
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_admin')

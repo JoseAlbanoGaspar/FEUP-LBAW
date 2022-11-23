@@ -41,6 +41,7 @@ class Answer extends Model
 	];
 
 	protected $fillable = [
+		'id_answer',
 		'id_question',
 		'is_solution',
 		'score'
@@ -83,5 +84,22 @@ class Answer extends Model
 	public function answer_votes()
 	{
 		return $this->hasMany(AnswerVote::class, 'id_answer');
+	}
+
+	public function score()
+	{
+		$votes = $this->answer_votes();
+		$sum = 0;
+		foreach ($votes as $vote) {
+			$sum += $vote->score;
+    	}
+		return $sum;
+	}
+
+	public function deleteComments()
+	{
+		foreach ($this->comments as $comment) {
+			$comment->delete();
+		}
 	}
 }

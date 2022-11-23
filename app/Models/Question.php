@@ -37,6 +37,7 @@ class Question extends Model
 	];
 
 	protected $fillable = [
+		'id_question',
 		'title',
 		'score'
 	];
@@ -71,5 +72,30 @@ class Question extends Model
 	public function question_votes()
 	{
 		return $this->hasMany(QuestionVote::class, 'id_question');
+	}
+
+	public function score()
+	{
+		$votes = $this->question_votes()->get();
+		$sum = 0;
+		foreach ($votes as $vote) {
+			$sum += $vote->score;
+    	}
+		return $sum;
+	}
+
+	public function deleteComments()
+	{
+		foreach ($this->comments as $comment) {
+			$comment->delete();
+		}
+	}
+
+	public function deleteAnswers()
+	{
+		foreach ($this->answers as $answer) {
+			$answer->deleteComments();
+			$answer->delete();
+		}
 	}
 }
