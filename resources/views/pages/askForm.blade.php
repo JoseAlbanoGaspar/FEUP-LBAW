@@ -11,9 +11,9 @@
         {{ csrf_field() }}
         @method('POST')
 
-        <!-- ID FALTA AINDA-->
-        <input id="id_user" type="hidden" value="id" name="id_user">
-
+        <!-- ID -->
+        <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
+        
         <!-- title input -->
         <div class="form-outline mb-4">
         <input type="text" name="title" class="form-control" required autofocus/>
@@ -79,7 +79,7 @@
 
         <!-- Submit and Go Back button -->
         <div class = "m-4 mx-5 d-flex justify-content-between">
-          @include('partials.go-back-button')
+          @include('partials.goBackButton')
           <button type="submit" class="btn btn-primary btn-block">Ask</button>
         </div>
 

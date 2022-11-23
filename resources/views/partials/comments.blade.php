@@ -1,5 +1,5 @@
 <div id="comments" class="comments bt bc-black-075 mt12 ">
-    <ul class="comments-list">      
+    <ul class="comments-list">
         @foreach ($comments as $comment)
         <li class="comment p-2 border-bottom">
             <span class="comment-body">{{ $comment->post->text_body}}</span>

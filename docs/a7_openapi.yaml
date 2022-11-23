@@ -6,7 +6,7 @@ info:
   description: 'Web Resources Specification (A7) for LBAW2214'
 
 servers:
-- url: http://localhost:8000
+- url: https://localhost:8000
   description: Local dev server
 - url: http://lbaw2214.lbaw.fe.up.pt
   description: Production server
@@ -230,30 +230,7 @@ paths:
                   description: 'Failed edition. Redirect to edit form.'
                   value: '/users/{id}/edit'
 
-    delete:
-      operationId: R109
-      summary: 'R109: Delete user action'
-      description: 'Delete user option. Access: OWN, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-              required:
-                - user_id
-
-      responses:
-        '200':
-          description: 'Ok.'
-
-  /users/{id}/myQuestions:
+  /users/{id}/questions:
     get:
       operationId: R110
       summary: 'R110: View all questions from a user'
@@ -273,7 +250,7 @@ paths:
           description: 'Ok. Show questions from a user'
 
 
-  /users/{id}/myAnswers:
+  /users/{id}/answers:
     get:
       operationId: R111
       summary: 'R111: View all answers from a user'
@@ -605,7 +582,7 @@ paths:
       tags:
         - 'M03: Users'
 
-      parameters: 
+      parameters:
         - in: path
           name: query
           schema:
@@ -632,7 +609,7 @@ paths:
                   description: 'Failed to process the search. Redirect to user search.'
                   value: '/search_users'
 
-  /admin: 
+  /admin:
     get:
       operationId: R401
       summary: 'R401: Get the admin page.'

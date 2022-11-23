@@ -3,11 +3,11 @@
     include_once(app_path() . '/Includes/Utils.php');
 @endphp
 
-<div class="question-card card mx-5 my-2">
+<div class="questionCard card mx-5 my-2">
     <div class = "card-body d-flex justify-content-center p-3">
         <div class="question-stats col-2 d-flex justify-content-between flex-column py-4">
 
-            @include('partials.stats-score', ['score' => $post->question->score])
+            @include('partials.statsScore', ['score' => $post->question->score])
 
             <div class="question-stats-item">
                 <span class="question-stats-answers-number">{{count($post->question->answers)}}</span>
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class = "user-card col d-inline d-flex justify-content-end text-wrap">
-                    @include('partials.profile-card', ['user' => $post->user])
+                    @include('partials.profileCard', ['user' => $post->user])
 
                     <time class="user-card-time flex-shrink">
                         &nbsp;&nbsp;asked {{timeElapsedString($post->date)}}

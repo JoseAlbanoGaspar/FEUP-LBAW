@@ -71,7 +71,7 @@
 
         <!-- Submit and Go Back button -->
         <div class = "m-4 mx-5 d-flex justify-content-between">
-          @include('partials.go-back-button')
+          @include('partials.goBackButton')
           <button type="submit" class="btn btn-primary btn-block">Edit</button>
         </div>
 

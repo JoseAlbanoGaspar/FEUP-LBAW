@@ -27,8 +27,8 @@ Route::get('search', 'PostController@search')->name('search');
 Route::get('search_users', 'UserController@search')->name('searchUsers');
 
 Route::get('users/{id_user}','UserController@show')->name('users');
-Route::get('users/{id_user}/myQuestions','PostController@showQuestions')->name('myQuestions');
-Route::get('users/{id_user}/myAnswers','PostController@showAnswers')->name('myAnswers');
+Route::get('users/{id_user}/questions','PostController@showQuestions')->name('userQuestions');
+Route::get('users/{id_user}/answers','PostController@showAnswers')->name('userAnswers');
 Route::get('users/{id_user}/edit','UserController@getEditProfile')->middleware('auth')->name('editProfile');
 Route::patch('users/edit','UserController@update')->middleware('auth')->name('updateProfile');
 
@@ -46,14 +46,14 @@ Route::get('home','PostController@showTopQuestions')->name('home');
 
 // Questions
 Route::get('questions', 'PostController@showAllQuestions')->name('allQuestions');
-Route::get('questions/ask', 'QuestionController@getAskForm')->name('FormToAskQuestion');
+Route::get('questions/ask', 'QuestionController@getAskForm')->name('formToAskQuestion');
 Route::post('questions/ask', 'QuestionController@postQuestion')->name('postQuestion');
 Route::get('questions/{id_question}', 'QuestionController@show')->name('question');
 Route::post('questions/{id_question}/answer', 'QuestionController@postAnswer')->name('postAnswer');
 
 Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updatePostForm');
-Route::patch('posts/edit','PostController@update')->name('updatePost');
-Route::delete('post/edit','PostController@delete')->name('deletePost');
+Route::post('posts/edit','PostController@update')->middleware('auth')->name('updatePost');
+Route::delete('post/edit','PostController@delete')->middleware('auth')->name('deletePost');
 
 
 

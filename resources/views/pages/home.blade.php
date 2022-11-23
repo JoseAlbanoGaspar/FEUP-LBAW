@@ -7,7 +7,7 @@
     <h2 class="my-4 mx-5"> Top Questions:</h2>
     @if((count($posts) > 0))
         <section id="search_results">
-            @each('partials.post_listing', $posts, 'post_listing')
+            @each('partials.postListing', $posts, 'postListing')
         </section>
 
         @if ($posts->links()->paginator->hasPages())

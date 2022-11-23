@@ -51,7 +51,8 @@ class User extends Authenticatable
 		'email',
 		'password',
 		'profile_picture',
-		'personal_text'
+		'personal_text',
+        'blocked'
 	];
 
 	public function administrator()

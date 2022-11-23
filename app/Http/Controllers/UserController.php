@@ -13,23 +13,26 @@ use App\Models\Moderator;
 
 class UserController extends Controller
 {
-    public function post_score($posts){
-      $up_post = 0;
-      $down_post = 0;
+    /**
+     * Get the number of upvotes and downvotes a user given to posts
+     * @param $posts
+     * @return array|int[]
+     */
+    public function postScore($posts){
+      $upPost = 0;
+      $downPost = 0;
 
       foreach($posts as $vote){
-        if($vote->score == -1) $up_post = $up_post + 1;
-        if($vote->score == 1) $down_post = $down_post + 1;
+        if($vote->score == 1) $upPost = $upPost + 1;
+        if($vote->score == -1) $downPost = $downPost + 1;
       }
 
-      $post_score = ['up' => $up_post,'down' => $down_post];
-      return $post_score;
+        return ['up' => $upPost,'down' => $downPost];
     }
     /**
      * Shows the user for a given id.
-     *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show($id)
     {
@@ -38,20 +41,30 @@ class UserController extends Controller
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
 
-      $question_votes = $this->post_score($user->question_votes()->get());
-      $answer_votes = $this->post_score($user->answer_votes()->get());
-
-
+      $question_votes = $this->postScore($user->question_votes()->get());
+      $answer_votes = $this->postScore($user->answer_votes()->get());
 
       return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes]);
     }
 
+    /**
+     * Get the page to edit a user
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function getEditProfile($id){
       $user = User::find($id);
       $this->authorize('editProfile',$user);
       return view('pages.edit', ['user' => $user]);
     }
 
+    /**
+     * Update user information
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update(Request $request){
       $user = User::find($request->id_user);
 
@@ -88,6 +101,11 @@ class UserController extends Controller
     }
 
 
+    /**
+     * Search for users and return a view with the results
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function search(Request $request){
         $query = $request->query('query');
         $users = User::query()
@@ -96,6 +114,12 @@ class UserController extends Controller
             ->simplePaginate(10);
         return view('pages.searchUsers', ['users' => $users, 'query' => $query]);
     }
+
+    /**
+     * Search for users and return a rendered view with the results for AJAX
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchApi(Request $request){
         $query = $request->input('query');
         $page = $request->input('page');
@@ -110,7 +134,7 @@ class UserController extends Controller
             ->orderBy('username', 'ASC')
             ->simplePaginate(10, ['*'], 'page', $page);
 
-        $returnHTML = view('pages.searchUsersResults', ['users' => $users, 'query' => $query])->render();
+        $returnHTML = view('pages.searchUsers', ['users' => $users, 'query' => $query])->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
     }
     /**
