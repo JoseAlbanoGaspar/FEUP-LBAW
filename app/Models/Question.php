@@ -37,6 +37,7 @@ class Question extends Model
 	];
 
 	protected $fillable = [
+		'id_question',
 		'title',
 		'score'
 	];
@@ -79,5 +80,20 @@ class Question extends Model
 			$sum += $vote->score;
     	}
 		return $sum;
+	}
+
+	public function deleteComments()
+	{
+		foreach ($this->comments as $comment) {
+			$comment->delete();
+		}
+	}
+
+	public function deleteAnswers()
+	{
+		foreach ($this->answers as $answer) {
+			$answer->deleteComments();
+			$answer->delete();
+		}
 	}
 }

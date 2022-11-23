@@ -58,7 +58,7 @@
 
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
-						{{-- csfr_field() --}}
+						{{ csrf_field() }}
 						@method('DELETE')
 						<input type="hidden" value="{{ $post->id_post }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
@@ -78,7 +78,10 @@
 				<span itemprop="answerCount">{{count($answers)}}</span> Answers
 			</h3>
 		</div>
-
+		<script>
+			let text = 0;
+			let edit_field = 0;
+		</script>
 		@foreach ($answers as $answer)
 		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row mb-3">
 			<div class="flex--item">
@@ -109,7 +112,7 @@
 
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
-						{{-- csfr_field() --}}
+						{{ csrf_field() }}
 						@method('DELETE')
 						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
@@ -123,12 +126,12 @@
 		@endforeach
 
 		<form method="POST" action="{{ route('postAnswer',['id_question' => $post->id_post]) }}" enctype="multipart/form-data">
-
-			<h3 id="your-answer-header" class="mb-3">
+            {{ csrf_field() }}
+            <h3 id="your-answer-header" class="space mb-3">
 				Your Answer
 			</h3>
-
-			<textarea class="form-control" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
+            <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
+            <textarea class="form-control" aria-label="Add answer" placeholder="Add answer" rows="8"></textarea>
 			<div class="form-submit clear-both d-flex flex-row justify-content-end mt-3">
 				<button id="submit-button" class="btn btn-outline-secondary" type="submit">
 					Post Your Answer </button>

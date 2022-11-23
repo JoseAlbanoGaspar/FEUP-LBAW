@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -322,7 +324,6 @@ class PostController extends Controller
         if($validator->fails()){
             return redirect()->route('question',['id_question' => $request->id_question]);
         }
-
         $post->text_body = $request->text_body;
         $post->date = new DateTime;
 
@@ -330,11 +331,71 @@ class PostController extends Controller
         return redirect(route('question',['id_question' => $request->id_question]).'#answerid-'.$request->id_post);
     }
 
-    public function delete(Request $request)
-    {
-        //remover
+    public function delete(Request $request){
+        $post = Post::find($request->id_post);
+        /*if($post->comment()) $post->comment->delete();
+        else if ($post->answer()) {
+            $post->answer->deleteComments();
+            $post->answer->delete();
+        } else if ($post->question()) {
+            $post->question->deleteAnswers();
+            $post->question->deleteComments();
+            $post->question->delete();
+        }*/
+        $post->delete();
+        return redirect()->route('allQuestions');
+    }
+
+    /*
+
+    public function update(Request $request){
+
+        $data = $request->all();
+        $post = Post::find($data['id_post']);
+        $question = Question::find($post->question->id_question);
+
+        Log::info($data);
+        //Log::info($post);
+        //authorize the edition!!! -> Uncomment after implemented loggin
+        //$this->authorize('editProfile',$request->id_user);
+        //validate results
+        $validator = Validator::make($request->all(),[
+            'text_body' => 'nullable|max:8192',
+            'title' => 'nullable|max:256',
+        ]);
+
+        if($validator->fails()){
+          return redirect()->route('updatePostForm',['id_post' => $data['id_post']])->withInput()->withErrors($validator);
+        }
+
+        //updating...
+        if($data['text_body'] != NULL) $post->text_body = $data['text_body'];
+        if($data['title'] != NULL) $question->title = $data['title'];
+        for ($i=1; $i < 5; $i++) {
+            if($data['tag'.$i] != NULL) {
+                $tag = Tag::where('name',$data['tag'.$i])->first();
+                if($tag == NULL) {
+                    Tag::create(['name' => $data['tag'.$i]]);
+                    $new_id = DB::table('tag')->latest('id_tag')->first()->id_tag;
+                    $tag = Tag::find($new_id);
+                } else {
+                    $tag = Tag::find($tag->id_tag);
+                }
+                $question->tags[$i-1] = $tag;
+                $tag->save();
+                $question->save();
+            }
+        }
+
+
+        //store updated information
+        $post->save();
+        $question->save();
+        return redirect()->route('question',['id_question' => $data['id_post']]);
+        //return redirect()->route('updatePostForm',['id_post' => $data['id_post']]);
     }
 
 
+     */
 }
 

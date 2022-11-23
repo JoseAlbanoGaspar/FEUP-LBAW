@@ -313,19 +313,17 @@ function adminMode() {
         }
     }
 }
-function editAnswer(id,pgid){
-    let csfr =  document.querySelector('meta[name="csrf-token"]').content;
 
-
+function editAnswer(id, pgid) {
+    let csfr = document.querySelector('meta[name="csrf-token"]').content;
     let classname = '.pedit-' + id;
-
     let p = document.querySelector(classname);
     let text = p.textContent;
     let form = document.createElement('div');
     form.innerHTML =
-    "<form method='POST' action='/../posts/edit'><input type='hidden' name='_token' value='" + csfr+ "'><input value=" + pgid + " name='id_question' type='hidden'/><input value=" + id + " name='id_post' type='hidden'/><textarea id='text-area' name='text_body'>" + text + "</textarea><button id='edit-post-button' type='submit'>Edit</button></form><a role='button' class='btn btn-secondary btn-sm mx-2 text-center' href='" + pgid + "'>Cancel</a>";
+        "<form method='POST' action='/../posts/edit'><input type='hidden' name='_token' value='" + csfr + "'><input value=" + pgid + " name='id_question' type='hidden'/><input value=" + id + " name='id_post' type='hidden'/><textarea id='text-area' name='text_body'>" + text + "</textarea><button id='edit-post-button' type='submit'>Edit</button></form><a role='button' class='btn btn-secondary btn-sm mx-2 text-center' href='" + pgid + "'>Cancel</a>";
     console.log(form);
-    p.parentNode.insertBefore(form,p);
+    p.parentNode.insertBefore(form, p);
     let edit = p.nextElementSibling.firstElementChild.nextElementSibling;
     let deleted = edit.nextElementSibling;
     console.log(edit);
@@ -333,13 +331,9 @@ function editAnswer(id,pgid){
     edit.parentNode.removeChild(edit);
     deleted.parentNode.removeChild(deleted);
     p.parentNode.removeChild(p);
-
-    /*let editPostButton = document.querySelector('#edit-post-button');
-    if(editPostButton != null){
-        editPostButton.addEventListener('click', routeEditPost);
-    }*/
 }
 
+/*
 function routeEditPost(event){
     event.preventDefault();
     let textarea = document.querySelector('#text-area');
@@ -351,6 +345,26 @@ function routeEditPost(event){
         let response = JSON.parse(this.responseText);
         console.log(this.responseText);});
 }
+function altEditAnswer(id, text){
 
+    edit_field = document.createElement("div");
+    edit_field.innerHTML = `
+    <form method="PATCH" action="posts/edit" enctype="multipart/form-data">
+        <input type="hidden" value="${id}" name="id_post">
+        <textarea class="form-control" name="text_body" aria-label="Edit answer" rows="8">${text}</textarea>
+        <button id="submit-button" class="btn btn-secondary btn-sm mx-2 text-center" type="submit">
+            Post Your Answer </button>
+        <button class="btn btn-secondary btn-sm mx-2 text-center">
+            Discard
+        </button>
+    </form>`;
+    toBeDeleted = document.getElementById(`answer-content-${id}`);
+    document.body.insertBefore(edit_field, toBeDeleted);
+    toBeDeleted.remove();
+    document.getElementById(`editButton-${id}`).innerHTML = `Submit`;
+
+}
+
+ */
 highlightSidenav();
 addEventListeners();

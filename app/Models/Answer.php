@@ -41,6 +41,7 @@ class Answer extends Model
 	];
 
 	protected $fillable = [
+		'id_answer',
 		'id_question',
 		'is_solution',
 		'score'
@@ -89,5 +90,12 @@ class Answer extends Model
 			$sum += $vote->score;
     	}
 		return $sum;
+	}
+
+	public function deleteComments()
+	{
+		foreach ($this->comments as $comment) {
+			$comment->delete();
+		}
 	}
 }
