@@ -42,7 +42,7 @@
 
         @if ($posts->links()->paginator->hasPages())
             <div class="mt-4 p-4 box has-text-centered">
-                {{ $posts->links() }}
+                {{ $posts->withQueryString()->links() }}
             </div>
         @endif
     @else

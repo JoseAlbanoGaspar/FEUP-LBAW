@@ -34,7 +34,7 @@
 				<div class="d-flex flex-row justify-content-end py-1 p-2">
 					<small>
 						<div class = "user-card col d-inline d-flex justify-content-end">
-							@include('partials.profile-card', ['user' => $post->user])
+							@include('partials.profileCard', ['user' => $post->user])
 
 							<time class="user-card-time flex-shrink">
 								&nbsp;asked {{timeElapsedString($post->date)}}
@@ -93,7 +93,7 @@
 				<div class="d-flex flex-row justify-content-end py-1 p-2">
 					<small>
 						<div class = "user-card col d-inline d-flex justify-content-end">
-							@include('partials.profile-card', ['user' => $answer->post->user])
+							@include('partials.profileCard', ['user' => $answer->post->user])
 
 							<time class="user-card-time flex-shrink">
 								&nbsp;answered {{timeElapsedString($answer->post->date)}}

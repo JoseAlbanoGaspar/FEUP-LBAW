@@ -45,7 +45,7 @@ class QuestionController extends PostController
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        $this->authorize('askQuestion');
+        $this->authorize('askQuestion', Question::class);
         return view('pages.askForm');
     }
 
