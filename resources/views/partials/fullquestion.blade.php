@@ -27,7 +27,7 @@
 						<a>{{$post->user->username}}</a> asked 1(FALTA)day ago
 					</small>
 				</div>
-
+				
 				<div class="d-flex align-items-center">
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
@@ -39,7 +39,7 @@
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
 				</div>
-
+				
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
 		</div>
@@ -63,15 +63,15 @@
 
 			<div class="flex--item m-2 w-100">
 
-				<p id='post-text-body' class="p-3">{{$answer->post->text_body}}</p>
+				<p id='post-text-body' class="p-3 pedit-{{$answer->id_answer}}">{{$answer->post->text_body}}</p>
 
 				<div class="d-flex flex-row fw-wrap p-2">
 					<small>
 						<a>{{$answer->post->user->username}}</a> answered 1(FALTA)day ago
 					</small>
 
-					<!-- NÃO SEI COMO EDITAR A RESPOSTA: NOVO FORM OU SO MUDAR NA PROPRIA PAGINA C JAVASCRIPT? -->
-					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+					
+					<a role="button" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})" class="btn btn-secondary btn-sm mx-2 text-center">Edit</a>
 
 					<!-- FALTA UM POP UP PARA CONFIRMAR -->
 					<form method='POST' action='{{route('deletePost')}}'>
@@ -80,6 +80,7 @@
 						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
+					
 				</div>
 
 

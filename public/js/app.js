@@ -312,9 +312,45 @@ function adminMode() {
             button.classList.toggle('notadmin');
         }
     }
+}
+function editAnswer(id,pgid){
+    let csfr =  document.querySelector('meta[name="csrf-token"]').content;
 
+
+    let classname = '.pedit-' + id;
+
+    let p = document.querySelector(classname);
+    let text = p.textContent;
+    let form = document.createElement('div');
+    form.innerHTML =
+    "<form method='POST' action='/../posts/edit'><input type='hidden' name='_token' value='" + csfr+ "'><input value=" + pgid + " name='id_question' type='hidden'/><input value=" + id + " name='id_post' type='hidden'/><textarea id='text-area' name='text_body'>" + text + "</textarea><button id='edit-post-button' type='submit'>Edit</button></form><a role='button' class='btn btn-secondary btn-sm mx-2 text-center' href='" + pgid + "'>Cancel</a>";
+    console.log(form);
+    p.parentNode.insertBefore(form,p);
+    let edit = p.nextElementSibling.firstElementChild.nextElementSibling;
+    let deleted = edit.nextElementSibling;
+    console.log(edit);
+    console.log(deleted);
+    edit.parentNode.removeChild(edit);
+    deleted.parentNode.removeChild(deleted);
+    p.parentNode.removeChild(p);
+
+    /*let editPostButton = document.querySelector('#edit-post-button');
+    if(editPostButton != null){
+        editPostButton.addEventListener('click', routeEditPost);
+    }*/
 }
 
+function routeEditPost(event){
+    event.preventDefault();
+    let textarea = document.querySelector('#text-area');
+    let textvalue = textarea.textContent;
+    let id = textarea.previousElementSibling.getAttribute('value');
+
+    sendAjaxRequest('PATCH','/../posts/edit',{text_body : textvalue, id_post: id},async function () {
+        let originalContent = document.querySelector('#content');
+        let response = JSON.parse(this.responseText);
+        console.log(this.responseText);});
+}
 
 highlightSidenav();
 addEventListeners();

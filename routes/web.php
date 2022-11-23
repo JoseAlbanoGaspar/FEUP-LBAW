@@ -52,8 +52,8 @@ Route::get('questions/{id_question}', 'QuestionController@show')->name('question
 Route::post('questions/{id_question}/answer', 'QuestionController@postAnswer')->name('postAnswer');
 
 Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updatePostForm');
-Route::patch('posts/edit','PostController@update')->name('updatePost');
-Route::delete('post/edit','PostController@delete')->name('deletePost');
+Route::post('posts/edit','PostController@update')->middleware('auth')->name('updatePost');
+Route::delete('post/edit','PostController@delete')->middleware('auth')->name('deletePost');
 
 
 

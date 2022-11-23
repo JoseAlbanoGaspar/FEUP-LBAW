@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -310,9 +312,22 @@ class PostController extends Controller
         return view('pages.editQuestion', ['post' => $post]);
     }
 
-    public function update(Request $request)
-    {
-        //dar update
+    public function update(Request $request){
+        $post = Post::find($request->id_post);
+
+        $validator = Validator::make($request->all(),[
+            'text_body' => 'max:511'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('question',['id_question' => $request->id_question]);
+        }
+
+        $post->text_body = $request->text_body;
+        $post->date = new DateTime;
+
+        $post->save();
+        return redirect(route('question',['id_question' => $request->id_question]).'#answerid-'.$request->id_post);
     }
 
     public function delete(Request $request)
