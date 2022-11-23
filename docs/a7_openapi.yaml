@@ -17,7 +17,7 @@ tags:
   - name: 'M01: Authentication and Individual Profile'
   - name: 'M02: Questions'
   - name: 'M03: Users'
-  - name: 'M04: User Administration and Static pages'
+  - name: 'M04: User Administration'
 
 paths:
 
@@ -128,8 +128,8 @@ paths:
                   type: string
               required:
                 - email
-                - password
                 - username
+                - password
                 - password_check
 
       responses:
@@ -142,7 +142,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful authentication. Redirect to user profile.'
-                  value: '/home'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
@@ -170,7 +170,7 @@ paths:
     get:
       operationId: R107
       summary: 'R107: View user profile edit form'
-      description: 'Show the edit form. Access: OWN, ADM, MOD'
+      description: 'Show the edit form. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
 
@@ -188,7 +188,7 @@ paths:
     patch:
       operationId: R108
       summary: 'R108: edit action'
-      description: 'Submit user profile changes. Access: OWN, ADM, MOD'
+      description: 'Submit user profile changes. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
 
@@ -231,7 +231,7 @@ paths:
     delete:
       operationId: R109
       summary: 'R109: Delete user action'
-      description: 'Delete user option. Access: OWN, ADM, MOD'
+      description: 'Delete user option. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
 
@@ -294,21 +294,15 @@ paths:
     get:
       operationId: R201
       summary: 'R201: Get all questions'
-      description: 'Return all questions. Filter and sort are optional but default sort is by date. Access: PUB'
+      description: 'Return all questions. Questions are paginated. Access: PUB'
       tags:
         - 'M02: Questions'
       parameters:
         - in: query
-          name: sort
-          description: Sorted by
+          name: page
+          description: Pagination number
           schema:
-            type: string
-          required: false
-        - in: query
-          name: filter
-          description: Filter by
-          schema:
-            type: string
+            type: integer
           required: false
       responses:
         '200':
@@ -335,15 +329,15 @@ paths:
   /questions/{id}/answer:
 
     post:
-      operationId: R204
-      summary: 'R204: Post an answer to a question'
+      operationId: R203
+      summary: 'R203: Post an answer to a question'
       description: 'Post the answer. Access: USR'
       tags:
         - 'M02: Questions'
       parameters:
         - in: path
           name: id
-          description: Sorted by
+          description: Question id
           schema:
             type: integer
           required: true
@@ -378,8 +372,8 @@ paths:
   /questions/ask:
 
     get:
-      operationId: R205
-      summary: 'R205: Get Page to Ask Question'
+      operationId: R204
+      summary: 'R204: Get Page to Ask Question'
       description: 'Render the page to ask a question. Access: USR'
       tags:
         - 'M02: Questions'
@@ -388,8 +382,8 @@ paths:
           description: 'Ok. Show ask question page.'
 
     post:
-      operationId: R206
-      summary: 'R206: Post a question'
+      operationId: R205
+      summary: 'R205: Post a question'
       description: 'Post a question. Access: USR'
       tags:
         - 'M02: Questions'
@@ -424,11 +418,11 @@ paths:
                   description: 'Failed posting. Redirect to ask question page.'
                   value: '/questions/ask'
 
-  /search/?query={query}&filters={filters}:
+  /search/?query={query}&filters={filters}&sort={sort}&order={order}:
     get:
-      operationId: R207
-      summary: 'R207: Get search for posts'
-      description: 'Render the page with the results for posts search. Access: PUB'
+      operationId: R206
+      summary: 'R206: Get search for posts'
+      description: 'Render the page with the results for posts search. Can filter based on user choice Access: PUB'
       tags:
         - 'M02: Questions'
       parameters:
@@ -444,6 +438,18 @@ paths:
         schema:
           type: string
         required: false
+      - in: path
+        name: sort
+        description: sort by date or score
+        schema:
+          type: string
+        required: false
+      - in: path
+        name: order
+        description: ascending or descending
+        schema:
+          type: string
+        required: false
       responses:
         '200':
           description: 'Ok. Show search posts page.'
@@ -451,8 +457,8 @@ paths:
 
   /post/{id}/edit:
     get:
-        operationId: R208
-        summary: 'R208: Form to edit post'
+        operationId: R207
+        summary: 'R207: Form to edit post'
         description: 'Render the page to edit a post. Access: OWN, MOD, ADM'
         tags:
           - 'M02: Questions'
@@ -469,8 +475,8 @@ paths:
 
   /posts/edit:
     patch:
-      operationId: R209
-      summary: 'R209: Edit post Action'
+      operationId: R208
+      summary: 'R208: Edit post Action'
       description: 'Processes the editing form submission. Access: OWN, MOD, ADM'
       tags:
         - 'M02: Questions'
@@ -497,8 +503,8 @@ paths:
           description: 'Ok.'
 
     delete:
-      operationId: R210
-      summary: 'R210: Delete post'
+      operationId: R209
+      summary: 'R209: Delete post'
       description: 'Delete post. Access: OWN, MOD, ADM'
       tags:
         - 'M02: Questions'
