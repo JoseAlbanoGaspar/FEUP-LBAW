@@ -609,6 +609,42 @@ paths:
                   description: 'Failed to process the search. Redirect to user search.'
                   value: '/search_users'
 
+  /api/search_users:
+    get:
+     operationId: R306
+     summary: 'R306: Search Users API'
+     description: 'Searches for works and returns the results as JSON. Access: PUB.'
+
+     tags:
+       - 'M03: Users'
+
+     parameters:
+       - in: query
+         name: query
+         description: String to use for full-text search
+         schema:
+           type: string
+         required: false
+       - in: query
+         name: page
+         description: Page for pagination
+         schema:
+           type: string
+         required: false
+       
+     responses:
+       '200':
+         description: Success
+         content:
+           application/json:
+             schema:
+                 type: object
+                 properties:
+                   success:
+                    type: boolean
+                   html:
+                     type: string
+
   /admin:
     get:
       operationId: R401
