@@ -600,7 +600,7 @@ paths:
 
     post:
       operationId: R305
-      summary: 'R305 Search users by username'
+      summary: 'R305: Search users by username'
       description: 'Processes the user search query. ACCESS: PUB'
       tags:
         - 'M03: Users'
@@ -635,7 +635,7 @@ paths:
   /admin: 
     get:
       operationId: R401
-      summary: 'R401: Renders the admin page.'
+      summary: 'R401: Get the admin page.'
       description: 'Page with user administration and tag management. ACCESS: ADM'
       tags:
         - 'M04: User Administration'
