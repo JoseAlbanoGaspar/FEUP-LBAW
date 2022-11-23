@@ -36,7 +36,13 @@ class AdminController extends Controller
      */
     public function createUser(Request $request){
       $this->authorize('isAdministrator', User::class);
-      $validator = UserController::validator($request->all());
+      $validator =   Validator::make($request->all(), [
+            'username' => 'required|string|min:5|regex:/^((?!deleted_user).)*$/|max:25|unique:users',
+            'email' => 'required|string|email|min:5|max:50|regex:/^((?!deleted_email).)*$/|regex:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'personal_text' => 'max:255'
+        ]);
+
       if($validator->fails()){
         return redirect()->route('admin',['tags' => Tag::all()])->withInput()->withErrors($validator);
       }
