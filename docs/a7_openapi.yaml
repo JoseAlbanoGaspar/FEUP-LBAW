@@ -734,8 +734,8 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Create user sucessful.'
-                  value: '/admin'
+                  description: 'Create user sucessful. Redirect to profile'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Failed to create a new user'
                   value: '/admin'
@@ -771,7 +771,7 @@ paths:
               examples:
                 302Success:
                   description: 'The user is now an admin.'
-                  value: '/admin'
+                  value: '/users/{id}'
                 302Failure:
                   description: 'Failed to promote to admin.'
                   value: '/admin'
