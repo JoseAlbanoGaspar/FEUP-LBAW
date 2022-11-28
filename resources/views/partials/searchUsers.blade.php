@@ -7,7 +7,7 @@
         <button class="btn btn-secondary mx-3" type="button"><i class="fa fa-search"></i></button>
     </form>
 
-@if(Auth::check() && Auth::user()->administrator)
+@if(Auth::check() && Auth::user()->administrator())
 <label>See as admin</label>
 <input type="checkbox" checked="true" onclick="adminMode()"/>
 @endif
