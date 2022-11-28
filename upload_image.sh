@@ -13,5 +13,6 @@ php artisan optimize
 php artisan link:storage
 
 
+
 docker build -t $IMAGE_NAME .
 docker push $IMAGE_NAME

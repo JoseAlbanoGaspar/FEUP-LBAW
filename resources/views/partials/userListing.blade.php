@@ -13,7 +13,7 @@
         </h4>
     </a>
 
-    @if(Auth::check() && Auth::user()->administrator())
+    @if(Auth::check() && Auth::user()->administrator)
     <div class="d-flex align-items-center">
          <a role="button" type="button" class="btn btn-secondary btn-sm mx-2 text-center admin" href="{{route('editProfile',['id_user' => $userListing->id_user]) }}">Edit</a>
 
