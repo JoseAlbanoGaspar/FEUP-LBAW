@@ -36,15 +36,11 @@ class FollowTagNotification extends Model
 
 	public function notification()
 	{
-		return $this->belongsTo(Notification::class, 'id_notif')
-//					->where('notification.id_notif', '=', 'follow_tag_notif.id_notif')
-					->where('notification.id_notif', '=', 'follow_tag_notif.id_notif');
+		return $this->belongsTo(Notification::class, 'id_notif');
 	}
 
 	public function tag()
 	{
-		return $this->belongsTo(Tag::class, 'id_tag')
-//					->where('tag.id_tag', '=', 'follow_tag_notif.id_tag')
-					->where('tag.id_tag', '=', 'follow_tag_notif.id_tag');
+		return $this->belongsTo(Tag::class, 'id_tag');
 	}
 }

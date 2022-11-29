@@ -59,3 +59,5 @@ Route::delete('post/edit','PostController@delete')->middleware('auth')->name('de
 
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
+
+Route::get('notifications', 'NotificationController@show')->middleware('auth')->name('notifications');
