@@ -368,3 +368,124 @@ function altEditAnswer(id, text){
  */
 highlightSidenav();
 addEventListeners();
+
+function closeModal(id){
+    let  modal = new bootstrap.Modal(document.getElementById(id));
+    console.log(modal);
+    modal.hide();
+}
+
+function logResponse(){
+    console.log(JSON.parse(this.responseText));
+}
+
+function addLoginRequiredModal() {
+    let modal = document.createElement('div');
+    modal.innerHTML = `
+                    <div class="modal" id="loginRequiredModal" tabindex="-1" role="dialog" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="loginRequiredModalLabel">Login Required</h5>
+                                <button id="close-login-modal" type="button" class="close btn"  aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You must be logged in to vote.</p>
+                                <a href="/login" class="btn btn-primary">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    `;
+    let content = document.querySelector('#content');
+    content.appendChild(modal);
+}
+
+if (window.location.href.match(/questions\/\d+/)) {
+    user = loggedUser ?? null;
+    colorVoteButtons();
+    addLoginRequiredModal();
+    let voteButtons = document.querySelectorAll('.vote-button');
+    if (voteButtons) {
+        for (let button of voteButtons) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (user == null) {
+                    let modal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+                    document.getElementById("close-login-modal").addEventListener("click", function () {
+                        modal.hide();
+                    });
+                    modal.show();
+
+                } else {
+                    let postId = button.getAttribute('id').split('-')[2];
+                    let vote = button.classList.contains('upvote-button') ? 1 : -1;
+                    let score = button.parentElement.querySelector('.post-score');
+
+                    let upvoteButton = button.parentElement.querySelector('.upvote-button');
+                    let downvoteButton = button.parentElement.querySelector('.downvote-button');
+                    if (upvoteButton.classList.contains('btn-outline-success')) {
+                        score.textContent = (parseInt(score.textContent) - 1).toString();
+                        upvoteButton.classList.remove('btn-outline-success');
+                        if (downvoteButton.classList.contains('btn-outline-danger')) {
+                            downvoteButton.classList.remove('btn-outline-danger');
+                        }
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 0}, logResponse);
+                    }
+                    else if (downvoteButton.classList.contains('btn-outline-danger')) {
+                        score.textContent = (parseInt(score.textContent) + 1).toString();
+                        downvoteButton.classList.remove('btn-outline-danger');
+                        if (upvoteButton.classList.contains('btn-outline-success')) {
+                            upvoteButton.classList.remove('btn-outline-success');
+                        }
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 0}, logResponse);
+                    }
+                    else if (vote === 1) {
+                        score.textContent = parseInt(score.textContent) + vote;
+                        upvoteButton.classList.add('btn-outline-success');
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 1}, logResponse);
+
+                    }
+                    else if (vote === -1) {
+                        score.textContent = parseInt(score.textContent) + vote;
+                        downvoteButton.classList.add('btn-outline-danger');
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: -1}, logResponse);
+                    }
+                }
+            });
+        }
+    }
+}
+
+function colorVoteButtons() {
+    let questionId = document.querySelector('.question_header').id.split('_')[3];
+    sendAjaxRequest('GET', '/api/users/'+ loggedUser.id_user + '/votes_on_question/' + questionId  , null, function () {
+        let response = JSON.parse(this.responseText);
+        let questionVote = response.questionVote[0];
+        let answerVotes = response.answerVotes;
+        let upvoteButton = document.querySelector('#upvote-button-' + questionId);
+        let downvoteButton = document.querySelector('#downvote-button-' + questionId);
+        if (questionVote != null) {
+            if (questionVote.score === 1) {
+                upvoteButton.classList.add('btn-outline-success');
+            } else if (questionVote.score === -1) {
+                downvoteButton.classList.add('btn-outline-danger');
+            }
+        }
+
+        for (let answerVote of answerVotes) {
+            let answerId = answerVote.id_answer;
+            let upvoteButton = document.querySelector('#upvote-button-' + answerId);
+            let downvoteButton = document.querySelector('#downvote-button-' + answerId);
+            if (answerVote.score === 1) {
+                upvoteButton.classList.add('btn-outline-success');
+            } else if (answerVote.score === -1) {
+                downvoteButton.classList.add('btn-outline-danger');
+            }
+        }
+
+    });
+
+}

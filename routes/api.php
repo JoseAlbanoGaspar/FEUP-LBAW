@@ -17,3 +17,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 Route::post('search_users', [UserController::class, 'searchApi'])->name('searchUsersApi');
+
+Route::post('current_user', [UserController::class, 'getCurrentUserApi'])->name('getCurrentUserApi');
+
+//proteger isto para o dono, não eet´s a funcionar nem para só users logados
+Route::get('users/{id_user}/votes_on_question/{id_question}', [UserController::class, 'userVotesToQuestionAndAnswers'])->name('userVotesToQuestionAndAnswers');
+
+Route::post('users/vote', [UserController::class, 'voteOnPost'])->name('voteOnPost');

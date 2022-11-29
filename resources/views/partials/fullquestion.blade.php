@@ -2,7 +2,7 @@
 	include_once(app_path() . '/Includes/Utils.php');
 @endphp
 
-<div id="question_header" class="d-flex flex-column mx-3 mx-md-5 mt-5">
+<div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
 	<div class="d-flex flex-row align-items-center justify-content-between">
 		<h1 id="question_title">{{$post->question->title}}</h1>
 		<a role="button" class="btn btn-secondary btn mx-2 text-center" href="{{ route('formToAskQuestion') }}">Ask Question</a>

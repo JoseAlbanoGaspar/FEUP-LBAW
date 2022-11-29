@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnswerVote;
+use App\Models\Post;
+use App\Models\Question;
+use App\Models\QuestionVote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
@@ -184,4 +188,63 @@ class UserController extends Controller
             'profile_picture' => $profile_image_url
         ]);
     }
+
+    public function getCurrentUserApi(){
+//        if(Auth::check()){
+//            $user = Auth::user();
+////           $user = User::find(1);
+//        }
+//        else{
+//            $user = null;
+//            $user = User::find(1);
+//        }
+
+        if (Auth::guard('api')->check())
+        {
+//            logger(Auth::guard('api')->user()); // to get user
+            $user = Auth::guard('api')->user();
+
+        }else{
+//            logger("User not authorized");
+            $user = 33;
+        }
+        return  response()->json(array('success' => true, 'user'=>$user));
+    }
+
+    public function userVotesToQuestionAndAnswers($id_user, $id_question){
+        $questionVote = User::find($id_user)->question_votes()->where('id_question', $id_question)->get();
+        $answerVotes = User::find($id_user)->answer_votes()->whereIn('id_answer', Question::find($id_question)->answers()->pluck('id_answer'))->get();
+        return response()->json(array('success' => true, 'questionVote'=>$questionVote, 'answerVotes'=>$answerVotes));
+    }
+
+    public function voteOnPost(Request $request){
+        $id_user = $request->id_user;
+        $id_post = $request->id_post;
+        $score = intval($request->score);
+        $post = Post::find($id_post);
+        if($post->question != null){
+            $vote = QuestionVote::where('id_question', $id_post)->where('id_user', $id_user)->first();
+            if($vote == null){
+                QuestionVote::create(['id_question' => $id_post, 'id_user' => $id_user, 'score' => $score]);
+            }
+            else{
+                QuestionVote::where('id_question', $id_post)->where('id_user', $id_user)->update(['score' => $score]);
+            }
+        }
+        elseif ($post->answer != null){
+            $vote = AnswerVote::where('id_answer', $id_post)->where('id_user', $id_user)->first();
+            if($vote == null){
+                AnswerVote::create(['id_answer' => $id_post, 'id_user' => $id_user, 'score' => $score]);
+            }
+            else{
+                AnswerVote::where('id_answer', $id_post)->where('id_user', $id_user)->update(['score' => $score]);
+            }
+        }
+        else{
+            return response()->json(array('success' => false, 'message'=>'Post not found'));
+        }
+        return response()->json(array('success' => true));
+    }
+
+
 }
