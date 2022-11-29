@@ -382,7 +382,7 @@ function logResponse(){
 function addLoginRequiredModal() {
     let modal = document.createElement('div');
     modal.innerHTML = `
-                    <div class="modal" id="loginRequiredModal" tabindex="-1" role="dialog" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="loginRequiredModal" tabindex="-1" role="dialog" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -426,6 +426,7 @@ if (window.location.href.match(/questions\/\d+/)) {
 
                     let upvoteButton = button.parentElement.querySelector('.upvote-button');
                     let downvoteButton = button.parentElement.querySelector('.downvote-button');
+                    console.log(loggedUser.id_user, postId);
                     if (upvoteButton.classList.contains('btn-outline-success')) {
                         score.textContent = (parseInt(score.textContent) - 1).toString();
                         upvoteButton.classList.remove('btn-outline-success');
@@ -460,6 +461,7 @@ if (window.location.href.match(/questions\/\d+/)) {
 }
 
 function colorVoteButtons() {
+    if(!loggedUser) return;
     let questionId = document.querySelector('.question_header').id.split('_')[3];
     sendAjaxRequest('GET', '/api/users/'+ loggedUser.id_user + '/votes_on_question/' + questionId  , null, function () {
         let response = JSON.parse(this.responseText);

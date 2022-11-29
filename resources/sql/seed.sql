@@ -256,10 +256,11 @@ CREATE TABLE follows_question (
 
 
 CREATE TABLE question_vote (
-	id_user INT NOT NULL,
+    id SERIAL PRIMARY KEY,
+    id_user INT NOT NULL,
 	id_question INT NOT NULL,
 	score INT NOT NULL,
-    PRIMARY KEY (id_user, id_question),
+    UNIQUE (id_user, id_question),
 		CONSTRAINT SCORE_VALUES
 			CHECK (score BETWEEN -1 AND 1),
 
@@ -274,12 +275,13 @@ CREATE TABLE question_vote (
 
 
 CREATE TABLE answer_vote (
+    id SERIAL PRIMARY KEY,
 	id_user INT NOT NULL,
 	id_answer INT NOT NULL,
 	score INT NOT NULL,
 		CONSTRAINT SCORE_VALUES
 			CHECK (score BETWEEN -1 AND 1),
-	PRIMARY KEY (id_user, id_answer),
+	UNIQUE (id_user, id_answer),
 		CONSTRAINT FK_ANSWER
 			FOREIGN KEY(id_answer)
 				REFERENCES answer(id_answer) ON DELETE CASCADE,
