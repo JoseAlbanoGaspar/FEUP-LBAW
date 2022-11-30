@@ -66,7 +66,9 @@ Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updateP
 Route::patch('posts/edit','PostController@update')->name('updatePost');
 Route::delete('post/edit','PostController@delete')->name('deletePost');
 
-
-
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
+
+//Static Pages
+Route::get('about','StaticController@showAbout')->name('about');
+Route::get('rules','StaticController@showRules')->name('rules');
