@@ -9,8 +9,9 @@ use App\Models\Report;
 
 class ReportController extends Controller
 {
-    public function addReport($request)
+    public function addReport()
     {
-        return true;
+        
+        return view('home');
     }
 }
