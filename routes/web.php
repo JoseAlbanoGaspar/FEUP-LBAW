@@ -61,3 +61,6 @@ Route::get('tags/{name}','PostController@search')->name('tags'); //to be impleme
 //Static Pages
 Route::get('about','StaticController@showAbout')->name('about');
 Route::get('rules','StaticController@showRules')->name('rules');
+
+//Report
+Route::post('report/add','ReportController@addReport')->name('addReport');

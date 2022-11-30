@@ -2,6 +2,7 @@
     <ul class="comments-list">
         @foreach ($comments as $comment)
         <li class="comment p-2 border-bottom">
+            <a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{route('addReport',['id_post' => $post->id_post])}}">Report</a>
             <span class="comment-body">{{ $comment->post->text_body}}</span>
 
             <div class="d-inline-flex ai-center">

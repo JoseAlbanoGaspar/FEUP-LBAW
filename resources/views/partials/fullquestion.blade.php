@@ -53,8 +53,10 @@
 					</div>
 				</div>
 
-                @if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
+
                 <div class="d-flex align-items-center">
+					<p role="button" onclick="addReport({{$post->id_post}})"  class="button-{{$post->id_post}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
+					@if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
@@ -64,8 +66,9 @@
 						<input type="hidden" value="{{ $post->id_post }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
+					@endif
 				</div>
-                @endif
+                
 
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
@@ -101,6 +104,8 @@
 				<p id='post-text-body' class="pedit-{{$answer->id_answer}}">{{$answer->post->text_body}}</p>
 
 				<div class="d-flex flex-row justify-content-end py-1 p-2">
+					
+					<p role="button" onclick="addReport({{$answer->id_answer}})"  class="button-{{$answer->id_answer}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
 					<small>
 						<div class = "user-card col d-inline d-flex justify-content-end">
 							@include('partials.profileCard', ['user' => $answer->post->user])
