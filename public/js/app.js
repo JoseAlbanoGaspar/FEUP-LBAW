@@ -335,15 +335,13 @@ function editAnswer(id, pgid) {
 function cancelReport(id){
     let form = document.querySelector(".go-back-" + id).parentNode;
     let p = document.querySelector(".button-" + id).parentNode;
-    /*let initialButton = document.createElement('div');
-    initialButton.innerHTML = 
-        "<p role='button' class='button-" + id + "' onclick='addReport(" + id + ")'  class='btn btn-secondary btn-sm mx-2 text-center'>Report</p>";
-    */
+    
     let initialButton = document.createElement('p');
     initialButton.setAttribute('role','button');
     initialButton.setAttribute('class',"button-" + id + " btn btn-secondary btn-sm mx-2 text-center");
     initialButton.setAttribute('onclick',"addReport(" + id + ")");
     initialButton.textContent = "Report";
+    
     p.parentNode.insertBefore(initialButton,p);
     p.remove();
     form.remove();
