@@ -55,7 +55,7 @@
 
 
                 <div class="d-flex align-items-center">
-					@if(Auth::check())
+					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $post->id_author))
 					<p role="button" onclick="addReport({{$post->id_post}},{{Auth::id()}})"  class="button-{{$post->id_post}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
 					@endif
 					@if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
@@ -107,8 +107,8 @@
 
 				<div class="d-flex flex-row justify-content-end py-1 p-2">
 					@if(Auth::check() && (Auth::user()->id_user === $answer->post->id_author || Auth::user()->administrator || Auth::user()->moderator))
-					<a role="button" id="edit-answer-button-{{$answer->id_answer}}" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})"
-                       class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
+					<p role="button" id="edit-answer-button-{{$answer->id_answer}}" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})"
+                       class="btn btn-secondary btn-sm mx-2 text-center">Edit</p>
 
 					<form method='POST' action='{{route('deletePost')}}'>
 						{{ csrf_field() }}
