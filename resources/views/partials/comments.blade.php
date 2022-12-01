@@ -2,7 +2,6 @@
     <ul class="comments-list">
         @foreach ($comments as $comment)
         <li class="comment p-2 border-bottom">
-            <a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{route('addReport',['id_post' => $post->id_post])}}">Report</a>
             <span class="comment-body">{{ $comment->post->text_body}}</span>
 
             <div class="d-inline-flex ai-center">
@@ -11,6 +10,9 @@
             <div class="comment-date d-inline-flex ai-center">
                 &nbsp;{{timeElapsedString($comment->post->date)}}
             </div>
+            @if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $comment->post->user->id_user))
+				<p role="button" onclick="addReport({{$comment->id_comment}},{{Auth::id()}})"  class="button-{{$comment->id_comment}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
+			@endif
         </li>
         @endforeach
     </ul>
