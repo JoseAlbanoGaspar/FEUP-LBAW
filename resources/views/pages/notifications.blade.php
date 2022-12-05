@@ -3,7 +3,13 @@
 
 @section('content')
     @if((count($notifications) > 0))
-        <section id="notifications">
+
+        <div class="row">
+            <div class="col-10 mt-3 mb-2">
+                <button class="btn btn-dark" id="mark-all-as-read-notifications">Mark all as read</button>
+            </div>
+
+            <section id="notifications">
             @each('partials.notificationListing', $notifications, 'notification')
         </section>
         @if ($notifications->links()->paginator->hasPages())
