@@ -15,5 +15,13 @@
     <li class="nav-item text-center my-1 fs-6">
       <a id="users-sidenav" class="nav-link link-dark" href="{{route('searchUsers')}}">Users</a>
     </li>
+
+    <li class="nav-item text-center my-1 fs-6">
+      <a id="users-sidenav" class="nav-link link-dark" href="{{route('about')}}">About</a>
+    </li>
+
+    <li class="nav-item text-center my-1 fs-6">
+      <a id="users-sidenav" class="nav-link link-dark" href="{{route('rules')}}">Rules</a>
+    </li>
 </ul>
 
