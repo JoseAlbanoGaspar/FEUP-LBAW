@@ -36,15 +36,11 @@ class NewAnswerNotification extends Model
 
 	public function notification()
 	{
-		return $this->belongsTo(Notification::class, 'id_notif')
-//					->where('notification.id_notif', '=', 'new_answer_notif.id_notif')
-					->where('notification.id_notif', '=', 'new_answer_notif.id_notif');
+		return $this->belongsTo(Notification::class, 'id_notif');
 	}
 
 	public function answer()
 	{
-		return $this->belongsTo(Answer::class, 'id_answer')
-//					->where('answer.id_answer', '=', 'new_answer_notif.id_answer')
-					->where('answer.id_answer', '=', 'new_answer_notif.id_answer');
+		return $this->belongsTo(Answer::class, 'id_answer');
 	}
 }

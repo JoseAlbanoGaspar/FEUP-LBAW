@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Moderator;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -212,14 +213,18 @@ class UserController extends Controller
     }
 
     public function userVotesToQuestionAndAnswers($id_user, $id_question){
+
+        //verificar se user logado ou admin??
         $questionVote = User::find($id_user)->question_votes()->where('id_question', $id_question)->get();
         $answerVotes = User::find($id_user)->answer_votes()->whereIn('id_answer', Question::find($id_question)->answers()->pluck('id_answer'))->get();
         return response()->json(array('success' => true, 'questionVote'=>$questionVote, 'answerVotes'=>$answerVotes));
     }
 
     public function voteOnPost(Request $request){
+
         $id_user = $request->id_user;
         $id_post = $request->id_post;
+
         $score = intval($request->score);
         $post = Post::find($id_post);
         if($post->question != null){

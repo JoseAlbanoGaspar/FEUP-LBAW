@@ -41,8 +41,8 @@
                     <a class="nav-link" href="{{route('login')}}"><i class="fa fa-sign-in"></i></a>
                 </li>
                 @endif
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fa fa-inbox"></i></a>
+            <li id="notifications-icon" class="nav-item">
+              <a class="nav-link" href="{{route('notifications')}}"><i class="fa fa-inbox"></i></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#"><i class="fa fa-question-circle"></i></a>

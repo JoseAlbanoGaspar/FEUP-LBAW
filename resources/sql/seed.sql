@@ -1183,6 +1183,28 @@ insert into moderator (id_moderator) values (67);
 insert into moderator (id_moderator) values (81);
 
 
+insert into notification (dismissed, id_user, date) values (true, 73, '2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 49,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (false, 71,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (false, 49,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (false, 74,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 38,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 28,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 92,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 4,'2022-10-02 12:32:23');
+insert into notification (dismissed, id_user, date) values (true, 2,'2022-10-02 12:32:23');
+
+insert into system_notif (id_notif, notif_text) values (1, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
+insert into system_notif (id_notif, notif_text) values (2, 'duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla');
+insert into system_notif (id_notif, notif_text) values (3, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
+insert into system_notif (id_notif, notif_text) values (4, 'aenean auctor gravida sem praesent id massa id nisl venenatis');
+insert into system_notif (id_notif, notif_text) values (5, 'aenean auctor gravida sem praesent id massa id nisl venenatis');
+insert into system_notif (id_notif, notif_text) values (6, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
+insert into system_notif (id_notif, notif_text) values (7, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
+insert into system_notif (id_notif, notif_text) values (8, 'duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla');
+insert into system_notif (id_notif, notif_text) values (9, 'Why don´t you add a description to your profile?');
+insert into system_notif (id_notif, notif_text) values (10, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
+
 --Questions
 insert into post (id_author, date, text_body) values (2, '2022-11-09 12:05:12', 'I am developing a program from another program (a fork) under GPLv3. I know that if "my" program is used commercially or just distributed (as opposed to just personal use) it should keep the same license.
 
@@ -2191,17 +2213,8 @@ VALUES
     (60,7);
 
 
-insert into notification (dismissed, id_user, date) values (true, 73, '2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 49,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (false, 71,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (false, 49,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (false, 74,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 38,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 28,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 92,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 4,'2022-10-02 12:32:23');
-insert into notification (dismissed, id_user, date) values (true, 69,'2022-10-02 12:32:23');
 
+/*
 insert into notification (dismissed, id_user, date) values (true, 26,'2022-10-02 12:32:23');
 insert into notification (dismissed, id_user, date) values (false, 97,'2022-10-02 12:32:23');
 insert into notification (dismissed, id_user, date) values (true, 95,'2022-10-02 12:32:23');
@@ -2257,18 +2270,9 @@ insert into notification (dismissed, id_user, date) values (true, 40,'2022-10-02
 insert into notification (dismissed, id_user, date) values (false, 44,'2022-10-02 12:32:23');
 insert into notification (dismissed, id_user, date) values (false, 32,'2022-10-02 12:32:23');
 
+*/
 
-insert into system_notif (id_notif, notif_text) values (1, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
-insert into system_notif (id_notif, notif_text) values (2, 'duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla');
-insert into system_notif (id_notif, notif_text) values (3, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
-insert into system_notif (id_notif, notif_text) values (4, 'aenean auctor gravida sem praesent id massa id nisl venenatis');
-insert into system_notif (id_notif, notif_text) values (5, 'aenean auctor gravida sem praesent id massa id nisl venenatis');
-insert into system_notif (id_notif, notif_text) values (6, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
-insert into system_notif (id_notif, notif_text) values (7, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
-insert into system_notif (id_notif, notif_text) values (8, 'duis consequat dui nec nisi volutpat eleifend donec ut dolor morbi vel lectus in quam fringilla');
-insert into system_notif (id_notif, notif_text) values (9, 'aenean auctor gravida sem praesent id massa id nisl venenatis');
-insert into system_notif (id_notif, notif_text) values (10, 'augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit');
-
+/*
 insert into follow_tag_notif (id_notif, id_tag) values (11, 5);
 insert into follow_tag_notif (id_notif, id_tag) values (12, 20);
 insert into follow_tag_notif (id_notif, id_tag) values (13, 1);
@@ -2301,7 +2305,7 @@ insert into new_badge_notif (id_notif,id_badge) values (37,7);
 insert into new_badge_notif (id_notif,id_badge) values (38,8);
 insert into new_badge_notif (id_notif,id_badge) values (39,9);
 insert into new_badge_notif (id_notif,id_badge) values (40,10);
-
+*/
 -- insert into new_answer_notif (id_notif,id_answer) values (41,53);
 INSERT INTO follows_tag (id_user, id_tag)
 VALUES
@@ -2399,6 +2403,7 @@ VALUES
 -- insert into new_answer_notif (id_notif,id_answer) values (49,67);
 -- insert into new_answer_notif (id_notif,id_answer) values (50,56);
 
+/*
 insert into followed_question_notif (id_notif,id_answer) values (51,60);
 insert into followed_question_notif (id_notif,id_answer) values (52,61);
 insert into followed_question_notif (id_notif,id_answer) values (53,62);
@@ -2409,6 +2414,7 @@ insert into followed_question_notif (id_notif,id_answer) values (57,66);
 insert into followed_question_notif (id_notif,id_answer) values (58,67);
 insert into followed_question_notif (id_notif,id_answer) values (59,68);
 insert into followed_question_notif (id_notif,id_answer) values (60,69);
+*/
 
 INSERT INTO follows_tag (id_user, id_tag)
 VALUES
@@ -2574,6 +2580,7 @@ VALUES
     (16,42,1),
     (96,47,1),
     (63,3,1);
+
 INSERT INTO question_vote (id_user,id_question,score)
 VALUES
     (13,12,-1),

@@ -55,8 +55,12 @@ Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updateP
 Route::post('posts/edit','PostController@update')->middleware('auth')->name('updatePost');
 Route::delete('post/edit','PostController@delete')->middleware('auth')->name('deletePost');
 
+
+
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
+
+Route::get('notifications', 'NotificationController@show')->middleware('auth')->name('notifications');
 
 //Static Pages
 Route::get('about','StaticController@showAbout')->name('about');

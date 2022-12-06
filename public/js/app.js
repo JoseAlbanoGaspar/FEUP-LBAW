@@ -89,6 +89,60 @@ function addEventListeners() {
         addApplySearchOptionEventListener();
     }
 
+    let markAsReadButtons = document.querySelectorAll('.mark-as-read-notification');
+    if (markAsReadButtons) {
+        for (let button of markAsReadButtons) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                let idNotification = button.id.split('-')[4];
+                sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: idNotification}, function () {
+                    let response = JSON.parse(this.responseText);
+                    if (response.success) {
+                        button.remove();
+                        let notificationAnchor = document.querySelector('#notification-anchor-' + idNotification);
+                        notificationAnchor.classList.add('text-muted');
+                        document.querySelector('#notification-header-id-' + idNotification).classList.remove('fw-bold');
+                        document.querySelector('#notification-time-ago-id-' + idNotification).classList.remove('fw-bold');
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+        }
+    }
+
+
+    let markAllAsReadButton = document.querySelector('#mark-all-notifications-as-read');
+    if (markAllAsReadButton) {
+        markAllAsReadButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            sendAjaxRequest('POST', '/api/dismiss_all_notifications', {id_user: loggedUser.id_user}, function () {
+                let response = JSON.parse(this.responseText);
+                if (response.success) {
+                    let markAsReadButtons = document.querySelectorAll('.mark-as-read-notification');
+                    for (let button of markAsReadButtons) {
+                        button.remove();
+                    }
+                    let notificationAnchors = document.querySelectorAll('.notification-anchor');
+                    for (let anchor of notificationAnchors) {
+                        anchor.classList.add('text-muted');
+                    }
+                    let notificationHeaders = document.querySelectorAll('.notification-header');
+                    for (let header of notificationHeaders) {
+                        header.classList.remove('fw-bold');
+                    }
+                    let notificationTimeAgo = document.querySelectorAll('.notification-time-ago');
+                    for (let timeAgo of notificationTimeAgo) {
+                        timeAgo.classList.remove('fw-bold');
+                    }
+                } else {
+                    alert(response.message);
+                }
+            });
+        });
+    }
+
+
 }
 
 function encodeForAjax(data) {
@@ -490,4 +544,79 @@ function colorVoteButtons() {
 
     });
 
+}
+
+
+let notificationsButton = document.getElementById('notifications-icon');
+if (notificationsButton) {
+        sendAjaxRequest('POST', '/api/get_unread_notifications', {id_user: loggedUser.id_user}, function () {
+            let response = JSON.parse(this.responseText);
+            let notifications = response.notifications;
+            //create a list of notifications
+            let notificationsList = document.createElement('ul');
+            /*notificationsList.classList.add('list-group');
+            notificationsList.classList.add('list-group-flush');
+            notificationsList.classList.add('list-group-hoverable');
+            notificationsList.classList.add('list-group-hoverable-dark');
+            */
+            notificationsList.setAttribute('id', 'notifications-list');
+            //for each notification, create a list item and add it to the list
+            if(notifications.length === 0) {
+                let noNotifications = document.createElement('li');
+                noNotifications.classList.add('list-group-item');
+                noNotifications.textContent = 'No new notifications';
+                notificationsList.appendChild(noNotifications);
+            }
+            for (let notification of notifications) {
+                let notificationListItem = document.createElement('li');
+                notificationListItem.classList.add('list-group-item');
+                notificationListItem.classList.add('list-group-item-dark');
+                notificationListItem.classList.add('list-group-item-action');
+                notificationListItem.classList.add('list-group-item-action-dark');
+                notificationListItem.setAttribute('id', 'notification-' + notification.id_notif);
+                //add a mark as read button
+                let markAsReadButton = document.createElement('button');
+                markAsReadButton.classList.add('btn');
+                markAsReadButton.classList.add('btn-sm');
+                markAsReadButton.classList.add('btn-outline-dark');
+                markAsReadButton.classList.add('mark-as-read-button');
+                markAsReadButton.textContent = 'Mark as read';
+                markAsReadButton.setAttribute('id', 'mark-as-read-button-' + notification.id_notif);
+                //align the button to the right
+                markAsReadButton.style.float = 'right';
+                markAsReadButton.addEventListener('click', function () {
+                    sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: notification.id_notif}, null);
+                    let notificationListItem = document.getElementById('notification-' + notification.id_notif);
+                    notificationListItem.classList.add('fade');
+                    notificationListItem.classList.add('out');
+                    setTimeout(function () {
+                        notificationListItem.remove();
+                        notifications.splice(notifications.indexOf(notification), 1);
+
+                        if(notifications.length === 0) {
+                            let noNotifications = document.createElement('li');
+                            noNotifications.classList.add('list-group-item');
+                            noNotifications.textContent = 'No new notifications';
+                            notificationsList.appendChild(noNotifications);
+                        }
+                    }, 500);
+
+                });
+
+
+                notificationListItem.addEventListener('click', function () {
+                    sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: notification.id_notif}, null);
+                });
+                let notificationLink = document.createElement('a');
+                notificationLink.classList.add('text-decoration-none');
+                notificationLink.classList.add('text-dark');
+                notificationLink.textContent = notification.message;
+                if(notification.href) notificationLink.setAttribute('href', notification.href);
+                notificationListItem.appendChild(notificationLink);
+                notificationListItem.appendChild(markAsReadButton);
+                notificationsList.appendChild(notificationListItem);
+            }
+            //add the list to the dropdown menu
+            document.querySelector('#notifications-icon').appendChild(notificationsList);
+        });
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 
 /*
@@ -24,3 +25,7 @@ Route::post('current_user', [UserController::class, 'getCurrentUserApi'])->name(
 Route::get('users/{id_user}/votes_on_question/{id_question}', [UserController::class, 'userVotesToQuestionAndAnswers'])->name('userVotesToQuestionAndAnswers');
 
 Route::post('users/vote', [UserController::class, 'voteOnPost'])->name('voteOnPost');
+
+Route::post('dismiss_notification', [NotificationController::class, 'dismissNotification'])->name('dismissNotification');
+Route::post('dismiss_all_notifications', [NotificationController::class, 'dismissAllNotifications'])->name('dismissAllNotifications');
+Route::post('get_unread_notifications', [NotificationController::class, 'getUnreadNotifications'])->name('getUnreadNotifications');

@@ -26,3 +26,44 @@ body {
 .notadmin{
   display: none;
 }
+
+
+#notifications {
+    position: relative;
+    display: block;
+}
+
+#notifications-list {
+    display: none;
+    border-radius: 5px;
+}
+
+#notifications-list p {
+    font-size: .75em;
+}
+#notifications-list li {
+    background-color: #eef0f3;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+#notifications-list * {
+    margin: auto;
+    font-size: .9em;
+}
+
+#notifications-icon:hover #notifications-list{
+    display: flex;
+    flex-direction: column-reverse;
+    gap: .5em;
+
+    width: 30em;
+    padding: .5em;
+    background-color: rgba(12, 27, 49, 0.79);
+    box-shadow: 0 0 8px #2d3748;
+
+    position: absolute;
+    right: 3.5em;
+    z-index: 1;
+}
