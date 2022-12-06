@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Tag;
+use App\Models\Report;
+use App\Models\Post;
 
 use App\Http\Controllers\UserController;
 
@@ -25,7 +27,24 @@ class AdminController extends Controller
     {
       $this->authorize('isAdministrator', User::class);
       $tags = Tag::all();
-      return view('pages.admin', ['tags'=> $tags]);
+      
+      $reports = Report::select('id_post')->distinct()->get();
+      $ret_reports = array();
+      foreach($reports as $id_post){
+        $rep = array();
+        $rep['id_post'] = $id_post['id_post'];
+        $number = Report::where('id_post','=',$id_post['id_post'])->get();
+        $rep['counter'] = count($number);
+        $reasons = array();
+        foreach($number as $reason){
+          $reasons[] = $reason->reason;
+        }
+        $rep['reasons'] = $reasons;
+        $rep['post'] = Post::find($id_post['id_post']);
+        $ret_reports[] = $rep;
+      }
+
+      return view('pages.admin', ['tags'=> $tags,'reports' => $ret_reports]);
     }
 
     /**

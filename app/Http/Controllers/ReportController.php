@@ -33,4 +33,15 @@ class ReportController extends Controller
 
         return redirect()->back();
     }
+
+    public function dismiss(Request $request){
+        $found = Report::find($request->id_post);
+        if($found)
+            $found->delete();
+        else{
+            //error handling
+            return redirect()->back();
+        }
+        return redirect()->back();
+    }
 }

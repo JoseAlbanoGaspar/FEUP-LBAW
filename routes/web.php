@@ -64,3 +64,4 @@ Route::get('rules','StaticController@showRules')->name('rules');
 
 //Report
 Route::post('report/add','ReportController@addReport')->name('addReport');
+Route::delete('report/dismiss','ReportController@dismiss')->name('dismissReport');
