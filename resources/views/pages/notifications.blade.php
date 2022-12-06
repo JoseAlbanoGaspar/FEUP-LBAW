@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-10 mt-3 mb-2">
-                <button class="btn btn-dark" id="mark-all-as-read-notifications">Mark all as read</button>
+                <button class="btn btn-dark" id="mark-all-notifications-as-read">Mark all as read</button>
             </div>
 
             <section id="notifications">

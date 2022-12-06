@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Post;
 use App\Models\User;
 
 
@@ -34,12 +35,21 @@ class UserPolicy
     }
     public function editProfile(User $auth,User $user){
       //Users can only edit their own profiles or admin
-      
+
       return (Auth::check() && $user->id_user == Auth::id()) || count(Auth::user()->administrator()->get());
     }
     public function delete(User $user, Card $card)
     {
       // Only a card owner can delete it
       return $user->id == $card->user_id;
+    }
+    public function owner(User $user, Post $post)
+    {
+      return $user->id_user == $post->id_author;
+    }
+
+    public function ownerOrPrivileged(User $user, Post $post)
+    {
+      return $user->id_user == $post->id_author || $user->administrator || $user->moderator;
     }
 }
