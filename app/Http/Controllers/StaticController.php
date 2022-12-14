@@ -14,6 +14,10 @@ class StaticController extends Controller
 
     public function showRules()
     {
-      return view('pages.Rules');
+      return view('pages.rules');
+    }
+    public function showContact()
+    {
+      return view('pages.contact');
     }
 }
