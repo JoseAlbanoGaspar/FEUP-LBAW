@@ -21,7 +21,7 @@
             </ul>
          </td>
          <td>
-            <form action="{{route('dismissReport')}}" method="POST">  <!-- DO ROUTE -->
+            <form action="{{route('dismissReport')}}" method="POST">  
                 @csrf
                 @method('DELETE')
                 <input type="hidden" name="id_post" value="{{ $report['id_post']}}"/>
