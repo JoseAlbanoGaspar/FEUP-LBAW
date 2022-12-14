@@ -57,6 +57,7 @@ Route::delete('post/edit','PostController@delete')->middleware('auth')->name('de
 
 //Drafts
 Route::get('drafts','PostController@showDrafts')->middleware('auth')->name('drafts');
+Route::post('drafts/delete/{id_draft}','PostController@deleteDraft')->middleware('auth')->name('deleteDraft');
 //Route::get('questions/ask', 'PostController@completeDraft')->name('formToAskQuestionFromDraft');
 
 
@@ -69,6 +70,8 @@ Route::get('notifications', 'NotificationController@show')->middleware('auth')->
 //Static Pages
 Route::get('about','StaticController@showAbout')->name('about');
 Route::get('rules','StaticController@showRules')->name('rules');
+Route::get('contact','StaticController@showContact')->name('contact');
 
-//Drafts
-Route::post('drafts/delete/{id_draft}','PostController@deleteDraft')->middleware('auth')->name('deleteDraft');
+//Report
+Route::post('report/add','ReportController@addReport')->name('addReport');
+Route::delete('report/dismiss','ReportController@dismiss')->name('dismissReport');

@@ -1,5 +1,7 @@
 @php
 	include_once(app_path() . '/Includes/Utils.php');
+	use App\Http\Controllers\ReportController;
+	$repController = new ReportController();
 @endphp
 
 <div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
@@ -53,8 +55,12 @@
 					</div>
 				</div>
 
-                @if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
+
                 <div class="d-flex align-items-center">
+					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $post->id_author) && !$repController->checkReport(Auth::id(),$post->id_post))
+					<p role="button" onclick="addReport({{$post->id_post}},{{Auth::id()}})"  class="button-{{$post->id_post}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
+					@endif
+					@if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
 					<a role="button" class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
 
 				   	<!-- FALTA UM POP UP PARA CONFIRMAR -->
@@ -64,8 +70,9 @@
 						<input type="hidden" value="{{ $post->id_post }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>
+					@endif
 				</div>
-                @endif
+                
 
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
@@ -105,6 +112,20 @@
 				<p id='post-text-body' class="pedit-{{$answer->id_answer}}">{{$answer->post->text_body}}</p>
 
 				<div class="d-flex flex-row justify-content-end py-1 p-2">
+					@if(Auth::check() && (Auth::user()->id_user === $answer->post->id_author || Auth::user()->administrator || Auth::user()->moderator))
+					<p role="button" id="edit-answer-button-{{$answer->id_answer}}" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})"
+                       class="btn btn-secondary btn-sm mx-2 text-center">Edit</p>
+
+					<form method='POST' action='{{route('deletePost')}}'>
+						{{ csrf_field() }}
+						@method('DELETE')
+						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
+						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
+					</form>	
+                	@endif
+					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $answer->post->id_author) && !$repController->checkReport(Auth::id(),$answer->id_answer))
+					<p role="button" onclick="addReport({{$answer->id_answer}},{{Auth::id()}})"  class="button-{{$answer->id_answer}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
+					@endif
 					<small>
 						<div class = "user-card col d-inline d-flex justify-content-end">
 							@include('partials.profileCard', ['user' => $answer->post->user])
@@ -117,19 +138,7 @@
 				</div>
 
 
-                @if(Auth::check() && (Auth::user()->id_user === $answer->post->id_author || Auth::user()->administrator || Auth::user()->moderator))
-                <div class="d-flex flex-row">
-					<a role="button" id="edit-answer-button-{{$answer->id_answer}}" onclick="editAnswer({{$answer->id_answer}},{{ $post->id_post }})"
-                       class="btn btn-secondary btn-sm mx-2 text-center" href="{{ route('updatePostForm',['id_post' => $post->id_post]) }}">Edit</a>
-
-					<form method='POST' action='{{route('deletePost')}}'>
-						{{ csrf_field() }}
-						@method('DELETE')
-						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
-						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
-					</form>
-				</div>
-                @endif
+               
 
 
 				@include('partials.comments', ['comments' => $answer->comments])

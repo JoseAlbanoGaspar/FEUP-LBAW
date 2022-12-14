@@ -386,7 +386,36 @@ function editAnswer(id, pgid) {
     deleted.remove();
     p.remove();
 }
+function cancelReport(id,id_user){
+    let form = document.querySelector(".go-back-" + id).parentNode;
+    let p = document.querySelector(".button-" + id).parentNode;
+    
+    let initialButton = document.createElement('p');
+    initialButton.setAttribute('role','button');
+    initialButton.setAttribute('class',"button-" + id + " btn btn-secondary btn-sm mx-2 text-center");
+    initialButton.setAttribute('onclick',"addReport(" + id + "," + id_user + ")");
+    initialButton.textContent = "Report";
+    
+    p.parentNode.insertBefore(initialButton,p);
+    p.remove();
+    form.remove();
+}
 
+function addReport(id,id_user){
+    let csfr = document.querySelector('meta[name="csrf-token"]').content;
+
+    let idname = '.button-' + id;
+    
+    let button = document.querySelector(idname);
+    let form = document.createElement('div');
+    form.innerHTML =
+        "<form class='go-back-" + id +"' method='POST' action='/../../report/add'><input type='hidden' name='_token' value='" + csfr + "'><input type='hidden' name='id_post' value='" + id + "'><input type='hidden' name='id_user' value='" + id_user + "'><input type='radio' name='reason' value='offensive' required><label>Offensive</label><input type='radio' name='reason' value='impContent' required><label>Improper Content</label><input type='radio' name='reason' value='Other' required><label>Other</label><button type='submit'>Report</button></form>";
+    button.parentNode.insertBefore(form,button);
+    let prev = document.createElement('div');
+    prev.innerHTML = "<p role='button' class='button-" + id + " btn btn-secondary btn-sm mx-2 text-center' onclick='cancelReport(" + id + ',' + id_user + ")'>Cancel</p>";
+    button.parentNode.insertBefore(prev,button);
+    button.remove();
+}
 /*
 function routeEditPost(event){
     event.preventDefault();
