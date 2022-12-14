@@ -4,7 +4,7 @@
 	$repController = new ReportController();
 @endphp
 
-<div id="question_header" class="d-flex flex-column mx-3 mx-md-5 mt-5">
+<div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
 	<div class="d-flex flex-row align-items-center justify-content-between">
 		<h1 id="question_title">{{$post->question->title}}</h1>
 		<a role="button" class="btn btn-secondary btn mx-2 text-center" href="{{ route('formToAskQuestion') }}">Ask Question</a>
@@ -95,8 +95,12 @@
 		<div id="answerid-{{$answer->id_answer}}" class="post-layout d-flex flex-row mb-3">
 			<div class="d-flex flex-column align-items-center">
 
+
 				@if($answer->is_solution)
-					<h5> <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question onwer accepted this as the best answer" class="text-center"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+					<h5> <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer" class="text-center"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+                    @if(Auth::check() && (Auth::user()->id_user === $post->id_author))
+{{--                        --}}
+                    @endif
 				@endif
 
 				@include('partials.voteButton', ['post' => $answer])

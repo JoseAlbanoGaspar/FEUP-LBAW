@@ -89,6 +89,60 @@ function addEventListeners() {
         addApplySearchOptionEventListener();
     }
 
+    let markAsReadButtons = document.querySelectorAll('.mark-as-read-notification');
+    if (markAsReadButtons) {
+        for (let button of markAsReadButtons) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                let idNotification = button.id.split('-')[4];
+                sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: idNotification}, function () {
+                    let response = JSON.parse(this.responseText);
+                    if (response.success) {
+                        button.remove();
+                        let notificationAnchor = document.querySelector('#notification-anchor-' + idNotification);
+                        notificationAnchor.classList.add('text-muted');
+                        document.querySelector('#notification-header-id-' + idNotification).classList.remove('fw-bold');
+                        document.querySelector('#notification-time-ago-id-' + idNotification).classList.remove('fw-bold');
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+        }
+    }
+
+
+    let markAllAsReadButton = document.querySelector('#mark-all-notifications-as-read');
+    if (markAllAsReadButton) {
+        markAllAsReadButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            sendAjaxRequest('POST', '/api/dismiss_all_notifications', {id_user: loggedUser.id_user}, function () {
+                let response = JSON.parse(this.responseText);
+                if (response.success) {
+                    let markAsReadButtons = document.querySelectorAll('.mark-as-read-notification');
+                    for (let button of markAsReadButtons) {
+                        button.remove();
+                    }
+                    let notificationAnchors = document.querySelectorAll('.notification-anchor');
+                    for (let anchor of notificationAnchors) {
+                        anchor.classList.add('text-muted');
+                    }
+                    let notificationHeaders = document.querySelectorAll('.notification-header');
+                    for (let header of notificationHeaders) {
+                        header.classList.remove('fw-bold');
+                    }
+                    let notificationTimeAgo = document.querySelectorAll('.notification-time-ago');
+                    for (let timeAgo of notificationTimeAgo) {
+                        timeAgo.classList.remove('fw-bold');
+                    }
+                } else {
+                    alert(response.message);
+                }
+            });
+        });
+    }
+
+
 }
 
 function encodeForAjax(data) {
@@ -397,3 +451,249 @@ function altEditAnswer(id, text){
  */
 highlightSidenav();
 addEventListeners();
+
+function closeModal(id){
+    let  modal = new bootstrap.Modal(document.getElementById(id));
+    console.log(modal);
+    modal.hide();
+}
+
+function logResponse(){
+    console.log(JSON.parse(this.responseText));
+}
+
+function addLoginRequiredModal() {
+    let modal = document.createElement('div');
+    modal.innerHTML = `
+                    <div class="modal fade" id="loginRequiredModal" tabindex="-1" role="dialog" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="loginRequiredModalLabel">Login Required</h5>
+                                <button id="close-login-modal" type="button" class="close btn"  aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You must be logged in to vote.</p>
+                                <a href="/login" class="btn btn-primary">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    `;
+    let content = document.querySelector('#content');
+    content.appendChild(modal);
+}
+
+if (window.location.href.match(/questions\/\d+/)) {
+    user = loggedUser ?? null;
+    colorVoteButtons();
+    addLoginRequiredModal();
+    let voteButtons = document.querySelectorAll('.vote-button');
+    if (voteButtons) {
+        for (let button of voteButtons) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (user == null) {
+                    let modal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+                    document.getElementById("close-login-modal").addEventListener("click", function () {
+                        modal.hide();
+                    });
+                    modal.show();
+
+                } else {
+                    let postId = button.getAttribute('id').split('-')[2];
+                    let vote = button.classList.contains('upvote-button') ? 1 : -1;
+                    let score = button.parentElement.querySelector('.post-score');
+
+                    let upvoteButton = button.parentElement.querySelector('.upvote-button');
+                    let downvoteButton = button.parentElement.querySelector('.downvote-button');
+                    if (upvoteButton.classList.contains('btn-outline-success')) {
+                        score.textContent = (parseInt(score.textContent) - 1).toString();
+                        upvoteButton.classList.remove('btn-outline-success');
+                        if (downvoteButton.classList.contains('btn-outline-danger')) {
+                            downvoteButton.classList.remove('btn-outline-danger');
+                        }
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 0}, logResponse);
+                    }
+                    else if (downvoteButton.classList.contains('btn-outline-danger')) {
+                        score.textContent = (parseInt(score.textContent) + 1).toString();
+                        downvoteButton.classList.remove('btn-outline-danger');
+                        if (upvoteButton.classList.contains('btn-outline-success')) {
+                            upvoteButton.classList.remove('btn-outline-success');
+                        }
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 0}, logResponse);
+                    }
+                    else if (vote === 1) {
+                        score.textContent = parseInt(score.textContent) + vote;
+                        upvoteButton.classList.add('btn-outline-success');
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: 1}, logResponse);
+
+                    }
+                    else if (vote === -1) {
+                        score.textContent = parseInt(score.textContent) + vote;
+                        downvoteButton.classList.add('btn-outline-danger');
+                        sendAjaxRequest('POST', '/api/users/vote', {id_user: loggedUser.id_user, id_post: postId, score: -1}, logResponse);
+                    }
+                }
+            });
+        }
+    }
+}
+
+function colorVoteButtons() {
+    if(!loggedUser) return;
+    let questionId = document.querySelector('.question_header').id.split('_')[3];
+    sendAjaxRequest('GET', '/api/users/'+ loggedUser.id_user + '/votes_on_question/' + questionId  , null, function () {
+        let response = JSON.parse(this.responseText);
+        let questionVote = response.questionVote[0];
+        let answerVotes = response.answerVotes;
+        let upvoteButton = document.querySelector('#upvote-button-' + questionId);
+        let downvoteButton = document.querySelector('#downvote-button-' + questionId);
+        if (questionVote != null) {
+            if (questionVote.score === 1) {
+                upvoteButton.classList.add('btn-outline-success');
+            } else if (questionVote.score === -1) {
+                downvoteButton.classList.add('btn-outline-danger');
+            }
+        }
+
+        for (let answerVote of answerVotes) {
+            let answerId = answerVote.id_answer;
+            let upvoteButton = document.querySelector('#upvote-button-' + answerId);
+            let downvoteButton = document.querySelector('#downvote-button-' + answerId);
+            if (answerVote.score === 1) {
+                upvoteButton.classList.add('btn-outline-success');
+            } else if (answerVote.score === -1) {
+                downvoteButton.classList.add('btn-outline-danger');
+            }
+        }
+
+    });
+
+}
+
+
+let notificationsButton = document.getElementById('notifications-icon');
+if (notificationsButton) {
+        sendAjaxRequest('POST', '/api/get_unread_notifications', {id_user: loggedUser.id_user}, function () {
+            let response = JSON.parse(this.responseText);
+            let notifications = response.notifications;
+            //create a list of notifications
+            let notificationsList = document.createElement('ul');
+            /*notificationsList.classList.add('list-group');
+            notificationsList.classList.add('list-group-flush');
+            notificationsList.classList.add('list-group-hoverable');
+            notificationsList.classList.add('list-group-hoverable-dark');
+            */
+            notificationsList.setAttribute('id', 'notifications-list');
+            //for each notification, create a list item and add it to the list
+            if(notifications.length === 0) {
+                let noNotifications = document.createElement('li');
+                noNotifications.classList.add('list-group-item');
+                noNotifications.textContent = 'No new notifications';
+                notificationsList.appendChild(noNotifications);
+            }
+            for (let notification of notifications) {
+                let notificationListItem = document.createElement('li');
+                notificationListItem.classList.add('list-group-item');
+                notificationListItem.classList.add('list-group-item-dark');
+                notificationListItem.classList.add('list-group-item-action');
+                notificationListItem.classList.add('list-group-item-action-dark');
+                notificationListItem.setAttribute('id', 'notification-' + notification.id_notif);
+                //add a mark as read button
+                let markAsReadButton = document.createElement('button');
+                markAsReadButton.classList.add('btn');
+                markAsReadButton.classList.add('btn-sm');
+                markAsReadButton.classList.add('btn-outline-dark');
+                markAsReadButton.classList.add('mark-as-read-button');
+                markAsReadButton.textContent = 'Mark as read';
+                markAsReadButton.setAttribute('id', 'mark-as-read-button-' + notification.id_notif);
+                //align the button to the right
+                markAsReadButton.style.float = 'right';
+                markAsReadButton.addEventListener('click', function () {
+                    sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: notification.id_notif}, null);
+                    let notificationListItem = document.getElementById('notification-' + notification.id_notif);
+                    notificationListItem.classList.add('fade');
+                    notificationListItem.classList.add('out');
+                    setTimeout(function () {
+                        notificationListItem.remove();
+                        notifications.splice(notifications.indexOf(notification), 1);
+
+                        if(notifications.length === 0) {
+                            let noNotifications = document.createElement('li');
+                            noNotifications.classList.add('list-group-item');
+                            noNotifications.textContent = 'No new notifications';
+                            notificationsList.appendChild(noNotifications);
+                        }
+                    }, 500);
+
+                });
+
+
+                notificationListItem.addEventListener('click', function () {
+                    sendAjaxRequest('POST', '/api/dismiss_notification', {id_user: loggedUser.id_user, id_notification: notification.id_notif}, null);
+                });
+                let notificationLink = document.createElement('a');
+                notificationLink.classList.add('text-decoration-none');
+                notificationLink.classList.add('text-dark');
+                notificationLink.textContent = notification.message;
+                if(notification.href) notificationLink.setAttribute('href', notification.href);
+                notificationListItem.appendChild(notificationLink);
+                notificationListItem.appendChild(markAsReadButton);
+                notificationsList.appendChild(notificationListItem);
+            }
+            //add the list to the dropdown menu
+            document.querySelector('#notifications-icon').appendChild(notificationsList);
+        });
+}
+
+
+
+let deleteDraftButtons = document.querySelectorAll('.delete-draft');
+for (let deleteDraftButton of deleteDraftButtons) {
+    deleteDraftButton.addEventListener('click', function () {
+        let draftId = this.id.split('-')[2];
+        sendAjaxRequest('POST', '/drafts/delete/' + draftId,null, function () {
+                let draftListItem = document.getElementById('draft-' + draftId);
+                draftListItem.classList.add('fade');
+                draftListItem.classList.add('out');
+                setTimeout(function () {
+                    let parentEl = deleteDraftButton.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    draftListItem.remove();
+                    let remainingButtons = document.querySelectorAll('.delete-draft');
+                    if(remainingButtons.length === 0) {
+                        let noDrafts = document.createElement('p');
+                        noDrafts.textContent = 'You do not have any drafts.';
+                        parentEl.parentElement.appendChild(noDrafts);
+                    }
+
+                }, 500);
+        });
+    });
+}
+
+let completeDraftButtons = document.querySelectorAll('.complete-draft');
+for (let completeDraftButton of completeDraftButtons) {
+    completeDraftButton.addEventListener('click', function () {
+        let draftId = this.id.split('-')[2];
+        sendAjaxRequest('POST', '/drafts/delete/' + draftId,null, function () {
+            //this can stay here only so that when a user clicks on the back button after completing a draft, the draft is not shown anymore
+                let draftListItem = document.getElementById('draft-' + draftId);
+                draftListItem.classList.add('fade');
+                draftListItem.classList.add('out');
+                setTimeout(function () {
+                    let parentEl = completeDraftButton.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    draftListItem.remove();
+                    let remainingButtons = document.querySelectorAll('.complete-draft');
+                    if(remainingButtons.length === 0) {
+                        let noDrafts = document.createElement('p');
+                        noDrafts.textContent = 'You do not have any drafts.';
+                        parentEl.parentElement.appendChild(noDrafts);
+                    }
+
+                }, 500);
+        });
+    });
+}

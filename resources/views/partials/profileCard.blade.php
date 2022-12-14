@@ -1,3 +1,5 @@
+
+@if(!str_contains($user->username, 'deleted'))
 <div class="flex-shrink">
     <a href="{{route('users', ['id_user'=>$user->id_user])}}" class="user-card-avatar">
         <div class="gravatar-wrapper-16">
@@ -5,9 +7,14 @@
         </div>
     </a>
 </div>
+@endif
 
 <div class="user-card-info flex-shrink">
         <div class="user-card-link">
-            <a href="{{route('users', ['id_user'=>$user->id_user])}}" class="flex--item">{{$user->username}}</a>
+            @if(str_contains($user->username, 'deleted') === false)
+                <a href="{{route('users', ['id_user'=>$user->id_user])}}" class="user-card-name">{{$user->username}}</a>
+            @else
+                <span class="user-card-name text-muted">Deleted user</span>
+            @endif
         </div>
 </div>

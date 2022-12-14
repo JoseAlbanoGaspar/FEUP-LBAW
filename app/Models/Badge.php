@@ -37,7 +37,7 @@ class Badge extends Model
     public $timestamps = false;
 
 	protected $casts = [
-		'b_rank' => 'USER-DEFINED'
+		//'b_rank' => 'USER-DEFINED'
 	];
 
 	protected $fillable = [

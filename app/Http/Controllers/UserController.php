@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnswerVote;
+use App\Models\Post;
+use App\Models\Question;
+use App\Models\QuestionVote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Moderator;
+use Illuminate\Support\Str;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -37,6 +43,11 @@ class UserController extends Controller
     public function show($id)
     {
       $user = User::find($id);
+      if(str_contains($user->username, 'deleted')){
+          abort(404);
+      }
+
+
       $role = 'Standard User';
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
@@ -184,4 +195,101 @@ class UserController extends Controller
             'profile_picture' => $profile_image_url
         ]);
     }
+
+    public function getCurrentUserApi(){
+//        if(Auth::check()){
+//            $user = Auth::user();
+////           $user = User::find(1);
+//        }
+//        else{
+//            $user = null;
+//            $user = User::find(1);
+//        }
+
+        if (Auth::guard('api')->check())
+        {
+//            logger(Auth::guard('api')->user()); // to get user
+            $user = Auth::guard('api')->user();
+
+        }else{
+//            logger("User not authorized");
+            $user = 33;
+        }
+        return  response()->json(array('success' => true, 'user'=>$user));
+    }
+
+    public function userVotesToQuestionAndAnswers($id_user, $id_question){
+
+        //verificar se user logado ou admin??
+        $questionVote = User::find($id_user)->question_votes()->where('id_question', $id_question)->get();
+        $answerVotes = User::find($id_user)->answer_votes()->whereIn('id_answer', Question::find($id_question)->answers()->pluck('id_answer'))->get();
+        return response()->json(array('success' => true, 'questionVote'=>$questionVote, 'answerVotes'=>$answerVotes));
+    }
+
+    public function voteOnPost(Request $request){
+
+        $id_user = $request->id_user;
+        $id_post = $request->id_post;
+
+        $score = intval($request->score);
+        $post = Post::find($id_post);
+        if($post->question != null){
+            $vote = QuestionVote::where('id_question', $id_post)->where('id_user', $id_user)->first();
+            if($vote == null){
+                QuestionVote::create(['id_question' => $id_post, 'id_user' => $id_user, 'score' => $score]);
+            }
+            else{
+                QuestionVote::where('id_question', $id_post)->where('id_user', $id_user)->update(['score' => $score]);
+            }
+        }
+        elseif ($post->answer != null){
+            $vote = AnswerVote::where('id_answer', $id_post)->where('id_user', $id_user)->first();
+            if($vote == null){
+                AnswerVote::create(['id_answer' => $id_post, 'id_user' => $id_user, 'score' => $score]);
+            }
+            else{
+                AnswerVote::where('id_answer', $id_post)->where('id_user', $id_user)->update(['score' => $score]);
+            }
+        }
+        else{
+            return response()->json(array('success' => false, 'message'=>'Post not found'));
+        }
+        return response()->json(array('success' => true));
+    }
+
+    public function delete(Request $request){
+        $id_user = $request->id_user;
+        try{
+            $user = User::findOrFail($id_user);
+        }
+        catch (Throwable $e){
+            abort(404);
+        }
+        //inside a transaction, change the $user->username to 'deleted_user_' . $user->id_user
+        //and change the $user->email to 'deleted_email_' . $user->id_user
+        //and change the $user->password to a random text
+        //and change the $user->profile_picture to null
+        //and change the $user->personal_text to null
+        //and delete all notifications, drafts, follows_tag, follows_question, badge_given
+        //dont do anything else
+        //and return a success message
+        DB::transaction(function () use ($user) {
+            $user->username = 'deleted_user_' . $user->id_user;
+            $user->email = 'deleted_email_' . $user->id_user;
+            $user->password = Str::random(20);
+            $user->profile_picture = null;
+            $user->personal_text = null;
+            $user->save();
+            $user->notifications()->delete();
+            $user->drafts()->delete();
+            $user->follows_tag()->delete();
+            $user->follows_question()->delete();
+            $user->badge_given()->delete();
+        });
+
+
+
+
+    }
+
 }

@@ -24,7 +24,7 @@
 
                 @if($post->answer->is_solution)
                     <a class="text-decoration-none" href="{{route('question', ['id_question'=>$post->answer->question->id_question])}}#{{'answerid-'.$post->answer->id_answer}}">
-                        <h5 class="card-text is-solution-{{$post->answer->is_solution}}">{{$truncated}} <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question onwer accepted this as the best answer"><i class="fa fa-check" aria-hidden="true"></i></a></h5>
+                        <h5 class="card-text is-solution-{{$post->answer->is_solution}}">{{$truncated}} <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer"><i class="fa fa-check" aria-hidden="true"></i></a></h5>
                     </a>
                 @else
                 <a class="text-decoration-none" href="{{route('question', ['id_question'=>$post->answer->question->id_question])}}#{{'answerid-'.$post->answer->id_answer}}">

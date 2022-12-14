@@ -36,15 +36,11 @@ class NewBadgeNotification extends Model
 
 	public function notification()
 	{
-		return $this->belongsTo(Notification::class, 'id_notif')
-//					->where('notification.id_notif', '=', 'new_badge_notif.id_notif')
-					->where('notification.id_notif', '=', 'new_badge_notif.id_notif');
+		return $this->belongsTo(Notification::class, 'id_notif');
 	}
 
 	public function badge()
 	{
-		return $this->belongsTo(Badge::class, 'id_badge')
-//					->where('badge.id_badge', '=', 'new_badge_notif.id_badge')
-					->where('badge.id_badge', '=', 'new_badge_notif.id_badge');
+		return $this->belongsTo(Badge::class, 'id_badge');
 	}
 }

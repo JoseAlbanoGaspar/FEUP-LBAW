@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 
 /*
@@ -17,3 +18,16 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', 'Auth\LoginController@getUser');
 
 Route::post('search_users', [UserController::class, 'searchApi'])->name('searchUsersApi');
+
+Route::post('current_user', [UserController::class, 'getCurrentUserApi'])->name('getCurrentUserApi');
+
+//proteger isto para o dono, não eet´s a funcionar nem para só users logados
+Route::get('users/{id_user}/votes_on_question/{id_question}', [UserController::class, 'userVotesToQuestionAndAnswers'])->name('userVotesToQuestionAndAnswers');
+
+Route::post('users/vote', [UserController::class, 'voteOnPost'])->name('voteOnPost');
+
+Route::post('get_unread_notifications', [NotificationController::class, 'getUnreadNotifications'])->name('getUnreadNotifications');
+
+//Tirar daqui o que não retorna json??
+Route::post('dismiss_notification', [NotificationController::class, 'dismissNotification'])->name('dismissNotification');
+Route::post('dismiss_all_notifications', [NotificationController::class, 'dismissAllNotifications'])->name('dismissAllNotifications');

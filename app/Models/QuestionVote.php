@@ -33,20 +33,16 @@ class QuestionVote extends Model
 	];
 
 	protected $fillable = [
-		'score'
+		'id_user', 'id_question', 'score'
 	];
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_user')
-//					->where('user.id_user', '=', 'question_vote.id_user')
-					->where('users.id_user', '=', 'question_vote.id_user');
+		return $this->belongsTo(User::class, 'id_user');
 	}
 
 	public function question()
 	{
-		return $this->belongsTo(Question::class, 'id_question')
-//					->where('question.id_question', '=', 'question_vote.id_question')
-					->where('question.id_question', '=', 'question_vote.id_question');
+		return $this->belongsTo(Question::class, 'id_question');
 	}
 }
