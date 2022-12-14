@@ -1,5 +1,7 @@
 @php
 	include_once(app_path() . '/Includes/Utils.php');
+	use App\Http\Controllers\ReportController;
+	$repController = new ReportController();
 @endphp
 
 <div id="question_header" class="d-flex flex-column mx-3 mx-md-5 mt-5">
@@ -55,7 +57,7 @@
 
 
                 <div class="d-flex align-items-center">
-					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $post->id_author))
+					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $post->id_author) && !$repController->checkReport(Auth::id(),$post->id_post))
 					<p role="button" onclick="addReport({{$post->id_post}},{{Auth::id()}})"  class="button-{{$post->id_post}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
 					@endif
 					@if(Auth::check() && (Auth::user()->id_user === $post->id_author || Auth::user()->administrator || Auth::user()->moderator))
@@ -117,7 +119,7 @@
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
 					</form>	
                 	@endif
-					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $answer->post->id_author))
+					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $answer->post->id_author) && !$repController->checkReport(Auth::id(),$answer->id_answer))
 					<p role="button" onclick="addReport({{$answer->id_answer}},{{Auth::id()}})"  class="button-{{$answer->id_answer}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
 					@endif
 					<small>

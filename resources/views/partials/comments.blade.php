@@ -1,3 +1,8 @@
+@php
+    use App\Http\Controllers\ReportController;
+    $repController = new ReportController();
+@endphp
+
 <div id="comments" class="comments bt bc-black-075 mt12 ">
     <ul class="comments-list">
         @foreach ($comments as $comment)
@@ -10,7 +15,7 @@
             <div class="comment-date d-inline-flex ai-center">
                 &nbsp;{{timeElapsedString($comment->post->date)}}
             </div>
-            @if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $comment->post->user->id_user))
+            @if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $comment->post->user->id_user) && !$repController->checkReport(Auth::id(),$comment->id_comment))
 				<p role="button" onclick="addReport({{$comment->id_comment}},{{Auth::id()}})"  class="button-{{$comment->id_comment}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
 			@endif
         </li>
