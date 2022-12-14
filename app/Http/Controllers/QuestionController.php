@@ -64,14 +64,18 @@ class QuestionController extends PostController
     }
 
 
-    public function getAskForm()
+    public function getAskForm(Request $request)
     {
 
         if (!Auth::check()) {
             return redirect()->route('login');
         }
+
+        $title = $request->input('title');
+        $text_body = $request->input('text_body');
+
         $this->authorize('askQuestion', Question::class);
-        return view('pages.askForm');
+        return view('pages.askForm', ['title' => $title, 'text_body' => $text_body]);
     }
 
     public function postQuestion(Request $request)

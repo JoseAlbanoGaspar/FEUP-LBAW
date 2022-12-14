@@ -55,13 +55,20 @@ Route::get('post/{id_post}/edit','PostController@updatePostForm')->name('updateP
 Route::post('posts/edit','PostController@update')->middleware('auth')->name('updatePost');
 Route::delete('post/edit','PostController@delete')->middleware('auth')->name('deletePost');
 
+//Drafts
+Route::get('drafts','PostController@showDrafts')->middleware('auth')->name('drafts');
+//Route::get('questions/ask', 'PostController@completeDraft')->name('formToAskQuestionFromDraft');
 
 
 //Tags
 Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
 
+//Notifications
 Route::get('notifications', 'NotificationController@show')->middleware('auth')->name('notifications');
 
 //Static Pages
 Route::get('about','StaticController@showAbout')->name('about');
 Route::get('rules','StaticController@showRules')->name('rules');
+
+//Drafts
+Route::post('drafts/delete/{id_draft}','PostController@deleteDraft')->middleware('auth')->name('deleteDraft');

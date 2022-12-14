@@ -1,5 +1,10 @@
 @extends('layouts.app')
+@php
 
+if(isset($text_body)){
+
+}
+@endphp
 @section('content')
 
 <h2 class="m-2 my-4">Ask Question</h2>
@@ -13,10 +18,10 @@
 
         <!-- ID -->
         <input type="hidden" value="{{ Auth::user()->id_user }}" name="id_author" />
-        
+
         <!-- title input -->
         <div class="form-outline mb-4">
-        <input type="text" name="title" class="form-control" required autofocus/>
+        <input type="text" name="title" @if(isset($title)) value="{{$title}}" @endif class="form-control" required autofocus/>
         <label class="form-label" for="title">Title</label>
         </div>
         @if ($errors->has('title'))
@@ -27,7 +32,8 @@
 
         <!-- text body input -->
         <div class="form-outline mb-4">
-        <textarea name="text_body" class="form-control" required rows="10"></textarea>
+        <textarea  name="text_body" class="form-control" required rows="10">@if(isset($text_body)){{$text_body}}@endif
+        </textarea>
         <label class="form-label" for="text_body">Question body</label>
         </div>
         @if ($errors->has('text_body'))

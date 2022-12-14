@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Moderator;
+use Illuminate\Support\Str;
 use Throwable;
 
 class UserController extends Controller
@@ -42,6 +43,11 @@ class UserController extends Controller
     public function show($id)
     {
       $user = User::find($id);
+      if(str_contains($user->username, 'deleted')){
+          abort(404);
+      }
+
+
       $role = 'Standard User';
       if(Moderator::find($id)) $role = 'Moderator';
       else if(Administrator::find($id)) $role = 'Administrator';
@@ -251,5 +257,39 @@ class UserController extends Controller
         return response()->json(array('success' => true));
     }
 
+    public function delete(Request $request){
+        $id_user = $request->id_user;
+        try{
+            $user = User::findOrFail($id_user);
+        }
+        catch (Throwable $e){
+            abort(404);
+        }
+        //inside a transaction, change the $user->username to 'deleted_user_' . $user->id_user
+        //and change the $user->email to 'deleted_email_' . $user->id_user
+        //and change the $user->password to a random text
+        //and change the $user->profile_picture to null
+        //and change the $user->personal_text to null
+        //and delete all notifications, drafts, follows_tag, follows_question, badge_given
+        //dont do anything else
+        //and return a success message
+        DB::transaction(function () use ($user) {
+            $user->username = 'deleted_user_' . $user->id_user;
+            $user->email = 'deleted_email_' . $user->id_user;
+            $user->password = Str::random(20);
+            $user->profile_picture = null;
+            $user->personal_text = null;
+            $user->save();
+            $user->notifications()->delete();
+            $user->drafts()->delete();
+            $user->follows_tag()->delete();
+            $user->follows_question()->delete();
+            $user->badge_given()->delete();
+        });
+
+
+
+
+    }
 
 }

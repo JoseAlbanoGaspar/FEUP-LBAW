@@ -480,7 +480,6 @@ if (window.location.href.match(/questions\/\d+/)) {
 
                     let upvoteButton = button.parentElement.querySelector('.upvote-button');
                     let downvoteButton = button.parentElement.querySelector('.downvote-button');
-                    console.log(loggedUser.id_user, postId);
                     if (upvoteButton.classList.contains('btn-outline-success')) {
                         score.textContent = (parseInt(score.textContent) - 1).toString();
                         upvoteButton.classList.remove('btn-outline-success');
@@ -619,4 +618,53 @@ if (notificationsButton) {
             //add the list to the dropdown menu
             document.querySelector('#notifications-icon').appendChild(notificationsList);
         });
+}
+
+
+
+let deleteDraftButtons = document.querySelectorAll('.delete-draft');
+for (let deleteDraftButton of deleteDraftButtons) {
+    deleteDraftButton.addEventListener('click', function () {
+        let draftId = this.id.split('-')[2];
+        sendAjaxRequest('POST', '/drafts/delete/' + draftId,null, function () {
+                let draftListItem = document.getElementById('draft-' + draftId);
+                draftListItem.classList.add('fade');
+                draftListItem.classList.add('out');
+                setTimeout(function () {
+                    let parentEl = deleteDraftButton.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    draftListItem.remove();
+                    let remainingButtons = document.querySelectorAll('.delete-draft');
+                    if(remainingButtons.length === 0) {
+                        let noDrafts = document.createElement('p');
+                        noDrafts.textContent = 'You do not have any drafts.';
+                        parentEl.parentElement.appendChild(noDrafts);
+                    }
+
+                }, 500);
+        });
+    });
+}
+
+let completeDraftButtons = document.querySelectorAll('.complete-draft');
+for (let completeDraftButton of completeDraftButtons) {
+    completeDraftButton.addEventListener('click', function () {
+        let draftId = this.id.split('-')[2];
+        sendAjaxRequest('POST', '/drafts/delete/' + draftId,null, function () {
+            //this can stay here only so that when a user clicks on the back button after completing a draft, the draft is not shown anymore
+                let draftListItem = document.getElementById('draft-' + draftId);
+                draftListItem.classList.add('fade');
+                draftListItem.classList.add('out');
+                setTimeout(function () {
+                    let parentEl = completeDraftButton.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    draftListItem.remove();
+                    let remainingButtons = document.querySelectorAll('.complete-draft');
+                    if(remainingButtons.length === 0) {
+                        let noDrafts = document.createElement('p');
+                        noDrafts.textContent = 'You do not have any drafts.';
+                        parentEl.parentElement.appendChild(noDrafts);
+                    }
+
+                }, 500);
+        });
+    });
 }

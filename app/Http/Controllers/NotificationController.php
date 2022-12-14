@@ -31,12 +31,12 @@ class NotificationController extends Controller
         try {
             $user = User::findOrFail($id_user);
         } catch (Throwable $e) {
-            return abort(404);
+            abort(404);
         }
         try {
             $notification = Notification::findOrFail($id_notification);
         } catch (Throwable $e) {
-            return abort(404);
+            abort(404);
         }
 
 
@@ -52,7 +52,7 @@ class NotificationController extends Controller
         try {
             $user = User::findOrFail($id_user);
         } catch (Throwable $e) {
-            return abort(404);
+            abort(404);
         }
 
         $notifications = $user->notifications()->get();
@@ -68,7 +68,7 @@ class NotificationController extends Controller
         try {
             $user = User::findOrFail($id_user);
         } catch (Throwable $e) {
-            return abort(404);
+            abort(404);
         }
         $notifications = $user->notifications()->where('dismissed', false)->orderBy('dismissed', 'asc')->orderBy('date','desc')->limit(10)->get();
 
