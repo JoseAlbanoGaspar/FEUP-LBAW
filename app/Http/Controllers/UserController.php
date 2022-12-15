@@ -121,6 +121,7 @@ class UserController extends Controller
         $query = $request->query('query');
         $users = User::query()
             ->where('username','LIKE', "%{$query}%")
+            ->whereNot('username','LIKE', "%deleted%")
             ->orderBy('username', 'ASC')
             ->simplePaginate(10);
         return view('pages.searchUsers', ['users' => $users, 'query' => $query]);
@@ -142,6 +143,7 @@ class UserController extends Controller
         }
         $users = User::query()
             ->where('username','LIKE', "%{$query}%")
+            ->whereNot('username','LIKE', "%deleted%")
             ->orderBy('username', 'ASC')
             ->simplePaginate(10, ['*'], 'page', $page);
 
@@ -282,13 +284,15 @@ class UserController extends Controller
             $user->save();
             $user->notifications()->delete();
             $user->drafts()->delete();
-            $user->follows_tag()->delete();
-            $user->follows_question()->delete();
-            $user->badge_given()->delete();
+            $user->follows_tags()->delete();
+            $user->follows_questions()->delete();
+            $user->badge_givens()->delete();
         });
 
 
-
+        if($user->id_user != Auth::id())
+            return redirect()->back();
+        return redirect()->route('logout');
 
     }
 

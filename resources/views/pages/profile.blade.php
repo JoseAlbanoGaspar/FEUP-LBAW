@@ -64,9 +64,17 @@
 
 
     @if (Auth::check() && Auth::user()->can('editProfile', $user))
-        <form class="my-3" method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
+    <div class="d-flex align-items-center my-2">
+        <form class="my-2" method='GET' action="{{ route('editProfile',['id_user' => $user->id_user]) }}">
             <button type="submit" class="btn btn-secondary">Edit Profile  <i class="fa fa-pencil" aria-hidden="true"></i></button>
         </form>
+        <form class="mx-2" method='POST' action="{{route('deleteUser')}}">
+            @method('DELETE')
+            {{ csrf_field() }}
+            <input type="hidden" value="{{$user->id_user}}" name="id_user"/>
+            <button type="submit" class="btn btn-danger btn-secondary mx-2 text-center admin">Delete Account</button>
+        </form>
+    </div>
     @endif
 
 </article>

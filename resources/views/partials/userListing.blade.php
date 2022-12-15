@@ -15,10 +15,13 @@
 
     @if(Auth::check() && Auth::user()->administrator())
     <div class="d-flex align-items-center">
-         <a role="button" type="button" class="btn btn-secondary btn-sm mx-2 text-center admin" href="{{route('editProfile',['id_user' => $userListing->id_user]) }}">Edit</a>
-
-        <!-- define route (not for A8) -->
-        <a role="button" type="button" class="btn btn-danger btn-sm mx-2 text-center admin" href="\">Delete</a>
+        <a role="button" type="button" class="btn btn-secondary btn-sm mx-2 text-center admin" href="{{route('editProfile',['id_user' => $userListing->id_user]) }}">Edit</a>
+        <form class="mx-2 d-flex" method='POST' action="{{route('deleteUser')}}">
+            @method('DELETE')
+            {{ csrf_field() }}
+            <input type="hidden" value="{{$userListing->id_user}}" name="id_user"/>
+            <button type="submit" class="btn btn-danger btn-sm mx-2 text-center admin">Delete</button>
+        </form>
         @if(! $userListing->administrator)
         <form class="mx-2 d-flex" method='POST' action="{{route('makeAdmin')}}">
             {{ csrf_field() }}
