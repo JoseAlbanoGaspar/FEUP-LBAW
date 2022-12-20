@@ -49,4 +49,24 @@ class TagController extends Controller
         return view('pages.tag', ['tag' => $tag]);
 
     }
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function followTag(Request $req){
+        $tag = Tag::find($req->id_tag);
+        $tag->users()->attach(auth()->user()->id_user);
+        return redirect()->back();
+    }
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unfollowTag(Request $req){
+        $tag = Tag::find($req->id_tag);
+        $tag->users()->detach(auth()->user()->id_user);
+        return redirect()->back();
+    }
 }

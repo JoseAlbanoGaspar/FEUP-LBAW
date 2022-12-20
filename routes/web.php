@@ -60,3 +60,6 @@ Route::delete('post/edit','PostController@delete')->middleware('auth')->name('de
 //Tags
 Route::get('tags','TagController@showAllTags')->name('tags'); 
 Route::get('tags/{id_tag}','TagController@showTag')->name('tag'); 
+
+Route::post('tags/{id_tag}/follow','TagController@follow')->middleware('auth')->name('followTag');
+Route::post('tags/{id_tag}/unfollow','TagController@unfollow')->middleware('auth')->name('unfollowTag');
