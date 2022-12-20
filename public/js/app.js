@@ -185,6 +185,8 @@ function highlightSidenav() {
         document.getElementById("questions-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("home")) {
         document.getElementById("homepage-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("tags")) {
+            document.getElementById("tags-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("personal_feed")) {
         document.getElementById("personalfeed-sidenav").classList.replace("link-dark", "selected");
     }

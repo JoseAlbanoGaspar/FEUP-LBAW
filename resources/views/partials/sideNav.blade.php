@@ -13,7 +13,7 @@
     </li>
 
     <li class="nav-item text-center my-1 fs-6">
-      <a id="questions-sidenav" class="nav-link link-dark" href="{{route('tags')}}">Tags</a>
+      <a id="tags-sidenav" class="nav-link link-dark" href="{{route('tags')}}">Tags</a>
     </li>
 
     <li class="nav-item text-center my-1 fs-6">
