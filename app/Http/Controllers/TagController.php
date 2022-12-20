@@ -32,4 +32,21 @@ class TagController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showAllTags(){
+        $tags = Tag::all();
+        return view('pages.tags', ['tags' => $tags]);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showTag($id){
+        $tag = Tag::find($id);
+        return view('pages.tag', ['tag' => $tag]);
+
+    }
 }

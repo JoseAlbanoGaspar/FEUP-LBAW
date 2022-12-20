@@ -26,3 +26,7 @@ body {
 .notadmin{
   display: none;
 }
+
+.tag-card{
+  background-color: #afa8a8;
+}

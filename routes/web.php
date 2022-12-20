@@ -58,4 +58,5 @@ Route::delete('post/edit','PostController@delete')->middleware('auth')->name('de
 
 
 //Tags
-Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
+Route::get('tags','TagController@showAllTags')->name('tags'); 
+Route::get('tags/{id_tag}','TagController@showTag')->name('tag'); 
