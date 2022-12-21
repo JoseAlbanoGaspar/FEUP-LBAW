@@ -265,7 +265,7 @@ class PostController extends Controller
      */
     public function showTopQuestions()
     {
-        $date = date('Y-m-d', strtotime('-1 months'));
+        $date = date('Y-m-d', strtotime('-2 months'));
         $posts = Post::query()->whereIn('id_post', Question::query()->get(['id_question']))
             ->orderByRaw('(SELECT score FROM question WHERE id_post = id_question) DESC')
             ->orderByRaw('(SELECT count(id_question) FROM answer WHERE id_question = id_post) DESC')
