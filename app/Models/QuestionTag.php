@@ -30,15 +30,18 @@ class QuestionTag extends Model
 		'id_question' => 'int'
 	];
 
+	protected $fillable = [
+		'id_tag',
+		'id_question'
+	];
+
 	public function tag()
 	{
-		return $this->belongsTo(Tag::class, 'id_tag')
-					->where('tag.id_tag', '=', 'question_tag.id_tag');
+		return $this->belongsTo(Tag::class, 'id_tag');
 	}
 
 	public function question()
 	{
-		return $this->belongsTo(Question::class, 'id_question')
-					->where('question.id_question', '=', 'question_tag.id_question');
+		return $this->belongsTo(Question::class, 'id_question');
 	}
 }

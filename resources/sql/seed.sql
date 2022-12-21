@@ -134,15 +134,15 @@ CREATE TABLE tag
 
 
 CREATE TABLE question_tag (
-                               id_tag INT NOT NULL,
-                               id_question INT NOT NULL,
-                               PRIMARY KEY (id_tag, id_question),
-                                   CONSTRAINT FK_TAG
-                                        FOREIGN KEY(id_tag)
-                                            REFERENCES tag(id_tag) ON DELETE CASCADE,
-                                    CONSTRAINT FK_QUESTION
-                                        FOREIGN KEY(id_question)
-                                            REFERENCES question(id_question) ON DELETE CASCADE
+                        id SERIAL PRIMARY KEY,
+                        id_tag INT NOT NULL,
+                        id_question INT NOT NULL,
+                        CONSTRAINT FK_TAG
+                            FOREIGN KEY(id_tag)
+                                REFERENCES tag(id_tag) ON DELETE CASCADE,
+                        CONSTRAINT FK_QUESTION
+                            FOREIGN KEY(id_question)
+                                REFERENCES question(id_question) ON DELETE CASCADE
 );
 
 

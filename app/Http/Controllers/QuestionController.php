@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Tag;
+use App\Models\QuestionTag;
 
 class QuestionController extends PostController
 {
@@ -74,16 +75,19 @@ class QuestionController extends PostController
         $title = $request->input('title');
         $text_body = $request->input('text_body');
 
+        $tags = Tag::all();
+
         $this->authorize('askQuestion', Question::class);
-        return view('pages.askForm', ['title' => $title, 'text_body' => $text_body]);
+        return view('pages.askForm', ['tags' => $tags,'title' => $title, 'text_body' => $text_body]);
     }
 
     public function postQuestion(Request $request)
     {
         $data = $request->all();
+
         Post::create([
             'id_author' => $data['id_author'],
-            'date' => Carbon::now()->format('Y'),
+            'date' => Carbon::now(),
             'text_body' => $data['text_body']
         ]);
 
@@ -94,16 +98,14 @@ class QuestionController extends PostController
             'title' => $data['title']
         ]);
 
-        $question = Question::find($new_id);
-
         for ($i=1; $i < 5; $i++) {
-            if($data['tag'.$i] != NULL) {
-                $tag = Tag::where('name',$data['tag'.$i])->first();
-                if($tag == NULL) Tag::create(['name' => $data['tag'.$i]]);
-                $question->tags[$i-1] = $tag;
+            if($data['tag'.$i] != "-1") {
+                QuestionTag::create([
+                    'id_tag' => $data['tag'.$i],
+                    'id_question' => $new_id
+                ]);
             }
         }
-        $question->save();
 
         return redirect()->route('question',['id_question' => $new_id]);
     }
