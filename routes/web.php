@@ -37,6 +37,7 @@ Route::get('admin', 'AdminController@show')->middleware('auth')->name('admin');
 Route::post('admin/tags','TagController@createTag')->middleware('auth')->name('createTag');
 Route::delete('admin/tags','TagController@deleteTag')->middleware('auth')->name('deleteTag');
 Route::post('admin/createUser', 'AdminController@createUser')->middleware('auth')->name('createUser');
+Route::delete('admin/deleteUser','UserController@delete')->middleware('auth')->name('deleteUser');
 Route::post('admin/makeAdmin','AdminController@makeAdmin')->middleware('auth')->name('makeAdmin');
 
 
