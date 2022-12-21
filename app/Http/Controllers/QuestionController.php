@@ -87,7 +87,7 @@ class QuestionController extends PostController
 
         Post::create([
             'id_author' => $data['id_author'],
-            'date' => Carbon::now()->format('Y'),
+            'date' => Carbon::now(),
             'text_body' => $data['text_body']
         ]);
 
