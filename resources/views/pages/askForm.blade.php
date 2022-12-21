@@ -1,10 +1,5 @@
 @extends('layouts.app')
-@php
 
-if(isset($text_body)){
-
-}
-@endphp
 @section('content')
 
 <h2 class="m-2 my-4">Ask Question</h2>
@@ -43,45 +38,23 @@ if(isset($text_body)){
         @endif
 
         <!-- Tags -->
+        <h5 class="row justify-content-md-center">Tags</h5>
+        <div class="d-flex flex-row">
+        @for ($i = 1; $i <= 4; $i++)
         <div class="form-outline mb-4">
-        <input type="text" name="tag1" class="form-control"/>
-        <label class="form-label" for="tag1">Tag 1</label>
+          @php $name = "tag" . strval($i) @endphp
+          <label class="form-label" for={{$name}}>Tag {{$i}}</label>
+          <select id={{$name}} name={{$name}}>
+            <option value="-1" selected="selected">----</option>
+            @foreach($tags as $tag)
+            <option value={{$tag->id_tag}}>{{$tag->name}}</option>
+            @endforeach
+          </select>
         </div>
-        @if ($errors->has('tag1'))
-        <span class="error">
-        {{ $errors->first('tag1') }}
-        </span>
-        @endif
+        @endfor
+        </div>
+        
 
-        <div class="form-outline mb-4">
-        <input type="text" name="tag2" class="form-control"/>
-        <label class="form-label" for="tag2">Tag 2</label>
-        </div>
-        @if ($errors->has('tag2'))
-        <span class="error">
-        {{ $errors->first('tag2') }}
-        </span>
-        @endif
-
-        <div class="form-outline mb-4">
-        <input type="text" name="tag3" class="form-control"/>
-        <label class="form-label" for="tag3">Tag 3</label>
-        </div>
-        @if ($errors->has('tag3'))
-        <span class="error">
-        {{ $errors->first('tag3') }}
-        </span>
-        @endif
-
-        <div class="form-outline mb-4">
-        <input type="text" name="tag4" class="form-control"/>
-        <label class="form-label" for="tag4">Tag 4</label>
-        </div>
-        @if ($errors->has('tag4'))
-        <span class="error">
-        {{ $errors->first('tag4') }}
-        </span>
-        @endif
 
         <!-- Submit and Go Back button -->
         <div class = "m-4 mx-5 d-flex justify-content-between">
