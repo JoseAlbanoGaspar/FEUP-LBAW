@@ -29,7 +29,9 @@
     </div>
     @if((count($tag->questions) > 0))
         <section id="questionList">
-                @each('partials.postListing', $tag->questions, 'postListing')
+                @foreach($tag->questions as $question)
+                    @include('partials.postListing', ['postListing' => $question->post])
+                @endforeach
         </section>
     @else
         <div class="d-flex flex-row" ><p id="results_not_found_message">No questions have this tag. </p>&nbsp;</div>
@@ -42,7 +44,7 @@
     </div>
     @if((count($tag->users) > 0))
         <section id="userList">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 m-1">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 m-3">
                 @each('partials.userListing', $tag->users, 'userListing')
             </div>
         </section>
