@@ -34,7 +34,7 @@
                 @endforeach
         </section>
     @else
-        <div class="d-flex flex-row" ><p id="results_not_found_message">No questions have this tag. </p>&nbsp;</div>
+        <p id="results_not_found_message" class="text-center">No questions have this tag. </p>
     @endif
 
 
@@ -64,7 +64,7 @@
             </div>
         </section>
     @else
-        <div class="d-flex flex-row" ><p id="results_not_found_message">No users are following this tag. </p>&nbsp;</div>
+        <p id="results_not_found_message" class="text-center">No users are following this tag. </p>
     @endif
 
 

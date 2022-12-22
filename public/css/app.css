@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(169, 169, 169);
+  background-color: rgb(202, 202, 202);
 }
 
 .navbar-nav > li{
@@ -28,5 +28,10 @@ body {
 }
 
 .tag-card{
-  background-color: #afa8a8;
+  background-color: #c0c0c0;
+}
+
+.isFollowedTag{
+  font-weight: bold;
+  color: #5cb85c;
 }
