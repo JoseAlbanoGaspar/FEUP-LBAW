@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(169, 169, 169);
+  background-color: rgb(202, 202, 202);
 }
 
 .navbar-nav > li{
@@ -25,4 +25,17 @@ body {
 
 .notadmin{
   display: none;
+}
+
+.tag-card{
+  background-color: #c0c0c0;
+}
+
+.isFollowedTag{
+  font-weight: bold;
+  color: #5cb85c;
+}
+
+.isNotFollowedTag{
+  color: #b85c5c;
 }
