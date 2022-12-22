@@ -9,9 +9,13 @@
         <div class="d-flex flex-row">
             <span class="isFollowedTag flex--item m-1">You follow this tag</span>
         </div>
+    @else
+        <div class="d-flex flex-row">
+            <span class="isNotFollowedTag flex--item m-1">You don't follow this tag, click on it to know more</span>
+        </div>
     @endif
 
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row mt-auto">
         <span class="flex--item m-1">Questions: {{count($tag->questions)}}</span>
         <span class="flex--item m-1">Users following: {{count($tag->users)}}</span>
     </div>

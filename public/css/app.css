@@ -35,3 +35,7 @@ body {
   font-weight: bold;
   color: #5cb85c;
 }
+
+.isNotFollowedTag{
+  color: #b85c5c;
+}
