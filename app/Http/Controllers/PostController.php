@@ -15,6 +15,8 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\User;
 use App\Models\Tag;
+use App\Models\QuestionTag;
+
 
 class PostController extends Controller
 {
@@ -284,7 +286,8 @@ class PostController extends Controller
     public function updatePostForm($id)
     {
         $post = Post::find($id);
-        return view('pages.editQuestion', ['post' => $post]);
+        $tags = Tag::all();
+        return view('pages.editQuestion', ['tags'=> $tags, 'post' => $post]);
     }
 
     public function updateAnswer(Request $request){
@@ -352,22 +355,19 @@ class PostController extends Controller
         //updating...
         if($data['text_body'] != NULL) $post->text_body = $data['text_body'];
         if($data['title'] != NULL) $question->title = $data['title'];
+
+        //deleting old tags
+        QuestionTag::where('id_question',$post->question->id_question)->delete();
+
+        //create new tags
         for ($i=1; $i < 5; $i++) {
-            if($data['tag'.$i] != NULL) {
-                $tag = Tag::where('name',$data['tag'.$i])->first();
-                if($tag == NULL) {
-                    Tag::create(['name' => $data['tag'.$i]]);
-                    $new_id = DB::table('tag')->latest('id_tag')->first()->id_tag;
-                    $tag = Tag::find($new_id);
-                } else {
-                    $tag = Tag::find($tag->id_tag);
-                }
-                $question->tags[$i-1] = $tag;
-                $tag->save();
-                $question->save();
+            if($data['tag'.$i] != "-1") {
+                QuestionTag::create([
+                    'id_tag' => $data['tag'.$i],
+                    'id_question' => $post->question->id_question
+                ]);
             }
         }
-
 
         //store updated information
         $post->save();

@@ -8,7 +8,7 @@
     <div style="width: 30rem;">
 
     <form method="post" action="{{ route('updatePost') }}" enctype="multipart/form-data">
-{{--        @method('patch')--}}
+        @method('PATCH')
         {{ csrf_field() }}
 
         <!-- ID FALTA AINDA-->
@@ -37,62 +37,41 @@
         </span>
         @endif
 
-        <!-- Tags -->
-        <div class="form-outline mb-4">
-        @if($post->question->tags->contains(0))
-        <input type="text" name="tag1" class="form-control" value="{{$post->question->tags[0]->name}}"/>
-        @else
-        <input type="text" name="tag1" class="form-control"/>
-        @endif
-        <label class="form-label" for="tag1">Tag 1</label>
-        </div>
-        @if ($errors->has('tag1'))
-        <span class="error">
-        {{ $errors->first('tag1') }}
-        </span>
-        @endif
+        <!-- Tags $post->question->tags-->
+        <h5 class="row justify-content-md-center">Tags</h5>
 
+        <div class="d-flex flex-row">
+        @php $k = 1 @endphp
+        @foreach($post->question->tags as $questionTag)
         <div class="form-outline mb-4">
-        @if($post->question->tags->contains(1))
-        <input type="text" name="tag2" class="form-control" value="{{$post->question->tags[1]->name}}"/>
-        @else
-        <input type="text" name="tag2" class="form-control"/>
-        @endif
-        <label class="form-label" for="tag2">Tag 2</label>
+          @php $name = "tag" . strval($k) @endphp
+          <label class="form-label" for={{$name}}>Tag {{$k}}</label>
+          <select id={{$name}} name={{$name}}>
+            <option value="-1">----</option>  <!-- option to remove tag -->
+            @foreach($tags as $tag)
+              @if($questionTag->name == $tag->name)
+              <option value={{$tag->id_tag}} selected="selected">{{$tag->name}}</option>
+              @else
+              <option value={{$tag->id_tag}}>{{$tag->name}}</option>
+              @endif
+            @endforeach
+          </select>
+          @php $k += 1 @endphp
         </div>
-        @if ($errors->has('tag2'))
-        <span class="error">
-        {{ $errors->first('tag2') }}
-        </span>
-        @endif
-
+        @endforeach
+        @for ($i = $k; $i <= 4; $i++)
         <div class="form-outline mb-4">
-        @if($post->question->tags->contains(2))
-        <input type="text" name="tag3" class="form-control" value="{{$post->question->tags[2]->name}}"/>
-        @else
-        <input type="text" name="tag3" class="form-control"/>
-        @endif
-        <label class="form-label" for="tag3">Tag 3</label>
+          @php $name = "tag" . strval($i) @endphp
+          <label class="form-label" for={{$name}}>Tag {{$i}}</label>
+          <select id={{$name}} name={{$name}}>
+            <option value="-1" selected="selected">----</option>
+            @foreach($tags as $tag)
+            <option value={{$tag->id_tag}}>{{$tag->name}}</option>
+            @endforeach
+          </select>
+        </div>                   
+        @endfor
         </div>
-        @if ($errors->has('tag3'))
-        <span class="error">
-        {{ $errors->first('tag3') }}
-        </span>
-        @endif
-
-        <div class="form-outline mb-4">
-        @if($post->question->tags->contains(3))
-        <input type="text" name="tag4" class="form-control" value="{{$post->question->tags[3]->name}}"/>
-        @else
-        <input type="text" name="tag4" class="form-control"/>
-        @endif
-        <label class="form-label" for="tag4">Tag 4</label>
-        </div>
-        @if ($errors->has('tag4'))
-        <span class="error">
-        {{ $errors->first('tag4') }}
-        </span>
-        @endif
 
         <!-- Submit and Go Back button -->
         <div class = "m-4 mx-5 d-flex justify-content-between">
