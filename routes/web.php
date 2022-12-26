@@ -61,10 +61,6 @@ Route::get('drafts','PostController@showDrafts')->middleware('auth')->name('draf
 Route::post('drafts/delete/{id_draft}','PostController@deleteDraft')->middleware('auth')->name('deleteDraft');
 //Route::get('questions/ask', 'PostController@completeDraft')->name('formToAskQuestionFromDraft');
 
-
-//Tags
-Route::get('tags/{name}','PostController@search')->name('tags'); //to be implemented in A9
-
 //Notifications
 Route::get('notifications', 'NotificationController@show')->middleware('auth')->name('notifications');
 
@@ -76,8 +72,9 @@ Route::get('contact','StaticController@showContact')->name('contact');
 //Report
 Route::post('report/add','ReportController@addReport')->name('addReport');
 Route::delete('report/dismiss','ReportController@dismiss')->name('dismissReport');
+
+//Tags
 Route::get('tags','TagController@showAllTags')->name('tags'); 
 Route::get('tags/{id_tag}','TagController@showTag')->name('tag'); 
-
 Route::post('tags/{id_tag}/follow','TagController@followTag')->middleware('auth')->name('followTag');
 Route::delete('tags/{id_tag}/unfollow','TagController@unfollowTag')->middleware('auth')->name('unfollowTag');

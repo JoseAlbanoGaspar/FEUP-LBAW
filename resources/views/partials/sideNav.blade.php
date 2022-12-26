@@ -21,15 +21,15 @@
     </li>
 
     <li class="nav-item text-center my-1 fs-6">
-      <a id="users-sidenav" class="nav-link link-dark" href="{{route('about')}}">About</a>
+      <a id="about-sidenav" class="nav-link link-dark" href="{{route('about')}}">About</a>
     </li>
 
     <li class="nav-item text-center my-1 fs-6">
-      <a id="users-sidenav" class="nav-link link-dark" href="{{route('rules')}}">Rules</a>
+      <a id="rules-sidenav" class="nav-link link-dark" href="{{route('rules')}}">Rules</a>
     </li>
 
     <li class="nav-item text-center my-1 fs-6">
-      <a id="users-sidenav" class="nav-link link-dark" href="{{route('contact')}}">Contact Us</a>
+      <a id="contact-sidenav" class="nav-link link-dark" href="{{route('contact')}}">Contact Us</a>
     </li>
 </ul>
 

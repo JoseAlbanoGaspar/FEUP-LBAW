@@ -240,9 +240,15 @@ function highlightSidenav() {
     } else if (window.location.pathname.includes("home")) {
         document.getElementById("homepage-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("tags")) {
-            document.getElementById("tags-sidenav").classList.replace("link-dark", "selected");
+        document.getElementById("tags-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("personal_feed")) {
         document.getElementById("personalfeed-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("contact")) {
+        document.getElementById("contact-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("rules")) {
+        document.getElementById("rules-sidenav").classList.replace("link-dark", "selected");
+    } else if (window.location.pathname.includes("about")) {
+        document.getElementById("about-sidenav").classList.replace("link-dark", "selected");
     }
 }
 
