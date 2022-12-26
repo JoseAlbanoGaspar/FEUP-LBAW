@@ -50,4 +50,12 @@ class Tag extends Model
 	{
 		return $this->hasMany(FollowsTag::class, 'id_tag');
 	}
+
+	public function isFollowedBy($user_id){
+		$follows = FollowsTag::where('id_user', $user_id)->where('id_tag', $this->id_tag)->first();
+		if($follows){
+			return true;
+		}
+		return false;
+	}
 }

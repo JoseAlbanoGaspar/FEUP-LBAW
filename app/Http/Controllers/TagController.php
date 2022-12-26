@@ -32,4 +32,41 @@ class TagController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showAllTags(){
+        $tags = Tag::all();
+        return view('pages.tags', ['tags' => $tags]);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showTag($id){
+        $tag = Tag::find($id);
+        return view('pages.tag', ['tag' => $tag]);
+
+    }
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function followTag(Request $req){
+        $tag = Tag::find($req->id_tag);
+        $tag->users()->attach(auth()->user()->id_user);
+        return redirect()->back();
+    }
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unfollowTag(Request $req){
+        $tag = Tag::find($req->id_tag);
+        $tag->users()->detach(auth()->user()->id_user);
+        return redirect()->back();
+    }
 }

@@ -76,3 +76,8 @@ Route::get('contact','StaticController@showContact')->name('contact');
 //Report
 Route::post('report/add','ReportController@addReport')->name('addReport');
 Route::delete('report/dismiss','ReportController@dismiss')->name('dismissReport');
+Route::get('tags','TagController@showAllTags')->name('tags'); 
+Route::get('tags/{id_tag}','TagController@showTag')->name('tag'); 
+
+Route::post('tags/{id_tag}/follow','TagController@followTag')->middleware('auth')->name('followTag');
+Route::delete('tags/{id_tag}/unfollow','TagController@unfollowTag')->middleware('auth')->name('unfollowTag');
