@@ -159,15 +159,15 @@ CREATE TABLE badge (
 
 
 CREATE TABLE badge_given (
-	id_badge INT NOT NULL,
+	id_badge_given serial NOT NULL,
+    id_badge INT NOT NULL,
     id_user INT NOT NULL,
-    PRIMARY KEY (id_user, id_badge),
-	    CONSTRAINT FK_BADGE
-			FOREIGN KEY(id_badge)
-				REFERENCES badge(id_badge),
-		CONSTRAINT FK_USER
-			FOREIGN KEY(id_user)
-				REFERENCES users(id_user)
+    CONSTRAINT FK_BADGE
+        FOREIGN KEY(id_badge)
+            REFERENCES badge(id_badge),
+    CONSTRAINT FK_USER
+        FOREIGN KEY(id_user)
+            REFERENCES users(id_user)
 );
 
 
@@ -2183,6 +2183,9 @@ INSERT INTO badge (b_rank, name, condition) VALUES ( 'Bronze', 'Judge Beginner',
 
 INSERT INTO badge_given (id_user,id_badge)
 VALUES
+    (3,1),
+    (3,2),
+    (3,3),
     (94,9),
     (54,3),
     (50,8),

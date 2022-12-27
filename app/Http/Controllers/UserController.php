@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Administrator;
 use App\Models\Moderator;
+use App\Models\BadgeGiven;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -55,7 +56,20 @@ class UserController extends Controller
       $question_votes = $this->postScore($user->question_votes()->get());
       $answer_votes = $this->postScore($user->answer_votes()->get());
 
-      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes]);
+      $badges = $user->badge_givens()->get();
+
+      $badge_count = ['Gold'=> 0,'Silver'=>0,'Bronze'=>0];
+      
+      foreach($badges as $badge){
+        if($badge->badge->b_rank == 'Gold')
+            $badge_count['Gold']++;
+        else if ($badge->badge->b_rank == 'Silver')
+            $badge_count['Silver']++;
+        else if ($badge->badge->b_rank == 'Bronze')
+            $badge_count['Bronze']++;
+      }
+
+      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes,'badges' =>$badge_count]);
     }
 
     /**
