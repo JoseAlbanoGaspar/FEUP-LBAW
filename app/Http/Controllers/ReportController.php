@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Report;
 
@@ -34,6 +35,9 @@ class ReportController extends Controller
     }
 
     public function dismiss(Request $request){
+        if(!Auth::user()->moderator && !Auth::user()->administrator)
+            abort(404);
+                
         $found = Report::where('id_post',$request->id_post)->delete();
         
         return redirect()->back();
