@@ -45,7 +45,7 @@
               <a class="nav-link" href="{{route('notifications')}}"><i class="fa fa-inbox"></i></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fa fa-question-circle"></i></a>
+              <a class="nav-link" href="{{route('about')}}"><i class="fa fa-question-circle"></i></a>
             </li>
             @auth
             <li class="nav-item" id="logout-button">
