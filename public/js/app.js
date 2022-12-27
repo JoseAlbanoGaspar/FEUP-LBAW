@@ -245,7 +245,9 @@ function highlightSidenav() {
         document.getElementById("personalfeed-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("contact")) {
         document.getElementById("contact-sidenav").classList.replace("link-dark", "selected");
-    } else if (window.location.pathname.includes("rules")) {
+    } else if (window.location.pathname.includes("unanswered")) {
+        document.getElementById("unansweredQuestions-sidenav").classList.replace("link-dark", "selected");
+    }else if (window.location.pathname.includes("rules")) {
         document.getElementById("rules-sidenav").classList.replace("link-dark", "selected");
     } else if (window.location.pathname.includes("about")) {
         document.getElementById("about-sidenav").classList.replace("link-dark", "selected");
