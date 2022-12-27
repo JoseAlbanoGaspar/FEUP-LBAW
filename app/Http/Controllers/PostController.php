@@ -251,6 +251,22 @@ class PostController extends Controller
     }
 
     /**
+     * Shows all unanswered questions in pages of 20 each, ordered by most recent
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showUnansweredQuestions()
+    {
+        
+    $posts = Post::query()
+        ->whereRaw('id_post IN (SELECT id_question FROM question)')
+        ->whereRaw('id_post NOT IN (SELECT id_question FROM answer)')
+        ->orderBy('date', 'DESC')
+        ->paginate(20);
+
+        return view('pages.unansweredQuestions', ['posts' => $posts]);
+    }
+
+    /**
      * Show all posts in pages of 20 each, ordered by most recent
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
