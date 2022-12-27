@@ -83,6 +83,10 @@ class QuestionController extends PostController
 
     public function postQuestion(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         $data = $request->all();
 
         Post::create([

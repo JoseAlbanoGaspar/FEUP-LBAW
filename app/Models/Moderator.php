@@ -28,6 +28,10 @@ class Moderator extends Model
 		'id_moderator' => 'int'
 	];
 
+	protected $fillable = [
+		'id_moderator'
+	];
+
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_moderator');

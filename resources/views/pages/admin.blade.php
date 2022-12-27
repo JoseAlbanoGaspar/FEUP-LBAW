@@ -2,9 +2,13 @@
 
 @section('content')
 
+@if(Auth::user()->administrator)
 <h2 class="m-2 my-4">Administration Page</h2>
-
+@else
+<h2 class="m-2 my-4">Moderation Page</h2>
+@endif
 <div class="accordion accordion-flush mx-4 mx-md-3" id="accordionFlushExample">
+    @if (Auth::user()->administrator)
     <div class="accordion-item">
       <h2 class="accordion-header" id="flush-headingOne">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -29,6 +33,7 @@
         </div>
       </div>
     </div>
+    @endif
     <div class="accordion-item">
       <h2 class="accordion-header" id="flush-headingOne">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
