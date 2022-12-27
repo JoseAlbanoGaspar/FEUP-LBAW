@@ -20,7 +20,7 @@
         <a type="button" class="btn btn-primary" href="{{ route('userQuestions',['id_user' => $user->id_user]) }}">My questions</a>
         <a type="button" class="btn btn-primary" href="{{ route('userAnswers',['id_user' => $user->id_user]) }}">My answers</a>
         <a type="button" class="btn btn-primary" href="{{ route('drafts')}}">My drafts</a>
-        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user && count(Auth::user()->administrator()->get()))
+        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user && (count(Auth::user()->administrator()->get()) || count(Auth::user()->moderator()->get())))
         <a type="button" class="btn btn-primary" href="{{ route('admin') }}">Admin</a>
         @endif
     </div>

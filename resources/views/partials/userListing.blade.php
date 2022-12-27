@@ -29,6 +29,13 @@
             <button type="submit" class="btn btn-warning btn-sm h-auto admin">Make Admin</button>
         </form>
         @endif
+        @if(! $userListing->moderator)
+        <form class="mx-2 d-flex" method='POST' action="{{route('makeModerator')}}">
+            {{ csrf_field() }}
+            <input type="hidden" value="{{$userListing->id_user}}" name="id_user"/>
+            <button type="submit" class="btn btn-warning btn-sm h-auto admin">Make Moderator</button>
+        </form>
+        @endif
     </div>
     @endif
 </article>

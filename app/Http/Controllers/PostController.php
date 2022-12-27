@@ -335,7 +335,7 @@ class PostController extends Controller
 
         $question = Question::find($post->question->id_question);
 
-        Log::info($data);
+        
         //Log::info($post);
         //authorize the edition!!! -> Uncomment after implemented loggin
         //$this->authorize('editProfile',$request->id_user);

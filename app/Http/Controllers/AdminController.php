@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
 use App\Models\Administrator;
+use App\Models\Moderator;
 use App\Models\Tag;
 use App\Models\Report;
 use App\Models\Post;
@@ -25,7 +26,8 @@ class AdminController extends Controller
      */
     public function show(Request $request)
     {
-      $this->authorize('isAdministrator', User::class);
+      if(!Administrator::find(Auth::id()) && !Moderator::find(Auth::id()))
+        abort(404);
       $tags = Tag::all();
       
       $reports = Report::select('id_post')->distinct()->get();
@@ -70,8 +72,23 @@ class AdminController extends Controller
     }
 
     public function makeAdmin(Request $request){
-      //$this->authorize('isAdministrator', App\Model\User::class);
+      $this->authorize('isAdministrator', User::class);
+      
+      //if moderator -> promoted
+      Moderator::where('id_moderator',$request->id_user)->delete();  
+      
       Administrator::create(['id_admin' => $request->id_user]);
+      return redirect()->route('users',['id_user' => $request->id_user]);
+    }
+
+    public function makeModerator(Request $request){
+      $this->authorize('isAdministrator', User::class);
+      
+      //if admin -> demoted
+      Administrator::where('id_admin',$request->id_user)->delete();  
+      
+      //make moderator
+      Moderator::create(['id_moderator' => $request->id_user]);
       return redirect()->route('users',['id_user' => $request->id_user]);
     }
 

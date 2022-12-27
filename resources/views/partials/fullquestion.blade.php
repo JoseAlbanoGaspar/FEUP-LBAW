@@ -137,10 +137,6 @@
 					</small>
 				</div>
 
-
-               
-
-
 				@include('partials.comments', ['comments' => $answer->comments])
 			</div>
 		</div>
