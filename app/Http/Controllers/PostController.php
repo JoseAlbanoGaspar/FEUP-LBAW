@@ -345,8 +345,12 @@ class PostController extends Controller
     }
 
     public function update(Request $request){
-
         $data = $request->all();
+
+        //authorize
+        if(!Auth::user()->moderator && !Auth::user()->administrator && Auth::id() != $data['id_author'])
+            abort(404);
+
         $post = Post::find($data['id_post']);
         if($post->answer){
             return $this->updateAnswer($request);
@@ -354,10 +358,7 @@ class PostController extends Controller
 
         $question = Question::find($post->question->id_question);
 
-        
-        //Log::info($post);
-        //authorize the edition!!! -> Uncomment after implemented loggin
-        //$this->authorize('editProfile',$request->id_user);
+    
         //validate results
         $validator = Validator::make($request->all(),[
             'text_body' => 'nullable|max:8192',
