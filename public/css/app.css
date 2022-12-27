@@ -79,3 +79,25 @@ body {
 .isNotFollowedTag{
   color: #b85c5c;
 }
+
+.badges{
+  padding:1rem 3rem 3rem 7rem;
+}
+
+.badge-pad{
+  padding-left: 1rem;
+  padding-right: 2rem;
+}
+
+.dropdown ul{
+  display: none;
+}
+
+.dropdown:hover ul{
+  display: block;
+  margin:0 auto;
+}
+
+.dropdown button{
+  margin: 0rem 2.5rem 0rem 2.5rem;
+}

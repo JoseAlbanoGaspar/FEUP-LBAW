@@ -32,15 +32,11 @@ class BadgeGiven extends Model
 
 	public function badge()
 	{
-		return $this->belongsTo(Badge::class, 'id_badge')
-//					->where('badge.id_badge', '=', 'badge_given.id_badge')
-					->where('badge.id_badge', '=', 'badge_given.id_badge');
-	}
+		return $this->belongsTo(Badge::class, 'id_badge');
+}
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_user')
-//					->where('user.id_user', '=', 'badge_given.id_user')
-					->where('users.id_user', '=', 'badge_given.id_user');
+		return $this->belongsTo(User::class, 'id_user');
 	}
 }

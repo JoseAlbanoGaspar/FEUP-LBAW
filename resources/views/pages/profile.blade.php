@@ -4,27 +4,68 @@
 <article class="user-profile my-4 mx-5">
     <h1>{{ $user->username }}'s profile</h1>
 
-    <div class="d-flex justify-content-start align-items-center">
-        <div class="gravatar-wrapper-16 m-2 me-5">
-            <img src="{{ asset($user->profile_picture) }}"  alt="{{ $user->username }}'s user avatar" width="100" ,="" height="100" class="avatar-image rounded-circle">
+    <div class="d-flex">    
+        <div>
+            <div class="d-flex justify-content-start align-items-center">
+                <div class="gravatar-wrapper-16 m-2 me-5">
+                    <img src="{{ asset($user->profile_picture) }}"  alt="{{ $user->username }}'s user avatar" width="100" ,="" height="100" class="avatar-image rounded-circle">
+                </div>
+
+                <div class="d-flex justify-content-around flex-column">
+                    <p class="fw-bold fs-5">{{ $user->username }} </p>
+                    <p class="fst-italic fs-6"> {{ $role }} </p>
+                </div>
+
+            </div>
+        
+            <div class="d-grid gap-5-lg gap-2 d-md-block my-4">
+                <a type="button" class="btn btn-primary" href="{{ route('userQuestions',['id_user' => $user->id_user]) }}">My questions</a>
+                <a type="button" class="btn btn-primary" href="{{ route('userAnswers',['id_user' => $user->id_user]) }}">My answers</a>
+                <a type="button" class="btn btn-primary" href="{{ route('drafts')}}">My drafts</a>
+                @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user && (count(Auth::user()->administrator()->get()) || count(Auth::user()->moderator()->get())))
+                <a type="button" class="btn btn-primary" href="{{ route('admin') }}">Admin</a>
+                @endif
+            </div>
         </div>
-
-        <div class="d-flex justify-content-around flex-column">
-            <p class="fw-bold fs-5">{{ $user->username }} </p>
-            <p class="fst-italic fs-6"> {{ $role }} </p>
+        <div class="badges">
+            <h3>Badges</h3>
+            <div class="d-flex">
+                <div class="dropdown">
+                    <button class="btn btn-warning">Gold
+                        <span class="btn btn-light btn-sm">{{$badges['Gold']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($gold as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                
+                <div class="dropdown">
+                    <button class="btn btn-light">Silver
+                        <span class="btn btn-secondary btn-sm">{{$badges['Silver']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($silver as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="btn btn-secondary">Bronze
+                        <span class="btn btn-light btn-sm">{{$badges['Gold']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($bronze as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
-
     </div>
-
-    <div class="d-grid gap-5-lg gap-2 d-md-block my-4">
-        <a type="button" class="btn btn-primary" href="{{ route('userQuestions',['id_user' => $user->id_user]) }}">My questions</a>
-        <a type="button" class="btn btn-primary" href="{{ route('userAnswers',['id_user' => $user->id_user]) }}">My answers</a>
-        <a type="button" class="btn btn-primary" href="{{ route('drafts')}}">My drafts</a>
-        @if (Auth::check() && Auth::user()->can('editProfile', $user) && Auth::id() == $user->id_user && (count(Auth::user()->administrator()->get()) || count(Auth::user()->moderator()->get())))
-        <a type="button" class="btn btn-primary" href="{{ route('admin') }}">Admin</a>
-        @endif
-    </div>
-
     <div class="user-profile-about">
     <h3>About:</h3>
     @if(empty($user->personal_text))
