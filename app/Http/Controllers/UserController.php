@@ -59,17 +59,25 @@ class UserController extends Controller
       $badges = $user->badge_givens()->get();
 
       $badge_count = ['Gold'=> 0,'Silver'=>0,'Bronze'=>0];
-      
+      $gold = array();
+      $silver = array();
+      $bronze = array();
       foreach($badges as $badge){
-        if($badge->badge->b_rank == 'Gold')
+        if($badge->badge->b_rank == 'Gold'){
             $badge_count['Gold']++;
-        else if ($badge->badge->b_rank == 'Silver')
+            $gold[] = $badge->badge;
+        }
+        else if ($badge->badge->b_rank == 'Silver'){
             $badge_count['Silver']++;
-        else if ($badge->badge->b_rank == 'Bronze')
+            $silver[] = $badge->badge;
+        }
+        else if ($badge->badge->b_rank == 'Bronze'){
             $badge_count['Bronze']++;
+            $bronze[] = $badge->badge;
+        }
       }
 
-      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes,'badges' =>$badge_count]);
+      return view('pages.profile', ['user' => $user, 'role'=> $role,'question_votes' => $question_votes,'answer_votes' => $answer_votes,'badges' =>$badge_count,'gold' => $gold,'silver' => $silver, 'bronze' => $bronze]);
     }
 
     /**

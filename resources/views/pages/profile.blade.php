@@ -30,12 +30,39 @@
         <div class="badges">
             <h3>Badges</h3>
             <div class="d-flex">
-                <span class="btn btn-warning btn-sm">Gold</span>
-                <p class="badge-pad">{{$badges['Gold']}}</p>
-                <span class="btn btn-light btn-sm">Silver</span>
-                <p class="badge-pad">{{$badges['Silver']}}</p>
-                <span class="btn btn-secondary btn-sm">Bronze</span>
-                <p class="badge-pad">{{$badges['Bronze']}}</p>
+                <div class="dropdown">
+                    <button class="btn btn-warning">Gold
+                        <span class="btn btn-light btn-sm">{{$badges['Gold']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($gold as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                
+                <div class="dropdown">
+                    <button class="btn btn-light">Silver
+                        <span class="btn btn-secondary btn-sm">{{$badges['Silver']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($silver as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="btn btn-secondary">Bronze
+                        <span class="btn btn-light btn-sm">{{$badges['Gold']}}</span>
+                    </button>
+                    <ul>
+                        @foreach($bronze as $g)
+                        <li>{{$g->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
