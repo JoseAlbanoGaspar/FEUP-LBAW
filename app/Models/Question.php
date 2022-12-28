@@ -96,4 +96,12 @@ class Question extends Model
 			$answer->delete();
 		}
 	}
+
+	public function isFollowedBy($user_id){
+		$follows = FollowsQuestion::where('id_user', $user_id)->where('id_question', $this->id_question)->first();
+		if($follows){
+			return true;
+		}
+		return false;
+	}
 }

@@ -6,7 +6,26 @@
 
 <div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
 	<div class="d-flex flex-row align-items-center justify-content-between">
-		<h1 id="question_title">{{$post->question->title}}</h1>
+		<h1 id="question_title">{{$post->question->title}}
+			@if (Auth::check() && $post->question->isFollowedBy(Auth::user()->id_user))
+			<span class="isFollowedQuestionCard"> 
+				<i class="fa fa-star" aria-hidden="true"></i>
+			</span>
+			@endif
+		</h1>
+		{{--If the user is logged in and the question is not his, he can follow the question--}}
+		@if (Auth::check() && Auth::user()->id_user != $post->user->id_user)
+			@if ($post->question->isFollowedBy(Auth::user()->id_user))
+				<form action="{{route('unfollowQuestion', ['id_question' => $post->id_post])}}" method="POST">
+					@csrf
+					@method('DELETE')
+					<button type="submit" class="btn btn-danger btn">Unfollow</button>
+			@else
+				<form action="{{route('followQuestion', ['id_question' => $post->id_post])}}" method="POST">
+					@csrf
+					<button type="submit" class="btn btn-primary btn">Follow</button>
+			@endif
+		@endif
 		<a role="button" class="btn btn-secondary btn mx-2 text-center" href="{{ route('formToAskQuestion') }}">Ask Question</a>
 	</div>
 

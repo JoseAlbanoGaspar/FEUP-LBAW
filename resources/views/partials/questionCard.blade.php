@@ -19,7 +19,14 @@
 
             <div class ="row">
                 <a class="text-decoration-none" href="{{route('question', ['id_question'=>$post->id_post])}}">
-                    <h5 class="card-title">{{$post->question->title}}</h5>
+                    <h5 class="card-title">{{$post->question->title}}
+                    {{--if the question is followed by the user, show a filled star--}}
+                    @if (Auth::check() && $post->question->isFollowedBy(Auth::user()->id_user))
+                        <span class="isFollowedQuestionCard"> 
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </span>
+                    @endif
+                    </h5>
                 </a>
             </div>
 

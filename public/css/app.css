@@ -83,3 +83,7 @@ body {
 div.card-body:has(.isFollowedTagCard){
   background-color: #f2ffba;
 }
+
+div.card-body:has(.isFollowedQuestionCard){
+  background-color: #e2ffb5;
+}
