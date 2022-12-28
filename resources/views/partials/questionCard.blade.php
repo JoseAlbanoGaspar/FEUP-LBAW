@@ -19,7 +19,14 @@
 
             <div class ="row">
                 <a class="text-decoration-none" href="{{route('question', ['id_question'=>$post->id_post])}}">
-                    <h5 class="card-title">{{$post->question->title}}</h5>
+                    <h5 class="card-title">{{$post->question->title}}
+                    {{--if the question is followed by the user, show a filled star--}}
+                    @if (Auth::check() && $post->question->isFollowedBy(Auth::user()->id_user))
+                        <span class="isFollowedQuestionCard"> 
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </span>
+                    @endif
+                    </h5>
                 </a>
             </div>
 
@@ -30,7 +37,15 @@
                 <div class="col d-flex justify-content-start">
                     <ul class="post-summary-meta-tags list-ls-none d-inline">
                         @foreach($post->question->tags as $tag)
-                            <li class="d-inline mr4"><a role="button" class="btn btn-outline-primary btn-sm" href="{{route('tag', ['id_tag' => $tag->id_tag])}}" class="post-tag flex--item">{{$tag->name}}</a></li>
+                            @if (Auth::check()  && $tag->isFollowedBy(Auth::user()->id_user))
+                                <li class="d-inline mr4">
+                                    <a role="button" class="isFollowedTagCard btn btn-outline-success btn-sm" href="{{route('tag', ['id_tag' => $tag->id_tag])}}" class="post-tag flex--item">{{$tag->name}}</a>
+                                </li>
+                            @else
+                                <li class="d-inline mr4">
+                                    <a role="button" class="btn btn-outline-primary btn-sm" href="{{route('tag', ['id_tag' => $tag->id_tag])}}" class="post-tag flex--item">{{$tag->name}}</a>
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </div>

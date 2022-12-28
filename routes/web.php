@@ -52,6 +52,8 @@ Route::get('questions/ask', 'QuestionController@getAskForm')->name('formToAskQue
 Route::post('questions/ask', 'QuestionController@postQuestion')->name('postQuestion');
 Route::get('questions/{id_question}', 'QuestionController@show')->name('question');
 Route::post('questions/{id_question}/answer', 'QuestionController@postAnswer')->name('postAnswer');
+Route::post('questions/{id_question}/follow', 'QuestionController@followQuestion')->middleware('auth')->name('followQuestion');
+Route::delete('questions/{id_question}/unfollow', 'QuestionController@unfollowQuestion')->middleware('auth')->name('unfollowQuestion');
 
 Route::get('unanswered', 'PostController@showUnansweredQuestions')->name('unansweredQuestions');
 

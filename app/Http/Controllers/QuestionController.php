@@ -113,5 +113,31 @@ class QuestionController extends PostController
 
         return redirect()->route('question',['id_question' => $new_id]);
     }
+
+    public function followQuestion(Request $req, $id_question)
+    {
+        $id_user = Auth::id();
+
+        DB::table('follows_question')->insert([
+            'id_user' => $id_user,
+            'id_question' => $id_question
+        ]);
+
+        return redirect()->route('question',['id_question' => $id_question]);
+    }
+
+    public function unfollowQuestion(Request $req, $id_question)
+    {
+        $id_user = Auth::id();
+
+        DB::table('follows_question')->where([
+            ['id_user', '=', $id_user],
+            ['id_question', '=', $id_question]
+        ])->delete();
+
+        return redirect()->route('question',['id_question' => $id_question]);
+    }
 }
+
+
 

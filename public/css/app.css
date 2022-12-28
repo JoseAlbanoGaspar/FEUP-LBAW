@@ -101,3 +101,10 @@ body {
 .dropdown button{
   margin: 0rem 2.5rem 0rem 2.5rem;
 }
+div.card-body:has(.isFollowedTagCard){
+  background-color: #f2ffba;
+}
+
+div.card-body:has(.isFollowedQuestionCard){
+  background-color: #e2ffb5;
+}
