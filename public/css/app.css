@@ -79,3 +79,7 @@ body {
 .isNotFollowedTag{
   color: #b85c5c;
 }
+
+div.card-body:has(.isFollowedTagCard){
+  background-color: #f2ffba;
+}
