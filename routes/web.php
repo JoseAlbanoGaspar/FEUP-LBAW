@@ -79,7 +79,14 @@ Route::post('report/add','ReportController@addReport')->name('addReport');
 Route::delete('report/dismiss','ReportController@dismiss')->name('dismissReport');
 
 //Tags
-Route::get('tags','TagController@showAllTags')->name('tags'); 
-Route::get('tags/{id_tag}','TagController@showTag')->name('tag'); 
+Route::get('tags','TagController@showAllTags')->name('tags');
+Route::get('tags/{id_tag}','TagController@showTag')->name('tag');
 Route::post('tags/{id_tag}/follow','TagController@followTag')->middleware('auth')->name('followTag');
 Route::delete('tags/{id_tag}/unfollow','TagController@unfollowTag')->middleware('auth')->name('unfollowTag');
+
+
+//Password Recovery
+Route::get('/forgot_password', 'UserController@forgotPasswordForm')->middleware('guest')->name('forgotPasswordForm');
+Route::post('/forgot_password', 'UserController@forgotPasswordAction')->middleware('guest')->name('forgotPasswordAction');
+Route::get('/reset_password/{token}', 'UserController@resetPasswordForm')->middleware('guest')->name('resetPasswordForm');
+Route::post('/reset_password', 'UserController@resetPasswordAction' )->middleware('guest')->name('resetPasswordAction');
