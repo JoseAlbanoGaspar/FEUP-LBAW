@@ -20,6 +20,7 @@ tags:
   - name: 'M02: Questions'
   - name: 'M03: Users'
   - name: 'M04: User Administration'
+  - name: 'M05: Static Pages'
 
 paths:
 
@@ -503,7 +504,120 @@ paths:
       responses:
         '200':
           description: 'Ok.'
+  /report/add:
+    post:
+      operationId: R210
+      summary: 'R210: Report a question'
+      description: 'Report a question. Access: USR'
+      tags:
+        - 'M02: Questions'
 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_user:
+                  type: integer
+                id_post:
+                  type: integer
+                reason:
+                  type: string
+              required:
+                    - id_user
+                    - id_post
+                    - reason
+
+      responses:
+        '302':
+          description: 'Redirect after reporting post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully reported a question. Redirect to page of the reported question.'
+                  value: '/questions/{question_id}'
+  /report/dismiss: 
+    delete:
+        operationId: R211
+        summary: 'R211: Delete report'
+        description: 'Delete report. Access: MOD, ADM'
+        tags:
+          - 'M02: Questions'
+
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                required:
+                  - report_id
+        responses:
+          '302':
+            description: 'Ok.'
+  
+  /drafts:
+    get:
+        operationId: R212
+        summary: 'R212: Show all drafts'
+        description: 'Show drafts of a certain user Access: USR'
+        tags:
+          - 'M02: Questions'
+        
+        responses:
+          '200':
+            description: 'Ok. Show drafts.'
+  /drafts/delete/{id_draft}:
+    delete:
+        operationId: R213
+        summary: 'R213: Delete draft'
+        description: 'Delete draft. Access:OWN'
+        tags:
+          - 'M02: Questions'
+
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  id_draft:
+                    type: integer
+                required:
+                  - id_draft
+        responses:
+          '302':
+            description: 'Redirect after deleting draft.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Redirect to drafts page.'
+                    value: '/drafts'
+  
+  /unanswered:
+    get:
+      operationId: R214
+      summary: 'R214: Get all the unanswered questions.'
+      description: 'Page with all unanswered questions. ACCESS: USR'
+      tags:
+        - 'M02: Questions'
+
+      responses:
+          '200':
+            description: 'Ok. Show unsanswered questions page.'
+  
   /:
     get:
       operationId: R301
@@ -644,6 +758,207 @@ paths:
                     type: boolean
                    html:
                      type: string
+  
+  /forgot_password:
+    get:
+      operationId: R307
+      summary: 'R307: Get the forgot password form.'
+      description: 'Page with a form to change password. ACCESS: USR'
+      tags:
+        - 'M03: Users'
+
+      responses:
+          '200':
+            description: 'Ok. Show forgot password form.'
+    post:
+      operationId: R308
+      summary: 'R308: Send reset password link'
+      description: 'Send the password link. Access: USR'
+      tags:
+        - 'M03: Users'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                    - email
+
+      responses:
+        '302':
+          description: 'Redirect after sending reset password link.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully sent link. Redirect to previous page.'
+                  value: '/forgot_password'
+                302Failure:
+                  description: 'Failed sending link. Redirect to previous page with error message.'
+                  value: '/forgot_password'
+  /reset_password/{token}:
+    get:
+      operationId: R309
+      summary: 'R309: Get the reset password form.'
+      description: 'Page with a form to change password. ACCESS: USR'
+      tags:
+        - 'M03: Users'
+      parameters:
+        - in: path
+          name: token
+          description: random token for changing password
+          schema:
+            type: integer
+          required: true
+      responses:
+          '200':
+            description: 'Ok. Show reset password form.'
+    post:
+      operationId: R310
+      summary: 'R310: Changing password'
+      description: 'Changes the password. Access: USR'
+      tags:
+        - 'M03: Users'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: integer
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                    - token
+                    - email
+                    - password
+
+      responses:
+        '302':
+          description: 'Redirect after changing password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully changed password. Redirect to login page.'
+                  value: '/login'
+                302Failure:
+                  description: 'Failed when changing password. Redirect to previous page.'
+                  value: '/reset_password/{token}'
+  
+  /notifications:
+    get:
+      operationId: R311
+      summary: 'R311: Get notifications.'
+      description: 'Show all notifications of a user. ACCESS: USR'
+      tags:
+        - 'M03: Users'
+
+      responses:
+          '200':
+            description: 'Ok. Show notifications.'
+  
+  /tags/{id_tag}: 
+    get:
+      operationId: R312
+      summary: 'R312: Get a specific tag.'
+      description: 'Show a specific tag. ACCESS: USR'
+      tags:
+        - 'M03: Users'
+      parameters:
+        - in: path
+          name: id_tag
+          description: id of the specific tag
+          schema:
+            type: integer
+          required: true
+      responses:
+          '200':
+            description: 'Ok. Show notifications.'
+  
+  /tags/{id_tag}/follow:
+    post:
+      operationId: R313
+      summary: 'R313: Follow Tag'
+      description: 'User Follows other tag Access: USR'
+      tags:
+        - 'M03: Users'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_tag:
+                  type: integer
+              required:
+                - id_tag
+
+      responses:
+        '302':
+          description: 'Redirect after following tag.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully created tag.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to create tag.'
+                  value: '/admin' 
+  
+  /tags/{id_tag}/unfollow:
+    post:  
+      operationId: R314
+      summary: 'R314: Unfollow tag'
+      description: 'User now does not follow a specific tag anymore. Access: USR'
+      tags:
+        - 'M03: UserS'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_tag:
+                  type: integer
+              required:
+                - id_tag
+
+      responses:
+        '302':
+          description: 'Redirect after Unfollow tag.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully unfollow tag.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to unfollow tag.'
+                  value: '/admin'
 
   /admin:
     get:
@@ -775,12 +1090,45 @@ paths:
                 302Failure:
                   description: 'Failed to create a new user'
                   value: '/admin'
+  /admin/deleteUser:
+    delete:
+      operationId: R405
+      summary: 'R405: Delete user'
+      description: 'Delete user. Access: ADM'
+      tags:
+        - 'M04: User Administration'
 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tag_id:
+                  type: integer
+              required:
+                - user_id
+
+      responses:
+        '302':
+          description: 'Redirect after deleting user.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully deleted user.'
+                  value: '/admin'
+                302Failure:
+                  description: 'Failed to delete user.'
+                  value: '/admin'
 
   /admin/makeAdmin:
     post:
-      operationId: R405
-      summary: 'R405: Make admin'
+      operationId: R406
+      summary: 'R406: Make admin'
       description: 'Promote a user so he has admin acess. Access: ADM'
       tags:
         - 'M04: User Administration'
@@ -811,4 +1159,82 @@ paths:
                 302Failure:
                   description: 'Failed to promote to admin.'
                   value: '/admin'
+  
+  /admin/makeModerator:
+    post:
+        operationId: R407
+        summary: 'R407: Make moderator'
+        description: 'Promote a user so he has moderator acess. Access: ADM'
+        tags:
+          - 'M04: User Administration'
 
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                required:
+                  - user_id
+        responses:
+          '302':
+            description: 'Redirect after processing the make moderator request.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'The user is now a moderator.'
+                    value: '/users/{id}'
+                  302Failure:
+                    description: 'Failed to promote to moderator.'
+                    value: '/admin' 
+  /tags:
+    get:
+      operationId: R408
+      summary: 'R408: Get all tags.'
+      description: 'Show all tags in system. ACCESS: ADM'
+      tags:
+        - 'M04: User Administration'
+
+      responses:
+          '200':
+            description: 'Ok. Show all tags.'
+  
+  /about:
+    get:
+      operationId: R501
+      summary: 'R501: Get the about page.'
+      description: 'Page with information about the site. ACCESS: PUB'
+      tags:
+        - 'M05: Static Pages'
+
+      responses:
+          '200':
+            description: 'Ok. Show about page.'
+  /rules:
+    get:
+      operationId: R502
+      summary: 'R502: Get the rules page.'
+      description: 'Page with information about the rules of the website. ACCESS: PUB'
+      tags:
+        - 'M05: Static Pages'
+
+      responses:
+          '200':
+            description: 'Ok. Show rules page.'
+  /contact:
+    get:
+        operationId: R503
+        summary: 'R503: Get the contact page.'
+        description: 'Page with contacts of the site forum. ACCESS: PUB'
+        tags:
+          - 'M05: Static Pages'
+
+        responses:
+            '200':
+              description: 'Ok. Show contact page.'
