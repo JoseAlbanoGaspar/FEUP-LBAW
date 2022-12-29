@@ -1,5 +1,12 @@
 @php
 	include_once(app_path() . '/Includes/Utils.php');
+    if(Auth::check() && (Auth::user()->id_user === $post->id_author)){
+        $tooltipText = 'Click to deselect as solution';
+    }
+    else{
+        $tooltipText = 'The question author accepted this as the best answer';
+    }
+
 @endphp
 
 <div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
@@ -90,9 +97,14 @@
 
 
 				@if($answer->is_solution)
-					<h5> <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer" class="text-center"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+					<h5 id="marked-as-solution-{{$answer->post->id_post}}" > <a data-toogle="tooltip" data-bs-placement="right" title="{{$tooltipText}}" class="text-center marked-as-solution "><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+                @else
                     @if(Auth::check() && (Auth::user()->id_user === $post->id_author))
-{{--                        --}}
+{{--                        <form method='POST' action=''>--}}
+{{--                            {{ csrf_field() }}--}}
+{{--                            <input type="hidden" value="{{ $answer->id_answer }}" name="id_answer"/>--}}
+                            <button id="mark-as-solution-{{$answer->post->id_post}}" type="submit" class="mark-as-solution px-2 mx-0 btn btn-secondary btn-sm mb-2 text-center">Accept</button>
+{{--                        </form>--}}
                     @endif
 				@endif
 

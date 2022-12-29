@@ -53,6 +53,7 @@ class Badge extends Model
 
 	public function new_badge_notifications()
 	{
+//
 		return $this->hasMany(NewBadgeNotification::class, 'id_badge');
 	}
 }
