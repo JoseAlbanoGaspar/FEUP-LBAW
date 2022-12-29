@@ -72,3 +72,16 @@ Route::get('rules','StaticController@showRules')->name('rules');
 
 //Drafts
 Route::post('drafts/delete/{id_draft}','PostController@deleteDraft')->middleware('auth')->name('deleteDraft');
+
+
+//Password Recovery
+Route::get('/forgot_password', 'UserController@forgotPasswordForm')->middleware('guest')->name('forgotPasswordForm');
+
+Route::post('/forgot_password', 'UserController@forgotPasswordAction')->middleware('guest')->name('forgotPasswordAction');
+
+
+Route::get('/reset_password/{token}', 'UserController@resetPasswordForm')->middleware('guest')->name('resetPasswordForm');
+
+
+
+Route::post('/reset_password', 'UserController@resetPasswordAction' )->middleware('guest')->name('resetPasswordAction');
