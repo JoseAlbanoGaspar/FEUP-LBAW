@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Draft;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DateTime;
@@ -15,6 +16,7 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\User;
 use App\Models\Tag;
+use Throwable;
 use App\Models\QuestionTag;
 
 
@@ -256,7 +258,7 @@ class PostController extends Controller
      */
     public function showUnansweredQuestions()
     {
-        
+
     $posts = Post::query()
         ->whereRaw('id_post IN (SELECT id_question FROM question)')
         ->whereRaw('id_post NOT IN (SELECT id_question FROM answer)')
@@ -358,7 +360,7 @@ class PostController extends Controller
 
         $question = Question::find($post->question->id_question);
 
-    
+
         //validate results
         $validator = Validator::make($request->all(),[
             'text_body' => 'nullable|max:8192',
@@ -405,5 +407,22 @@ class PostController extends Controller
         $draft->delete();
     }
 
+
+    public function markAsSolution(Request $request){
+        try {
+            $answer = Answer::findOrFail($request->answerId);
+        }
+        catch (Throwable $e){
+            return response()->json(['success' => false, 'error' => 'Answer not found'], 404);
+        }
+        $answer->is_solution = !($request->value == "false");
+        $answer->save();
+        dump($request->value);
+        dump($answer->is_solution);
+        $confirmation = Answer::find($request->answerId)->is_solution;
+        dump($confirmation);
+//        dump($answer);
+        return response()->json(['success' => true]);
+    }
 }
 

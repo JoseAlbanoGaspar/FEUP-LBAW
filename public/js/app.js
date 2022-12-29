@@ -53,6 +53,8 @@ function selectSearchOptionsFromPath(url) {
 
 function addEventListeners() {
     addUserSearchEventListeners();
+    markAsSolutionEventListeners();
+    markedAsSolutionEventListeners();
 
     if (window.location.pathname.includes("search") && !window.location.pathname.includes("search_")) {
         let url = new URL(window.location.href);
@@ -586,7 +588,7 @@ function colorVoteButtons() {
 
 
 let notificationsButton = document.getElementById('notifications-icon');
-if (notificationsButton) {
+if (notificationsButton && loggedUser) {
         sendAjaxRequest('POST', '/api/get_unread_notifications', {id_user: loggedUser.id_user}, function () {
             let response = JSON.parse(this.responseText);
             let notifications = response.notifications;
@@ -707,3 +709,107 @@ for (let completeDraftButton of completeDraftButtons) {
         });
     });
 }
+
+
+function markAsSolutionClickHandler(event, button) {
+    let answerId = button.id.split('-')[3];
+
+    sendAjaxRequest('POST', '/api/mark_as_solution', {answerId: answerId, value: true}, null);
+    let markedAsSolutionDiv = document.querySelector('.marked-as-solution');
+    if (markedAsSolutionDiv) {
+        let id = markedAsSolutionDiv.parentElement.id.split('-')[3];
+        markedToMarkAsSolution(id);
+    }
+    markToMarkedAsSolution(answerId);
+    markAsSolutionEventListeners();
+    markedAsSolutionEventListeners();
+}
+
+// markedAsSolutionDiv = <h5 id="marked-as-solution-<XX>"> <a data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer" class="text-center marked-as-solution"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+// markAsSolutionDiv =   <button id="mark-as-solution-<XX>" type="submit" class="mark-as-solution btn btn-secondary btn-sm mb-2 text-center">Accept</button>
+// when a user clicks on a .mark-as-solution button, the answer is marked as the solution
+// it changes to a markedAsSolutionDiv and every other markedAsSolutionDiv becomes a markAsSolutionDiv
+function markAsSolutionEventListeners() {
+    if(!loggedUser) return;
+    let markAsSolutionButtons = document.querySelectorAll('.mark-as-solution');
+
+    for (let markAsSolutionButton of markAsSolutionButtons) {
+        //add a click event listener to each button that calls markToMarkedAsSolution
+        //select the current markedAsSolutionDiv if it exists and swap it using markedToMarkAsSolution
+        let markAsSolutionClosure = (event) => markAsSolutionClickHandler(event, markAsSolutionButton);
+        markAsSolutionButton.addEventListener('click', markAsSolutionClosure);
+    }
+}
+
+
+//swaps a markAsSolutionDiv with a markedAsSolutionDiv
+function markToMarkedAsSolution(answerId) {
+    let markAsSolutionDiv = document.getElementById('mark-as-solution-' + answerId);
+    markAsSolutionDiv.classList.add('fade');
+    markAsSolutionDiv.classList.add('out');
+    let markedAsSolution = document.createElement('h5');
+    markedAsSolution.id = 'marked-as-solution-' + answerId;
+    markedAsSolution.innerHTML = `
+        <a data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer" class="text-center marked-as-solution">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        </a>
+        </h5>
+    `
+    let parent = markAsSolutionDiv.parentElement;
+    // setTimeout(function () {
+        markAsSolutionDiv.remove();
+        parent.insertBefore(markedAsSolution, parent.firstChild);
+    // }, 500);
+}
+
+function markedToMarkAsSolution(answerId) {
+    let markedAsSolutionDiv = document.getElementById('marked-as-solution-' + answerId);
+    markedAsSolutionDiv.classList.add('fade');
+    markedAsSolutionDiv.classList.add('out');
+    let markAsSolution = document.createElement('button');
+    markAsSolution.id = 'mark-as-solution-' + answerId;
+    markAsSolution.classList.add('mark-as-solution');
+    markAsSolution.classList.add('btn');
+    markAsSolution.classList.add('btn-secondary');
+    markAsSolution.classList.add('btn-sm');
+    markAsSolution.classList.add('mb-2');
+    markAsSolution.classList.add('mx-0');
+    markAsSolution.classList.add('px-2');
+    markAsSolution.classList.add('text-center');
+    markAsSolution.textContent = 'Accept';
+    let parent = markedAsSolutionDiv.parentElement;
+    // setTimeout(function () {
+        markedAsSolutionDiv.remove();
+        parent.insertBefore(markAsSolution, parent.firstChild);
+    // }, 500);
+}
+
+
+//when a user clicks on a .marked-as-solution button, the answer is unmarked as the solution
+// it is swicthed using markedToMarkAsSolution
+
+function markedAsSolutionEventListeners() {
+
+    let markedAsSolutionButtons = document.querySelectorAll('.marked-as-solution');
+    for (let markedAsSolutionButton of markedAsSolutionButtons) {
+        //add a click event listener to each button that calls markedToMarkAsSolution
+        //get authorId from the last digit of the href in .user-card-name inside #question
+        let authorId = document.querySelector('#question .user-card-name').href.split('/').pop();
+        if (loggedUser && loggedUser.id_user == authorId) {
+            let markedAsSolutionClosure = (event) => markedAsSolutionClickHandler(event, markedAsSolutionButton);
+            markedAsSolutionButton.addEventListener('click', markedAsSolutionClosure);
+        }
+    }
+}
+
+function markedAsSolutionClickHandler(event, button) {
+    let answerId = button.parentElement.id.split('-')[3];
+    // console.log(answerId);
+    //send request to /mark_as_solution with answerId as parameter and false as value
+    sendAjaxRequest('POST', '/api/mark_as_solution', {answerId: answerId, value: false}, null);
+    markedToMarkAsSolution(answerId);
+    markAsSolutionEventListeners();
+    markedAsSolutionEventListeners()
+}
+
+

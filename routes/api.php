@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
@@ -31,3 +32,8 @@ Route::post('get_unread_notifications', [NotificationController::class, 'getUnre
 //Tirar daqui o que não retorna json??
 Route::post('dismiss_notification', [NotificationController::class, 'dismissNotification'])->name('dismissNotification');
 Route::post('dismiss_all_notifications', [NotificationController::class, 'dismissAllNotifications'])->name('dismissAllNotifications');
+
+
+//mark as solution
+Route::post('mark_as_solution', [PostController::class, 'markAsSolution'])->name('markAsSolution');
+

@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS question_tag CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS moderator CASCADE;
 DROP TABLE IF EXISTS administrator CASCADE;
+DROP TABLE IF EXISTS password_resets CASCADE;
 
 --notifs
 DROP TABLE IF EXISTS notification CASCADE;
@@ -31,6 +32,13 @@ DROP TABLE IF EXISTS report CASCADE; --2
 DROP TABLE IF EXISTS edit CASCADE; --3
 
 DROP TYPE IF EXISTS rank;
+
+
+CREATE TABLE password_resets (
+    email TEXT NOT NULL,
+    token TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
 CREATE TABLE users (
 	id_user SERIAL PRIMARY KEY,
@@ -444,6 +452,8 @@ DROP FUNCTION IF EXISTS send_marked_as_solution_notif();
 DROP TRIGGER IF EXISTS send_new_badge_notif ON badge_given;
 DROP FUNCTION IF EXISTS send_new_badge_notif();
 
+DROP TRIGGER IF EXISTS only_one_solution_edit ON answer;
+DROP FUNCTION IF EXISTS only_one_solution_edit();
 
 
 --author of answer cannot answer his question
@@ -651,6 +661,24 @@ CREATE TRIGGER only_one_solution
     FOR EACH ROW
 EXECUTE PROCEDURE only_one_solution();
 
+--trigger that when answer is edited to is_solution = 1, it puts every other is_solution = 0 from answers of the same question
+CREATE FUNCTION only_one_solution_edit() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.is_solution = '1' AND
+       EXISTS (SELECT * FROM answer WHERE id_question = NEW.id_question AND is_solution = '1' AND id_answer <> NEW.id_answer)
+    THEN
+        UPDATE answer SET is_solution = '0' WHERE is_solution = '1' AND id_answer <> NEW.id_answer;
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER only_one_solution_edit
+    AFTER UPDATE ON answer
+    FOR EACH ROW
+EXECUTE PROCEDURE only_one_solution_edit();
 
 --check if the new notification has already been sent before
 CREATE FUNCTION repeated_followed_tag_notif() RETURNS TRIGGER AS
@@ -725,7 +753,7 @@ BEGIN
     INSERT INTO notification(dismissed, id_user, date)
     VALUES(false, t.id_author, Now());
 
-    insert into marked_as_solution_notif (id_notif)
+    insert into marked_as_solution_notif (id_notif, id_answer)
         (select currval('notification_id_notif_seq'), NEW.id_answer);
     END IF;
     RETURN NEW;

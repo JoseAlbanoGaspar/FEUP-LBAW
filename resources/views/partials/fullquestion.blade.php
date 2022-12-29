@@ -2,13 +2,20 @@
 	include_once(app_path() . '/Includes/Utils.php');
 	use App\Http\Controllers\ReportController;
 	$repController = new ReportController();
+    if(Auth::check() && (Auth::user()->id_user === $post->id_author)){
+        $tooltipText = 'Click to deselect as solution';
+    }
+    else{
+        $tooltipText = 'The question author accepted this as the best answer';
+    }
+
 @endphp
 
 <div id="question_header_id_{{$post->id_post}}" class="d-flex flex-column mx-3 mx-md-5 mt-5 question_header">
 	<div class="d-flex flex-row align-items-center justify-content-between">
 		<h1 id="question_title">{{$post->question->title}}
 			@if (Auth::check() && $post->question->isFollowedBy(Auth::user()->id_user))
-			<span class="isFollowedQuestionCard"> 
+			<span class="isFollowedQuestionCard">
 				<i class="fa fa-star" aria-hidden="true"></i>
 			</span>
 			@endif
@@ -99,7 +106,7 @@
 					</form>
 					@endif
 				</div>
-                
+
 
 				@include('partials.comments', ['comments' => $post->question->comments])
 			</div>
@@ -124,9 +131,10 @@
 
 
 				@if($answer->is_solution)
-					<h5> <a href='#' data-toogle="tooltip" data-bs-placement="right" title="The question author accepted this as the best answer" class="text-center"><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+					<h5 id="marked-as-solution-{{$answer->post->id_post}}" > <a data-toogle="tooltip" data-bs-placement="right" title="{{$tooltipText}}" class="text-center marked-as-solution "><i class="fa fa-check" aria-hidden="true"></i></a> </h5>
+                @else
                     @if(Auth::check() && (Auth::user()->id_user === $post->id_author))
-{{--                        --}}
+                            <button id="mark-as-solution-{{$answer->post->id_post}}" type="submit" class="mark-as-solution px-2 mx-0 btn btn-secondary btn-sm mb-2 text-center">Accept</button>
                     @endif
 				@endif
 
@@ -148,7 +156,7 @@
 						@method('DELETE')
 						<input type="hidden" value="{{ $answer->id_answer }}" name="id_post"/>
 						<button type="submit" class="btn btn-secondary btn-sm mx-2 text-center">Delete</button>
-					</form>	
+					</form>
                 	@endif
 					@if(Auth::check() && ( Auth::user()->administrator || Auth::user()->moderator || Auth::id() !== $answer->post->id_author) && !$repController->checkReport(Auth::id(),$answer->id_answer))
 					<p role="button" onclick="addReport({{$answer->id_answer}},{{Auth::id()}})"  class="button-{{$answer->id_answer}} btn btn-secondary btn-sm mx-2 text-center">Report</p>
